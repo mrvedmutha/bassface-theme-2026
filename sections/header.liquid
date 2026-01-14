@@ -65,17 +65,16 @@
         {%- if logo_light != blank and logo_dark != blank -%}
           {%- comment -%} Both logos exist - switch based on sticky state {%- endcomment -%}
           <img
-            :style="sticky ? 'display: none;' : 'display: block;'"
+            x-show="!sticky"
             src="{{ logo_light | image_url: width: logo_width }}"
             alt="{{ shop.name }} - Light"
             width="{{ logo_width }}"
             height="52"
             class="w-auto logo-height"
-            style="display: block;"
             loading="eager"
           >
           <img
-            :style="sticky ? 'display: block;' : 'display: none;'"
+            x-show="sticky"
             src="{{ logo_dark | image_url: width: logo_width }}"
             alt="{{ shop.name }} - Dark"
             width="{{ logo_width }}"

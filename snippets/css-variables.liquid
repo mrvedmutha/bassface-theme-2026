@@ -14,10 +14,10 @@
     7. Semantic Tokens
 
     Typography Philosophy:
-    - Mobile-first: Work Sans everywhere
-    - Desktop (768px+): Grupo for decorative/accent text
+    - Desktop-first (1440px base): Gruppo for decorative/accent text
+    - Mobile (≤700px): Work Sans everywhere
     - Work Sans: Primary workhorse font with multiple weights
-    - Grupo: Display/accent font (single weight: 400)
+    - Gruppo: Display/accent font (single weight: 400)
 
     Color Philosophy:
     - Primary: Black - Main text and UI elements
@@ -109,7 +109,7 @@
       ==========================================
       4. TYPOGRAPHY SCALE
       ==========================================
-      Mobile-first sizing with desktop overrides
+      Desktop-first sizing (1440px base) with mobile overrides
     {% endcomment %}
 
     {% comment %} Font Sizes {% endcomment %}
@@ -177,14 +177,15 @@
 
     {% comment %}
       ==========================================
-      7. BREAKPOINTS
+      7. BREAKPOINTS - DESKTOP-FIRST
       ==========================================
-      Mobile-first responsive design
+      Base styles for 1440px, scale DOWN with max-width queries
+      Breakpoint Flow: 1440px → 1024px → 700px → 412px
     {% endcomment %}
-    --breakpoint-sm: 640px;   /* Small tablets */
-    --breakpoint-md: 768px;   /* Tablets - Font swap threshold */
-    --breakpoint-lg: 1024px;  /* Small desktop */
-    --breakpoint-xl: 1440px;  /* Desktop design width */
+    --breakpoint-sm: 412px;   /* Small mobile */
+    --breakpoint-md: 700px;   /* Mobile - Font swap threshold */
+    --breakpoint-lg: 1024px;  /* Tablet */
+    --breakpoint-xl: 1440px;  /* Desktop (base) */
     --breakpoint-2xl: 1920px; /* Large desktop */
 
     {% comment %}
@@ -284,38 +285,45 @@
 
   {% comment %}
     ==========================================
-    RESPONSIVE TYPOGRAPHY - DESKTOP
+    RESPONSIVE TYPOGRAPHY - DESKTOP-FIRST
     ==========================================
-    Font family swaps at 768px breakpoint
-    Grupo for decorative elements on desktop
+    Desktop (base): Larger font sizes, Gruppo for decorative text
+    Mobile (≤700px): Smaller font sizes, Work Sans only
   {% endcomment %}
-  @media (min-width: 768px) {
+  :root {
+    {% comment %} Desktop base sizes (1440px) {% endcomment %}
+    --font-size-3xl: 2.5rem;  /* 40px on desktop */
+    --heading-h1-size: 3rem;  /* 48px on desktop */
+  }
+
+  @media (max-width: 700px) {
     :root {
-      {% comment %} Increase font sizes slightly for desktop {% endcomment %}
-      --font-size-3xl: 2.5rem;  /* 40px on desktop */
-      --heading-h1-size: 3rem;  /* 48px on desktop */
+      {% comment %} Scale down font sizes for mobile {% endcomment %}
+      --font-size-3xl: 2rem;    /* 32px on mobile */
+      --heading-h1-size: 2rem;  /* 32px on mobile */
     }
   }
 
   {% comment %}
     ==========================================
-    UTILITY CLASSES - Display Text
+    UTILITY CLASSES - Display Text (Desktop-First)
     ==========================================
-    Responsive typography that swaps font family
+    Desktop: Gruppo font with wide letter-spacing
+    Mobile (≤700px): Work Sans with normal letter-spacing
   {% endcomment %}
 
-  {% comment %} Display text - Mobile: Work Sans, Desktop: Grupo {% endcomment %}
+  {% comment %} Desktop base - Gruppo font {% endcomment %}
   .display-text {
-    font-family: var(--font-body);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--letter-spacing-normal);
+    font-family: var(--font-display);
+    font-weight: 400;  /* Gruppo only has 400 weight */
+    letter-spacing: var(--letter-spacing-wide);
   }
 
-  @media (min-width: 768px) {
+  @media (max-width: 700px) {
     .display-text {
-      font-family: var(--font-display);
-      font-weight: 400;  /* Grupo only has 400 weight */
-      letter-spacing: var(--letter-spacing-wide);
+      font-family: var(--font-body);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--letter-spacing-normal);
     }
   }
 
