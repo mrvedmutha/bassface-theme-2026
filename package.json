@@ -7,7 +7,6 @@
     "doc": "docs"
   },
   "scripts": {
-    "tw": "npx @tailwindcss/cli -i tailwind-input.css -o ./assets/tailwind-output.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,9 +20,5 @@
   "bugs": {
     "url": "https://github.com/mrvedmutha/bassface-theme-2026/issues"
   },
-  "homepage": "https://github.com/mrvedmutha/bassface-theme-2026#readme",
-  "dependencies": {
-    "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
-  }
+  "homepage": "https://github.com/mrvedmutha/bassface-theme-2026#readme"
 }
