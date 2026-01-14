@@ -54,6 +54,37 @@
     ]
   },
   {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_light",
+        "label": "Logo (Light - for transparent header)",
+        "info": "Used when header is transparent. Recommended: White or light colored logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_dark",
+        "label": "Logo (Dark - for solid header)",
+        "info": "Used when header is solid or sticky. Recommended: Black or dark colored logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 100,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo Width",
+        "default": 150
+      }
+    ]
+  },
+  {
     "name": "t:general.colors",
     "settings": [
       {

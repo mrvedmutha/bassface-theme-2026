@@ -1,66 +1,294 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{%- liquid
+  # Header State Logic
+  # - transparent: Used on pages with hero images (overlays content)
+  # - solid: Used on standard pages (stacks with content)
+  # - sticky: Triggered after scrolling 300px (always uses solid styling)
+  
+  assign logo_light = settings.logo_light
+  assign logo_dark = settings.logo_dark
+  assign logo_width = settings.logo_width | default: 150
+-%}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<header
+  x-data="headerAnimation"
+  :class="{
+    'bg-white': sticky,
+    'bg-transparent': !sticky
+  }"
+  class="fixed top-0 left-0 w-full z-[var(--z-index-sticky)] transition-colors duration-300"
+>
+  <div class="flex items-center justify-between h-header px-10 max-md:px-9 max-sm:px-7">
+    
+    {%- comment -%} LEFT GROUP: Hamburger Menu + Search {%- endcomment -%}
+    <div class="flex items-center gap-md shrink-0">
+      {%- comment -%} Hamburger Menu Button {%- endcomment -%}
+      <button
+        @click="menuOpen = !menuOpen"
+        aria-label="Toggle Menu"
+        :class="{ 'text-black': sticky, 'text-white': !sticky }"
+        class="transition-base hover:opacity-70"
+      >
+        {{ 'icon-header-hamburger-menu.svg' | inline_asset_content }}
+      </button>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
-    {% endif %}
+      {%- comment -%} Search Button {%- endcomment -%}
+      <button
+        @click="searchOpen = !searchOpen"
+        aria-label="Search"
+        :class="{ 'text-black': sticky, 'text-white': !sticky }"
+        class="hidden md:flex items-center gap-3 transition-base hover:opacity-70"
+      >
+        {{ 'icon-header-search.svg' | inline_asset_content }}
+        <span class="font-display text-xs tracking-wide uppercase">
+          Search
+        </span>
+      </button>
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
+      {%- comment -%} Search Icon Only (Mobile) {%- endcomment -%}
+      <button
+        @click="searchOpen = !searchOpen"
+        aria-label="Search"
+        :class="{ 'text-black': sticky, 'text-white': !sticky }"
+        class="flex md:hidden transition-base hover:opacity-70"
+      >
+        {{ 'icon-header-search.svg' | inline_asset_content }}
+      </button>
+    </div>
+
+    {%- comment -%} CENTER GROUP: Logo {%- endcomment -%}
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      {%- comment -%} DEBUG: logo_light={{ logo_light | default: 'EMPTY' }}, logo_dark={{ logo_dark | default: 'EMPTY' }} {%- endcomment -%}
+      <a 
+        href="{{ routes.root_url }}" 
+        class="block transition-base hover:opacity-80"
+      >
+        {%- if logo_light != blank and logo_dark != blank -%}
+          {%- comment -%} Both logos exist - switch based on sticky state {%- endcomment -%}
+          <img
+            :style="sticky ? 'display: none;' : 'display: block;'"
+            src="{{ logo_light | image_url: width: logo_width }}"
+            alt="{{ shop.name }} - Light"
+            width="{{ logo_width }}"
+            height="52"
+            class="w-auto logo-height"
+            style="display: block;"
+            loading="eager"
+          >
+          <img
+            :style="sticky ? 'display: block;' : 'display: none;'"
+            src="{{ logo_dark | image_url: width: logo_width }}"
+            alt="{{ shop.name }} - Dark"
+            width="{{ logo_width }}"
+            height="52"
+            class="w-auto logo-height"
+            style="display: none;"
+            loading="eager"
+          >
+        {%- elsif logo_light != blank -%}
+          {%- comment -%} Only light logo - always show {%- endcomment -%}
+          <img
+            src="{{ logo_light | image_url: width: logo_width }}"
+            alt="{{ shop.name }}"
+            width="{{ logo_width }}"
+            height="52"
+            class="w-auto logo-height"
+            loading="eager"
+          >
+        {%- elsif logo_dark != blank -%}
+          {%- comment -%} Only dark logo - always show {%- endcomment -%}
+          <img
+            src="{{ logo_dark | image_url: width: logo_width }}"
+            alt="{{ shop.name }}"
+            width="{{ logo_width }}"
+            height="52"
+            class="w-auto logo-height"
+            loading="eager"
+          >
+        {%- else -%}
+          {%- comment -%} No logos - show text {%- endcomment -%}
+          <span 
+            :class="{ 'text-black': sticky, 'text-white': !sticky }"
+            class="font-display text-2xl max-md:text-xl max-sm:text-lg uppercase whitespace-nowrap block transition-base"
+          >
+            {{ shop.name }}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} RIGHT GROUP: Account/Login + Cart {%- endcomment -%}
+    <div class="flex items-center gap-md shrink-0">
+      
+      {%- comment -%} Account/Login - Desktop & Tablet (Text) {%- endcomment -%}
+      {% if shop.customer_accounts_enabled %}
+        <a
+          href="{{ routes.account_url }}"
+          :class="{ 'text-black': sticky, 'text-white': !sticky }"
+          class="hidden lg:block font-display text-xs tracking-wide uppercase transition-base hover:opacity-70 p-2"
+        >
+          {%- if customer -%}
+            Account
+          {%- else -%}
+            Login/Signup
+          {%- endif -%}
+        </a>
+
+        {%- comment -%} Account Icon - Mobile {%- endcomment -%}
+        <a
+          href="{{ routes.account_url }}"
+          aria-label="Account"
+          :class="{ 'text-black': sticky, 'text-white': !sticky }"
+          class="flex lg:hidden transition-base hover:opacity-70"
+        >
+          {{ 'icon-header-user.svg' | inline_asset_content }}
+        </a>
       {% endif %}
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+      {%- comment -%} Cart Icon {%- endcomment -%}
+      <a
+        href="{{ routes.cart_url }}"
+        aria-label="Cart ({{ cart.item_count }} items)"
+        :class="{ 'text-black': sticky, 'text-white': !sticky }"
+        class="relative transition-base hover:opacity-70"
+      >
+        {%- comment -%} T-shirt Cart Icon {%- endcomment -%}
+        {{ 'icon-header-t-shirt.svg' | inline_asset_content }}
+
+        {%- comment -%} Cart Badge {%- endcomment -%}
+        {% if cart.item_count > 0 %}
+          <span 
+            class="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-white text-2xs font-semibold"
+          >
+            {{ cart.item_count }}
+          </span>
+        {% endif %}
+      </a>
+    </div>
+
   </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+{%- comment -%}
+  NOTE: Body padding for solid header (stacked mode) should be handled
+  at the layout level or per-page template using pt-header class
+{%- endcomment -%}
+
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.data('headerAnimation', () => ({
+    sticky: false,
+    menuOpen: false,
+    searchOpen: false,
+    lastScroll: 0,
+    isAnimating: false,  // Prevent re-trigger during animation
+    
+    init() {
+      // Initialize Lenis for smooth scrolling
+      if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          direction: 'vertical',
+          gestureDirection: 'vertical',
+          smooth: true,
+          smoothTouch: false,
+          touchMultiplier: 2,
+        });
+
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        
+        // Store globally for debugging
+        window.lenis = lenis;
+        console.log('✅ Lenis initialized - Smooth scrolling active');
+      } else {
+        console.warn('⚠️ Lenis not loaded');
+      }
+
+      // GSAP ScrollTrigger alternative with custom scroll detection
+      window.addEventListener('scroll', () => this.handleScroll());
+    },
+
+    handleScroll() {
+      const scrollY = window.scrollY;
+      const threshold = 300;
+
+      // Detect when crossing the threshold
+      if (scrollY > threshold && !this.sticky && !this.isAnimating) {
+        console.log('🔽 TRIGGER: Becoming sticky at scrollY:', scrollY);
+        // Activate sticky with GSAP slide-down animation
+        this.isAnimating = true;
+        this.animateHeaderIn();
+        this.sticky = true;
+      } else if (scrollY <= threshold && this.sticky && !this.isAnimating) {
+        console.log('🔼 TRIGGER: Becoming transparent at scrollY:', scrollY);
+        // Deactivate sticky with slide-up animation
+        // State will switch in onComplete
+        this.isAnimating = true;
+        this.animateHeaderOut();
+      }
+
+      this.lastScroll = scrollY;
+    },
+
+    animateHeaderIn() {
+      if (typeof gsap === 'undefined') {
+        console.warn('⚠️ GSAP not loaded');
+        return;
+      }
+
+      const header = this.$el;
+      
+      console.log('▶️ START: Slide DOWN animation');
+      
+      // Kill any existing animations
+      gsap.killTweensOf(header);
+      
+      // Slide down from top - slower, smoother
+      gsap.fromTo(header, 
+        { 
+          y: -100
+        },
+        { 
+          y: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          onComplete: () => {
+            console.log('✅ COMPLETE: Slide DOWN animation');
+            this.isAnimating = false;  // Allow next animation
+          }
+        }
+      );
+    },
+
+    animateHeaderOut() {
+      if (typeof gsap === 'undefined') return;
+      
+      const header = this.$el;
+      
+      console.log('▶️ START: Transition to transparent');
+      
+      // Kill any existing animations
+      gsap.killTweensOf(header);
+      
+      // Instant transition - no slide animation
+      this.sticky = false;
+      gsap.set(header, { y: 0, clearProps: 'transform' });
+      
+      console.log('✅ COMPLETE: Instant transition');
+      this.isAnimating = false;  // Allow next animation
+    }
+  }));
+});
+</script>
 
 {% schema %}
 {
-  "name": "t:general.header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
-    }
-  ]
+  "name": "Header",
+  "settings": [],
+  "class": "header-section"
 }
 {% endschema %}

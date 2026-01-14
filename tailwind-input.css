@@ -124,15 +124,18 @@
   --radius-full: var(--radius-full); /* 9999px */
 
   /**
-   * BREAKPOINTS
+   * BREAKPOINTS - DESKTOP-FIRST APPROACH
+   * Base styles are written for 1440px, then scaled DOWN with max-width queries
    * Maps our breakpoints to Tailwind responsive utilities
-   * Usage: sm:, md:, lg:, xl:, 2xl:
+   * Usage: max-sm:, max-md:, max-lg:, max-xl: (desktop-first)
+   * 
+   * Breakpoint Flow: 1440px (Desktop) → 1024px (Tablet) → 700px (Mobile) → 412px (Small Mobile)
    */
-  --breakpoint-sm: var(--breakpoint-sm);    /* 640px */
-  --breakpoint-md: var(--breakpoint-md);    /* 768px */
-  --breakpoint-lg: var(--breakpoint-lg);    /* 1024px */
-  --breakpoint-xl: var(--breakpoint-xl);    /* 1440px */
-  --breakpoint-2xl: var(--breakpoint-2xl);  /* 1920px */
+  --breakpoint-sm: 412px;    /* Small mobile */
+  --breakpoint-md: 700px;    /* Mobile */
+  --breakpoint-lg: 1024px;   /* Tablet */
+  --breakpoint-xl: 1440px;   /* Desktop (base) */
+  --breakpoint-2xl: 1920px;  /* Large desktop */
 
   /**
    * SHADOWS
@@ -209,26 +212,27 @@
 }
 
 /**
- * RESPONSIVE DISPLAY TEXT
- * Mobile: Work Sans, Desktop (768px+): Gruppo
+ * RESPONSIVE DISPLAY TEXT - DESKTOP-FIRST
+ * Desktop (1440px): Gruppo, Mobile (≤700px): Work Sans
  *
  * Usage examples:
  * <h2 class="display-text display-md">Heading</h2>
  * <span class="display-text display-sm">Label</span>
  */
 
-/* These classes are already defined in css-variables.liquid but repeated here for reference */
+/* Desktop styles (base) - Gruppo font */
 .display-text {
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-normal);
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: var(--letter-spacing-wide);
 }
 
-@media (min-width: 768px) {
+/* Mobile styles (max-width: 700px) - Work Sans font */
+@media (max-width: 700px) {
   .display-text {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: var(--letter-spacing-wide);
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-normal);
   }
 }
 
@@ -249,14 +253,28 @@
   padding-right: var(--page-margin);
 }
 
-/* Header height utilities */
+/* Header height utilities - Desktop-first */
 .h-header {
-  height: var(--header-height-mobile);
+  height: var(--header-height);
 }
 
-@media (min-width: 768px) {
+
+@media (max-width: 700px) {
   .h-header {
-    height: var(--header-height);
+    height: var(--header-height-mobile);
+  }
+}
+
+/**
+ * LOGO UTILITIES
+ */
+.logo-height {
+  height: 52px; /* Desktop/Tablet */
+}
+
+@media (max-width: 700px) {
+  .logo-height {
+    height: 40px; /* Mobile */
   }
 }
 
