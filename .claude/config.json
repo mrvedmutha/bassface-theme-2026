@@ -1,0 +1,25 @@
+{
+  "mcpServers": {},
+  "settings": {
+    "alwaysApproveEnterPlanMode": false,
+    "alwaysApproveTools": [],
+    "approveAllToolsAfterDelay": false
+  },
+  "contextFiles": [
+    ".claude/context/shopify-theme.md",
+    ".claude/context/tech-stack.md",
+    "../claude.md",
+    "config/settings_schema.json"
+  ],
+  "rules": [
+    "Use Liquid template syntax for all Shopify theme files",
+    "Follow Shopify theme best practices and section/block architecture",
+    "Ensure all components are responsive and accessible",
+    "Use CSS variables defined in snippets/css-variables.liquid",
+    "When implementing Figma designs, match the design system exactly",
+    "Always test theme changes locally before suggesting deployment",
+    "Follow the existing code style and structure in the theme",
+    "Use Shopify's schema format for section settings",
+    "Optimize images and assets for web performance"
+  ]
+}

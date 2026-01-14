@@ -19,6 +19,10 @@
 
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{  'tailwind-output.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% comment %} Lenis CSS {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.css">
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
@@ -32,5 +36,10 @@
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
+
+    {% comment %} Framework Scripts {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js" defer></script>
   </body>
 </html>

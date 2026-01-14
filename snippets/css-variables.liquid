@@ -1,18 +1,330 @@
 {% style %}
-  {% # Loads all font variantions with display: swap %}
+  {% comment %}
+    ==========================================
+    BASSFACE THEME 2026 - CSS DESIGN TOKENS
+    ==========================================
+
+    Design System Structure:
+    1. Font Definitions & Loading
+    2. Color Palette
+    3. Typography Scale
+    4. Spacing Scale
+    5. Border Radius
+    6. Breakpoints
+    7. Semantic Tokens
+
+    Typography Philosophy:
+    - Mobile-first: Work Sans everywhere
+    - Desktop (768px+): Grupo for decorative/accent text
+    - Work Sans: Primary workhorse font with multiple weights
+    - Grupo: Display/accent font (single weight: 400)
+
+    Color Philosophy:
+    - Primary: Black - Main text and UI elements
+    - Secondary: White - Backgrounds and inverse text
+    - Accent: Orange - Highlights, active states, CTAs
+  {% endcomment %}
+
+  {% comment %}
+    ==========================================
+    FONT LOADING - Shopify Font Settings
+    ==========================================
+  {% endcomment %}
+  {% comment %} Load all font variations with display: swap for performance {% endcomment %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
   :root {
+    {% comment %}
+      ==========================================
+      1. FONT FAMILIES
+      ==========================================
+    {% endcomment %}
+
+    {% comment %} Base Fonts {% endcomment %}
+    --font-display: 'Gruppo', sans-serif;         /* Decorative/accent - desktop only */
+    --font-body: 'Work Sans', sans-serif;         /* Primary functional font */
+    --font-heading: 'Work Sans', sans-serif;      /* Headings need weight variations */
+
+    {% comment %} Shopify Font Settings Integration {% endcomment %}
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
-    --page-width: {{ settings.max_page_width }};
-    --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+
+    {% comment %}
+      ==========================================
+      2. FONT WEIGHTS
+      ==========================================
+      Work Sans weights - Grupo only has 400
+    {% endcomment %}
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    {% comment %}
+      ==========================================
+      3. COLOR PALETTE
+      ==========================================
+      Primary: Black
+      Secondary: White
+      Accent: Orange
+    {% endcomment %}
+
+    {% comment %} Core Brand Colors {% endcomment %}
+    --color-primary: #000000;                     /* Black - Main brand color */
+    --color-secondary: #FFFFFF;                   /* White - Secondary brand color */
+    --color-accent: #FE7F2D;                      /* Orange - Accent/highlight color */
+    --color-accent-rgb: 254, 127, 45;             /* RGB for opacity variants */
+
+    {% comment %} Background Colors {% endcomment %}
+    --color-background: {{ settings.background_color | default: '#FFFFFF' }};
+    --color-background-primary: #FFFFFF;          /* White background */
+    --color-background-secondary: #EFEFEF;        /* Light gray background */
+    --color-background-tertiary: #000000;         /* Black background (for inverse sections) */
+
+    {% comment %} Text Colors {% endcomment %}
+    --color-foreground: {{ settings.foreground_color | default: '#000000' }};
+    --color-text-primary: #000000;                /* Black - Primary text */
+    --color-text-secondary: #787878;              /* Medium gray - Secondary text */
+    --color-text-tertiary: rgba(120, 120, 120, 0.53);  /* Light gray with opacity */
+    --color-text-inverse: #FFFFFF;                /* White text on dark backgrounds */
+    --color-text-accent: #FE7F2D;                 /* Orange text for highlights */
+
+    {% comment %} Border Colors {% endcomment %}
+    --color-border-primary: #000000;              /* Black borders */
+    --color-border-secondary: rgba(0, 0, 0, 0.1); /* Light borders */
+    --color-border-accent: #FE7F2D;               /* Accent borders */
+
+    {% comment %} State Colors {% endcomment %}
+    --color-hover: var(--color-accent);           /* Orange hover state */
+    --color-active: var(--color-accent);          /* Orange active state */
+    --color-focus: var(--color-accent);           /* Orange focus state */
+    --color-disabled: #CCCCCC;                    /* Disabled state */
+
+    {% comment %}
+      ==========================================
+      4. TYPOGRAPHY SCALE
+      ==========================================
+      Mobile-first sizing with desktop overrides
+    {% endcomment %}
+
+    {% comment %} Font Sizes {% endcomment %}
+    --font-size-2xs: 0.625rem;    /* 10px - Small labels */
+    --font-size-xs: 0.75rem;      /* 12px - Micro text */
+    --font-size-sm: 0.875rem;     /* 14px - Category buttons */
+    --font-size-base: 1rem;       /* 16px - Body text, primary UI */
+    --font-size-lg: 1.125rem;     /* 18px - Section headings mobile */
+    --font-size-xl: 1.25rem;      /* 20px - Feature headings */
+    --font-size-2xl: 1.5rem;      /* 24px - Product names, nav tabs */
+    --font-size-3xl: 2rem;        /* 32px - Large section headings */
+
+    {% comment %} Line Heights {% endcomment %}
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    {% comment %} Letter Spacing {% endcomment %}
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.05em;
+
+    {% comment %}
+      ==========================================
+      5. SPACING SCALE
+      ==========================================
+      Consistent spacing rhythm
+    {% endcomment %}
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.3125rem; /* 5px */
+    --space-3: 0.5rem;    /* 8px */
+    --space-4: 0.625rem;  /* 10px */
+    --space-5: 1rem;      /* 16px */
+    --space-6: 1.125rem;  /* 18px */
+    --space-7: 1.25rem;   /* 20px */
+    --space-8: 1.5625rem; /* 25px */
+    --space-9: 1.875rem;  /* 30px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-11: 3rem;     /* 48px */
+    --space-12: 3.5rem;   /* 56px */
+    --space-13: 3.75rem;  /* 60px */
+    --space-14: 3.875rem; /* 62px */
+
+    {% comment %} Semantic Spacing Names {% endcomment %}
+    --gap-micro: var(--space-1);      /* 4px */
+    --gap-tiny: var(--space-2);       /* 5px */
+    --gap-xs: var(--space-3);         /* 8px */
+    --gap-sm: var(--space-4);         /* 10px */
+    --gap-md: var(--space-5);         /* 16px */
+    --gap-lg: var(--space-9);         /* 30px */
+    --gap-xl: var(--space-10);        /* 40px */
+
+    {% comment %}
+      ==========================================
+      6. BORDER RADIUS
+      ==========================================
+    {% endcomment %}
+    --radius-sm: 0.3125rem;   /* 5px - Cards, images */
+    --radius-md: 0.625rem;    /* 10px - Search bar modal */
+    --radius-lg: 1rem;        /* 16px - Large components */
+    --radius-full: 9999px;    /* Fully rounded */
+
+    {% comment %} Shopify Settings Integration {% endcomment %}
+    --style-border-radius-inputs: {{ settings.input_corner_radius | default: 5 }}px;
+
+    {% comment %}
+      ==========================================
+      7. BREAKPOINTS
+      ==========================================
+      Mobile-first responsive design
+    {% endcomment %}
+    --breakpoint-sm: 640px;   /* Small tablets */
+    --breakpoint-md: 768px;   /* Tablets - Font swap threshold */
+    --breakpoint-lg: 1024px;  /* Small desktop */
+    --breakpoint-xl: 1440px;  /* Desktop design width */
+    --breakpoint-2xl: 1920px; /* Large desktop */
+
+    {% comment %}
+      ==========================================
+      8. LAYOUT
+      ==========================================
+    {% endcomment %}
+    --page-width: {{ settings.max_page_width | default: 1440 }};
+    --page-margin: {{ settings.min_page_margin | default: 20 }}px;
+    --header-height: 4rem;        /* 64px - Desktop header */
+    --header-height-mobile: 3.5rem; /* 56px - Mobile header */
+
+    {% comment %}
+      ==========================================
+      9. SEMANTIC TYPOGRAPHY TOKENS
+      ==========================================
+      Purpose-based token names for consistent usage
+    {% endcomment %}
+
+    {% comment %} Headings - Always Work Sans for weight flexibility {% endcomment %}
+    --heading-h1-size: var(--font-size-3xl);
+    --heading-h1-weight: var(--font-weight-bold);
+    --heading-h1-line-height: var(--line-height-tight);
+
+    --heading-h2-size: var(--font-size-2xl);
+    --heading-h2-weight: var(--font-weight-semibold);
+    --heading-h2-line-height: var(--line-height-tight);
+
+    --heading-h3-size: var(--font-size-xl);
+    --heading-h3-weight: var(--font-weight-semibold);
+    --heading-h3-line-height: var(--line-height-normal);
+
+    --heading-h4-size: var(--font-size-lg);
+    --heading-h4-weight: var(--font-weight-medium);
+    --heading-h4-line-height: var(--line-height-normal);
+
+    {% comment %} Body Text {% endcomment %}
+    --body-size: var(--font-size-base);
+    --body-weight: var(--font-weight-normal);
+    --body-line-height: var(--line-height-relaxed);
+
+    --body-sm-size: var(--font-size-sm);
+    --body-sm-weight: var(--font-weight-normal);
+    --body-sm-line-height: var(--line-height-normal);
+
+    {% comment %} Display Text - Mobile: Work Sans, Desktop: Grupo {% endcomment %}
+    --display-sm-size: var(--font-size-xl);
+    --display-md-size: var(--font-size-2xl);
+    --display-lg-size: var(--font-size-3xl);
+
+    {% comment %} UI Elements {% endcomment %}
+    --label-size: var(--font-size-sm);
+    --label-weight: var(--font-weight-medium);
+
+    --button-size: var(--font-size-base);
+    --button-weight: var(--font-weight-normal);
+
+    {% comment %}
+      ==========================================
+      10. TRANSITIONS & ANIMATIONS
+      ==========================================
+    {% endcomment %}
+    --transition-fast: 150ms ease-in-out;
+    --transition-base: 250ms ease-in-out;
+    --transition-slow: 400ms ease-in-out;
+
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+    {% comment %}
+      ==========================================
+      11. Z-INDEX SCALE
+      ==========================================
+      Consistent layering system
+    {% endcomment %}
+    --z-index-base: 1;
+    --z-index-dropdown: 100;
+    --z-index-sticky: 200;
+    --z-index-fixed: 300;
+    --z-index-modal-backdrop: 400;
+    --z-index-modal: 500;
+    --z-index-popover: 600;
+    --z-index-tooltip: 700;
+
+    {% comment %}
+      ==========================================
+      12. SHADOWS
+      ==========================================
+    {% endcomment %}
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   }
+
+  {% comment %}
+    ==========================================
+    RESPONSIVE TYPOGRAPHY - DESKTOP
+    ==========================================
+    Font family swaps at 768px breakpoint
+    Grupo for decorative elements on desktop
+  {% endcomment %}
+  @media (min-width: 768px) {
+    :root {
+      {% comment %} Increase font sizes slightly for desktop {% endcomment %}
+      --font-size-3xl: 2.5rem;  /* 40px on desktop */
+      --heading-h1-size: 3rem;  /* 48px on desktop */
+    }
+  }
+
+  {% comment %}
+    ==========================================
+    UTILITY CLASSES - Display Text
+    ==========================================
+    Responsive typography that swaps font family
+  {% endcomment %}
+
+  {% comment %} Display text - Mobile: Work Sans, Desktop: Grupo {% endcomment %}
+  .display-text {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-normal);
+  }
+
+  @media (min-width: 768px) {
+    .display-text {
+      font-family: var(--font-display);
+      font-weight: 400;  /* Grupo only has 400 weight */
+      letter-spacing: var(--letter-spacing-wide);
+    }
+  }
+
+  {% comment %} Display sizes {% endcomment %}
+  .display-sm { font-size: var(--display-sm-size); }
+  .display-md { font-size: var(--display-md-size); }
+  .display-lg { font-size: var(--display-lg-size); }
+
+  {% comment %} Always Work Sans - Never swap to Grupo {% endcomment %}
+  .text-body { font-family: var(--font-body); }
+  .text-heading { font-family: var(--font-heading); }
 {% endstyle %}
