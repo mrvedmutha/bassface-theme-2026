@@ -13,10 +13,85 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "blocks": {
+        "featured_collection_wDkFnB": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "HARDWELL",
+            "url": "",
+            "image": "shopify://shop_images/Hardwell-RND-IMG01_96759ef1-82d9-438c-bef7-7095fc582683.jpg"
+          }
+        },
+        "featured_collection_7QN8nf": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "HARDWELL",
+            "url": "",
+            "image": "shopify://shop_images/JohnSummit-WhereYouAre-IMG01.jpg"
+          }
+        },
+        "featured_collection_MMzaNA": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "HARDWELL",
+            "url": "",
+            "image": "shopify://shop_images/JohnSummit-WhereYouAre-IMG01.jpg"
+          }
+        },
+        "exclusive_card_kVejKE": {
+          "type": "exclusive_card",
+          "settings": {
+            "image": "shopify://shop_images/Kygo-ArtistEdition-IMG02.jpg",
+            "label": "EXCLUSIVE COLLECTION",
+            "title": "This Week's Highlights one of the explicit collection",
+            "button_text": "THIS IS BUTTON",
+            "button_url": "#"
+          }
+        },
+        "featured_collection_xK7KXg": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "HARDWELL",
+            "url": "",
+            "image": "shopify://shop_images/JohnSummit-WhereYouAre-IMG01.jpg"
+          }
+        },
+        "featured_collection_99bTxr": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "AFROJACK",
+            "url": "",
+            "image": "shopify://shop_images/Kygo-MiamiSunset-Regular-IMG00.jpg"
+          }
+        },
+        "featured_collection_7z3R3h": {
+          "type": "featured_collection",
+          "settings": {
+            "title": "HARDWELL",
+            "url": "#",
+            "image": "shopify://shop_images/MatisseSadko-ArtistEdition-IMG01.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_wDkFnB",
+        "featured_collection_7QN8nf",
+        "featured_collection_MMzaNA",
+        "exclusive_card_kVejKE",
+        "featured_collection_xK7KXg",
+        "featured_collection_99bTxr",
+        "featured_collection_7z3R3h"
+      ],
+      "settings": {
+        "utility_menu": "main-menu",
+        "product_categories_menu": "product-categories",
+        "collections_menu": "collections",
+        "blog_handle": "",
+        "blog_posts_limit": 8,
+        "contact_phone": "",
+        "contact_email": ""
+      }
     }
   },
-  "order": [
-    "header"
-  ],
+  "order": ["header"]
 }
