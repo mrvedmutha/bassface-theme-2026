@@ -30,25 +30,52 @@ All JavaScript dependencies are loaded from CDN in `layout/theme.liquid`:
 
 **Note:** All scripts use `defer` for non-blocking page load.
 
-### When to Use Local JavaScript Files
+### External JavaScript Files (Required)
 
-**Generally, avoid creating local JavaScript files.** Use Alpine.js for most interactivity.
+**NEVER write inline JavaScript in Liquid files.** Always create external JavaScript files.
 
-**Only create local JS files if:**
-1. Complex utility functions needed across multiple components
-2. Third-party integrations requiring custom initialization
-3. User explicitly requests it
-
-**If needed, create:**
+**File Naming Convention:**
+Follow the same naming pattern as CSS files:
 ```
-assets/utils.js           # Shared utilities
-assets/integrations.js    # Third-party integrations
+CSS file:  assets/section-header.css
+JS file:   assets/section-header.js
+
+CSS file:  assets/section-hero.css
+JS file:   assets/section-hero.js
+```
+
+**Examples:**
+```
+assets/section-header.js       # JavaScript for header section
+assets/section-hero.js         # JavaScript for hero section
+assets/section-product-grid.js # JavaScript for product grid
+assets/utils.js                # Shared utilities
+assets/integrations.js         # Third-party integrations
 ```
 
 **Link in Liquid:**
 ```liquid
-<script src="{{ 'utils.js' | asset_url }}" defer></script>
+{{ 'section-header.js' | asset_url | script_tag }}
+{{ 'section-hero.js' | asset_url | script_tag }}
 ```
+
+**Process:**
+1. Create a new `.js` file in `assets/` folder
+2. Follow the naming convention: `section-[name].js` or `snippet-[name].js`
+3. Write all JavaScript code in this external file
+4. Link the file in your Liquid file using `{{ 'filename.js' | asset_url | script_tag }}`
+
+**Exceptions (Allowed inline):**
+- Alpine.js inline directives: `x-data`, `x-init`, `x-show`, `@click`, etc.
+- Critical inline scripts required for performance
+- Vendor scripts loaded via CDN (GSAP, Lenis, Alpine.js)
+
+**What goes in external files:**
+- Alpine component definitions (`Alpine.data()`)
+- Complex functions and logic
+- Event listeners and initialization code
+- Utility functions
+- API integrations
 
 ---
 
@@ -117,45 +144,49 @@ const toggleMenu = () => {
 
 ### Extracting Reusable Components
 
-For complex components, extract to Alpine components:
+For complex components, extract to Alpine components in external files:
 
+**In Liquid file (snippets/product-card.liquid):**
 ```liquid
 <div x-data="productCard">
   <!-- Component markup -->
 </div>
 
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('productCard', () => ({
-      quantity: 1,
-      adding: false,
+{{ 'snippet-product-card.js' | asset_url | script_tag }}
+```
 
-      async addToCart() {
-        this.adding = true;
-        try {
-          const response = await fetch('/cart/add.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              id: this.variantId,
-              quantity: this.quantity
-            })
-          });
+**In external JS file (assets/snippet-product-card.js):**
+```javascript
+document.addEventListener('alpine:init', () => {
+  Alpine.data('productCard', () => ({
+    quantity: 1,
+    adding: false,
 
-          if (!response.ok) throw new Error('Failed to add to cart');
+    async addToCart() {
+      this.adding = true;
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: this.variantId,
+            quantity: this.quantity
+          })
+        });
 
-          const data = await response.json();
-          // Update cart UI
-        } catch (error) {
-          console.error('Error adding to cart:', error);
-          this.error = error.message;
-        } finally {
-          this.adding = false;
-        }
+        if (!response.ok) throw new Error('Failed to add to cart');
+
+        const data = await response.json();
+        // Update cart UI
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        this.error = error.message;
+      } finally {
+        this.adding = false;
       }
-    }));
-  });
-</script>
+    }
+  }));
+});
 ```
 
 ---
@@ -588,6 +619,56 @@ console.log('Product data:', productData);
 
 ## Best Practices with Alpine.js
 
+### 0. External JavaScript Files (Critical Rule)
+
+**✗ BAD - Inline JavaScript in Liquid**
+```liquid
+<!-- sections/header.liquid -->
+<div x-data="mobileMenu">
+  <!-- Menu markup -->
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('mobileMenu', () => ({
+      open: false,
+      toggle() { this.open = !this.open; }
+    }));
+  });
+</script>
+```
+
+**✓ GOOD - External JavaScript file**
+```liquid
+<!-- sections/header.liquid -->
+<div x-data="mobileMenu">
+  <!-- Menu markup -->
+</div>
+
+{{ 'section-header.js' | asset_url | script_tag }}
+```
+
+```javascript
+// assets/section-header.js
+document.addEventListener('alpine:init', () => {
+  Alpine.data('mobileMenu', () => ({
+    open: false,
+    toggle() { this.open = !this.open; }
+  }));
+});
+```
+
+**✓ ALSO GOOD - Simple Alpine directives inline (allowed exception)**
+```liquid
+<!-- sections/header.liquid -->
+<div x-data="{ open: false }">
+  <button @click="open = !open">Toggle</button>
+  <nav x-show="open" x-transition>
+    <!-- Menu items -->
+  </nav>
+</div>
+```
+
 ### 1. Keep Component State Simple
 
 **✓ GOOD - Simple, clear state**
@@ -615,44 +696,56 @@ console.log('Product data:', productData);
 
 ### 2. Extract Complex Components
 
-**✓ GOOD - Reusable Alpine component**
+**✓ GOOD - Reusable Alpine component in external file**
+
+**In Liquid (sections/cart.liquid or snippets/cart-drawer.liquid):**
 ```liquid
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('cartManager', () => ({
-      cart: {},
-      loading: false,
-      error: null,
-
-      async init() {
-        await this.fetchCart();
-      },
-
-      async fetchCart() {
-        this.loading = true;
-        try {
-          const response = await fetch('/cart.js');
-          this.cart = await response.json();
-        } catch (error) {
-          this.error = error.message;
-        } finally {
-          this.loading = false;
-        }
-      }
-    }));
-  });
-</script>
-
 <div x-data="cartManager">
   <!-- Cart UI -->
 </div>
+
+{{ 'section-cart.js' | asset_url | script_tag }}
 ```
 
-**✗ BAD - Inline complex logic**
+**In external JS file (assets/section-cart.js):**
+```javascript
+document.addEventListener('alpine:init', () => {
+  Alpine.data('cartManager', () => ({
+    cart: {},
+    loading: false,
+    error: null,
+
+    async init() {
+      await this.fetchCart();
+    },
+
+    async fetchCart() {
+      this.loading = true;
+      try {
+        const response = await fetch('/cart.js');
+        this.cart = await response.json();
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    }
+  }));
+});
+```
+
+**✗ BAD - Inline complex logic in Liquid file**
 ```liquid
 <div x-data="{ /* 50 lines of complex logic */ }">
   <!-- Hard to read and maintain -->
 </div>
+
+<!-- Or even worse: -->
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('cartManager', () => ({ /* ... */ }));
+  });
+</script>
 ```
 
 ### 3. Use Meaningful Property Names
@@ -913,9 +1006,12 @@ Lenis is automatically initialized in `layout/theme.liquid`. For custom scroll i
 
 Before considering JavaScript work complete:
 
+- [ ] **NO inline JavaScript in Liquid files** (except Alpine directives)
+- [ ] **External JavaScript files created** following naming convention (section-[name].js)
+- [ ] **JavaScript files linked** using `{{ 'filename.js' | asset_url | script_tag }}`
 - [ ] **Alpine.js used for interactivity** (not vanilla JavaScript)
 - [ ] **Component state is simple and clear**
-- [ ] **Complex components extracted** to Alpine.data()
+- [ ] **Complex components extracted** to Alpine.data() in external files
 - [ ] **Error handling in place** for all async operations
 - [ ] **Loading states shown** for async operations
 - [ ] **All console.log statements have TODO comments** (or removed before production)

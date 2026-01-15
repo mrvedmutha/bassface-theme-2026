@@ -44,15 +44,53 @@ blocks/[name].liquid
 
 ---
 
-## CSS & JavaScript
+## CSS & JavaScript Files
 
-### NO Separate CSS/JS Files
-
-**Use Tailwind utilities + Alpine.js directly in Liquid**
-
-### Exception: Shared Utilities (Rare)
+### CSS Files (Required)
+All CSS must be in separate files in the `assets/` folder:
 ```
-assets/utils.js      # Only if complex shared logic needed
+assets/section-[name].css      # Section-specific styles
+assets/snippet-[name].css      # Snippet-specific styles
+```
+
+**Examples:**
+```
+assets/section-header.css
+assets/section-hero.css
+assets/section-product-grid.css
+assets/snippet-product-card.css
+```
+
+### JavaScript Files (Required)
+All JavaScript must be in separate files in the `assets/` folder, following the same naming convention as CSS:
+```
+assets/section-[name].js       # Section-specific JavaScript
+assets/snippet-[name].js       # Snippet-specific JavaScript
+```
+
+**Examples:**
+```
+assets/section-header.js       # JavaScript for header section
+assets/section-hero.js         # JavaScript for hero section
+assets/section-product-grid.js # JavaScript for product grid
+assets/snippet-product-card.js # JavaScript for product card
+assets/utils.js                # Shared utilities (if needed)
+```
+
+**Linking in Liquid:**
+```liquid
+<!-- CSS -->
+<link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}">
+
+<!-- JavaScript -->
+{{ 'section-header.js' | asset_url | script_tag }}
+```
+
+**Exception: Alpine.js inline directives are allowed**
+```liquid
+<div x-data="{ open: false }" @click="open = !open">
+  <!-- Simple Alpine.js directives can be inline -->
+</div>
 ```
 
 ---
@@ -203,6 +241,8 @@ snake_case
 | Section (Liquid) | `[name].liquid` | `header.liquid` |
 | Snippet (Liquid) | `[name].liquid` | `product-card.liquid` |
 | Block (Liquid) | `[name].liquid` | `feature.liquid` |
+| CSS File | `section-[name].css` or `snippet-[name].css` | `section-header.css` |
+| JavaScript File | `section-[name].js` or `snippet-[name].js` | `section-header.js` |
 | Documentation | `docs/[category]/[name]/` | `docs/sections/hero/` |
 | BEM Block | `.[name]` | `.header` |
 | BEM Element | `.[block]__[element]` | `.header__logo` |
@@ -230,8 +270,15 @@ bassface-theme-2026/
 │   ├── text.liquid
 │   └── group.liquid
 ├── assets/
-│   ├── tailwind-output.css
-│   ├── critical.css
+│   ├── section-header.css          # CSS for header section
+│   ├── section-header.js           # JavaScript for header section
+│   ├── section-hero.css            # CSS for hero section
+│   ├── section-hero.js             # JavaScript for hero section
+│   ├── section-product-grid.css    # CSS for product grid
+│   ├── section-product-grid.js     # JavaScript for product grid
+│   ├── snippet-product-card.css    # CSS for product card snippet
+│   ├── snippet-product-card.js     # JavaScript for product card snippet
+│   ├── utils.js                    # Shared utilities (if needed)
 │   └── (direct uploads if needed)
 ├── docs/ (optional documentation)
 │   └── sections/
@@ -247,6 +294,8 @@ bassface-theme-2026/
 
 ### DO ✓
 - Use kebab-case for file names (`product-grid.liquid`)
+- Use `section-[name].css` and `section-[name].js` for section files
+- Use `snippet-[name].css` and `snippet-[name].js` for snippet files
 - Use BEM-like for custom component classes (`.product-card__image`)
 - Use camelCase for Alpine.js properties (`isOpen`)
 - Use snake_case for schema IDs (`background_image`)
@@ -254,7 +303,7 @@ bassface-theme-2026/
 
 ### DON'T ✗
 - Don't use "custom-" prefix anywhere
-- Don't create separate CSS/JS files (use Tailwind + Alpine)
+- Don't write inline JavaScript in Liquid files (except Alpine directives)
 - Don't create documentation for every section
 - Don't mix naming conventions
 - Don't use abbreviated names (`prod` instead of `product`)

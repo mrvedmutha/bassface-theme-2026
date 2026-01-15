@@ -20,6 +20,7 @@
     "Always test theme changes locally before suggesting deployment",
     "Follow the existing code style and structure in the theme",
     "Use Shopify's schema format for section settings",
-    "Optimize images and assets for web performance"
+    "Optimize images and assets for web performance",
+    "NEVER write inline JavaScript in Liquid files. Instead: (1) Create a separate .js file in the assets folder following the same naming convention as CSS files (e.g., section-header.css → section-header.js), (2) Write all JavaScript code in this external file, (3) Link the JavaScript file in the Liquid file using {{ 'filename.js' | asset_url | script_tag }}. This applies to all <script> blocks except for: Alpine.js inline directives (x-data, x-init), critical inline scripts required for performance, or vendor scripts loaded via CDN."
   ]
 }
