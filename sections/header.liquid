@@ -3,64 +3,77 @@
   # - transparent: Used on pages with hero images (overlays content)
   # - solid: Used on standard pages (stacks with content)
   # - sticky: Triggered after scrolling 300px (always uses solid styling)
-  
+
   assign logo_light = settings.logo_light
   assign logo_dark = settings.logo_dark
   assign logo_width = settings.logo_width | default: 150
+
+  # Determine if header should start as transparent or solid
+  assign is_transparent_page = false
+  if template.name == 'index' or template.name == 'collection'
+    assign is_transparent_page = true
+  endif
 -%}
 
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+
 <header
-  x-data="headerAnimation"
+  x-data="headerAnimation({{ is_transparent_page }})"
   :class="{
-    'bg-white': sticky,
-    'bg-transparent': !sticky
+    'section-header--solid': sticky,
+    'section-header--transparent': !sticky
   }"
-  class="fixed top-0 left-0 w-full z-[var(--z-index-sticky)] transition-colors duration-300"
+  class="section-header"
 >
-  <div class="flex items-center justify-between h-header px-10 max-md:px-9 max-sm:px-7">
+  <div class="section-header__container">
     
     {%- comment -%} LEFT GROUP: Hamburger Menu + Search {%- endcomment -%}
-    <div class="flex items-center gap-md shrink-0">
+    <div class="section-header__left">
       {%- comment -%} Hamburger Menu Button {%- endcomment -%}
       <button
         @click="menuOpen = !menuOpen"
+        @mouseenter="animateHamburgerEnter($el)"
+        @mouseleave="animateHamburgerExit($el)"
         aria-label="Toggle Menu"
-        :class="{ 'text-black': sticky, 'text-white': !sticky }"
-        class="transition-base hover:opacity-70"
+        :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
+        class="section-header__button section-header__hamburger"
       >
         {{ 'icon-header-hamburger-menu.svg' | inline_asset_content }}
       </button>
 
-      {%- comment -%} Search Button {%- endcomment -%}
+      {%- comment -%} Search Button - Desktop/Tablet (with text) {%- endcomment -%}
       <button
         @click="searchOpen = !searchOpen"
+        @mouseenter="animateTextEnter($el)"
+        @mouseleave="animateTextExit($el)"
         aria-label="Search"
-        :class="{ 'text-black': sticky, 'text-white': !sticky }"
-        class="hidden md:flex items-center gap-3 transition-base hover:opacity-70"
+        :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
+        class="section-header__button section-header__search-button"
       >
         {{ 'icon-header-search.svg' | inline_asset_content }}
-        <span class="font-display text-xs tracking-wide uppercase">
-          Search
+        <span class="section-header__search-text-wrapper">
+          <span class="section-header__search-text">Search</span>
+          <div class="section-header__underline"></div>
         </span>
       </button>
 
-      {%- comment -%} Search Icon Only (Mobile) {%- endcomment -%}
+      {%- comment -%} Search Icon Only - Mobile {%- endcomment -%}
       <button
         @click="searchOpen = !searchOpen"
         aria-label="Search"
-        :class="{ 'text-black': sticky, 'text-white': !sticky }"
-        class="flex md:hidden transition-base hover:opacity-70"
+        :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
+        class="section-header__button section-header__search-icon"
       >
         {{ 'icon-header-search.svg' | inline_asset_content }}
       </button>
     </div>
 
     {%- comment -%} CENTER GROUP: Logo {%- endcomment -%}
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div class="section-header__logo-wrapper">
       {%- comment -%} DEBUG: logo_light={{ logo_light | default: 'EMPTY' }}, logo_dark={{ logo_dark | default: 'EMPTY' }} {%- endcomment -%}
       <a 
         href="{{ routes.root_url }}" 
-        class="block transition-base hover:opacity-80"
+        class="section-header__logo-link"
       >
         {%- if logo_light != blank and logo_dark != blank -%}
           {%- comment -%} Both logos exist - switch based on sticky state {%- endcomment -%}
@@ -70,7 +83,7 @@
             alt="{{ shop.name }} - Light"
             width="{{ logo_width }}"
             height="52"
-            class="w-auto logo-height"
+            class="section-header__logo-image"
             loading="eager"
           >
           <img
@@ -79,7 +92,7 @@
             alt="{{ shop.name }} - Dark"
             width="{{ logo_width }}"
             height="52"
-            class="w-auto logo-height"
+            class="section-header__logo-image"
             style="display: none;"
             loading="eager"
           >
@@ -90,7 +103,7 @@
             alt="{{ shop.name }}"
             width="{{ logo_width }}"
             height="52"
-            class="w-auto logo-height"
+            class="section-header__logo-image"
             loading="eager"
           >
         {%- elsif logo_dark != blank -%}
@@ -100,14 +113,14 @@
             alt="{{ shop.name }}"
             width="{{ logo_width }}"
             height="52"
-            class="w-auto logo-height"
+            class="section-header__logo-image"
             loading="eager"
           >
         {%- else -%}
           {%- comment -%} No logos - show text {%- endcomment -%}
           <span 
-            :class="{ 'text-black': sticky, 'text-white': !sticky }"
-            class="font-display text-2xl max-md:text-xl max-sm:text-lg uppercase whitespace-nowrap block transition-base"
+            :class="{ 'section-header__logo-text--dark': sticky, 'section-header__logo-text--light': !sticky }"
+            class="section-header__logo-text"
           >
             {{ shop.name }}
           </span>
@@ -116,50 +129,74 @@
     </div>
 
     {%- comment -%} RIGHT GROUP: Account/Login + Cart {%- endcomment -%}
-    <div class="flex items-center gap-md shrink-0">
+    <div class="section-header__right">
       
       {%- comment -%} Account/Login - Desktop & Tablet (Text) {%- endcomment -%}
       {% if shop.customer_accounts_enabled %}
         <a
           href="{{ routes.account_url }}"
-          :class="{ 'text-black': sticky, 'text-white': !sticky }"
-          class="hidden lg:block font-display text-xs tracking-wide uppercase transition-base hover:opacity-70 p-2"
+          @mouseenter="animateTextEnter($el)"
+          @mouseleave="animateTextExit($el)"
+          :class="{ 'section-header__account-link--dark': sticky, 'section-header__account-link--light': !sticky }"
+          class="section-header__account-link"
         >
-          {%- if customer -%}
-            Account
-          {%- else -%}
-            Login/Signup
-          {%- endif -%}
+          <span class="section-header__account-text-wrapper">
+            <span class="section-header__account-text">
+              {%- if customer -%}
+                Account
+              {%- else -%}
+                Login/Signup
+              {%- endif -%}
+            </span>
+            <div class="section-header__underline"></div>
+          </span>
         </a>
 
         {%- comment -%} Account Icon - Mobile {%- endcomment -%}
         <a
           href="{{ routes.account_url }}"
+          @mouseenter="animateIconFillEnter($el)"
+          @mouseleave="animateIconFillExit($el)"
           aria-label="Account"
-          :class="{ 'text-black': sticky, 'text-white': !sticky }"
-          class="flex lg:hidden transition-base hover:opacity-70"
+          :class="{ 'section-header__account-icon--dark': sticky, 'section-header__account-icon--light': !sticky }"
+          class="section-header__account-icon"
         >
-          {{ 'icon-header-user.svg' | inline_asset_content }}
+          {%- comment -%} Transparent header: White icons {%- endcomment -%}
+          <span x-show="!sticky" class="icon-stack">
+            <span class="icon-outline">{{ 'icon-user-white-outline.svg' | inline_asset_content }}</span>
+            <span class="icon-filled">{{ 'icon-user-white-fill.svg' | inline_asset_content }}</span>
+          </span>
+          {%- comment -%} Sticky header: Black icons {%- endcomment -%}
+          <span x-show="sticky" style="display: none;" class="icon-stack">
+            <span class="icon-outline">{{ 'icon-user-black-outline.svg' | inline_asset_content }}</span>
+            <span class="icon-filled">{{ 'icon-user-black-fill.svg' | inline_asset_content }}</span>
+          </span>
         </a>
       {% endif %}
 
       {%- comment -%} Cart Icon {%- endcomment -%}
       <a
         href="{{ routes.cart_url }}"
+        @mouseenter="animateIconFillEnter($el)"
+        @mouseleave="animateIconFillExit($el)"
         aria-label="Cart ({{ cart.item_count }} items)"
-        :class="{ 'text-black': sticky, 'text-white': !sticky }"
-        class="relative transition-base hover:opacity-70"
+        :class="{ 'section-header__cart-link--dark': sticky, 'section-header__cart-link--light': !sticky }"
+        class="section-header__cart-link"
       >
-        {%- comment -%} T-shirt Cart Icon {%- endcomment -%}
-        {{ 'icon-header-t-shirt.svg' | inline_asset_content }}
+        {%- comment -%} Transparent header: White t-shirt {%- endcomment -%}
+        <span x-show="!sticky" class="icon-stack">
+          <span class="icon-outline">{{ 'icon-tshirt-white-outline.svg' | inline_asset_content }}</span>
+          <span class="icon-filled">{{ 'icon-tshirt-white-fill.svg' | inline_asset_content }}</span>
+        </span>
+        {%- comment -%} Sticky header: Black t-shirt {%- endcomment -%}
+        <span x-show="sticky" style="display: none;" class="icon-stack">
+          <span class="icon-outline">{{ 'icon-tshirt-black-outline.svg' | inline_asset_content }}</span>
+          <span class="icon-filled">{{ 'icon-tshirt-black-fill.svg' | inline_asset_content }}</span>
+        </span>
 
-        {%- comment -%} Cart Badge {%- endcomment -%}
+        {%- comment -%} Cart Badge - Orange dot if items present {%- endcomment -%}
         {% if cart.item_count > 0 %}
-          <span 
-            class="absolute -top-1 -right-1 flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-white text-2xs font-semibold"
-          >
-            {{ cart.item_count }}
-          </span>
+          <span class="section-header__cart-badge"></span>
         {% endif %}
       </a>
     </div>
@@ -172,117 +209,7 @@
   at the layout level or per-page template using pt-header class
 {%- endcomment -%}
 
-<script>
-document.addEventListener('alpine:init', () => {
-  Alpine.data('headerAnimation', () => ({
-    sticky: false,
-    menuOpen: false,
-    searchOpen: false,
-    lastScroll: 0,
-    isAnimating: false,  // Prevent re-trigger during animation
-    
-    init() {
-      // Initialize Lenis for smooth scrolling
-      if (typeof Lenis !== 'undefined') {
-        const lenis = new Lenis({
-          duration: 1.2,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          direction: 'vertical',
-          gestureDirection: 'vertical',
-          smooth: true,
-          smoothTouch: false,
-          touchMultiplier: 2,
-        });
-
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-        
-        // Store globally for debugging
-        window.lenis = lenis;
-        console.log('✅ Lenis initialized - Smooth scrolling active');
-      } else {
-        console.warn('⚠️ Lenis not loaded');
-      }
-
-      // GSAP ScrollTrigger alternative with custom scroll detection
-      window.addEventListener('scroll', () => this.handleScroll());
-    },
-
-    handleScroll() {
-      const scrollY = window.scrollY;
-      const threshold = 300;
-
-      // Detect when crossing the threshold
-      if (scrollY > threshold && !this.sticky && !this.isAnimating) {
-        console.log('🔽 TRIGGER: Becoming sticky at scrollY:', scrollY);
-        // Activate sticky with GSAP slide-down animation
-        this.isAnimating = true;
-        this.animateHeaderIn();
-        this.sticky = true;
-      } else if (scrollY <= threshold && this.sticky && !this.isAnimating) {
-        console.log('🔼 TRIGGER: Becoming transparent at scrollY:', scrollY);
-        // Deactivate sticky with slide-up animation
-        // State will switch in onComplete
-        this.isAnimating = true;
-        this.animateHeaderOut();
-      }
-
-      this.lastScroll = scrollY;
-    },
-
-    animateHeaderIn() {
-      if (typeof gsap === 'undefined') {
-        console.warn('⚠️ GSAP not loaded');
-        return;
-      }
-
-      const header = this.$el;
-      
-      console.log('▶️ START: Slide DOWN animation');
-      
-      // Kill any existing animations
-      gsap.killTweensOf(header);
-      
-      // Slide down from top - slower, smoother
-      gsap.fromTo(header, 
-        { 
-          y: -100
-        },
-        { 
-          y: 0,
-          duration: 0.6,
-          ease: 'power3.out',
-          onComplete: () => {
-            console.log('✅ COMPLETE: Slide DOWN animation');
-            this.isAnimating = false;  // Allow next animation
-          }
-        }
-      );
-    },
-
-    animateHeaderOut() {
-      if (typeof gsap === 'undefined') return;
-      
-      const header = this.$el;
-      
-      console.log('▶️ START: Transition to transparent');
-      
-      // Kill any existing animations
-      gsap.killTweensOf(header);
-      
-      // Instant transition - no slide animation
-      this.sticky = false;
-      gsap.set(header, { y: 0, clearProps: 'transform' });
-      
-      console.log('✅ COMPLETE: Instant transition');
-      this.isAnimating = false;  // Allow next animation
-    }
-  }));
-});
-</script>
+<script src="{{ 'section-header.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

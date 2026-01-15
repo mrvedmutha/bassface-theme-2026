@@ -1,0 +1,336 @@
+/* =====================================================
+   HEADER SECTION
+   ===================================================== */
+
+/* Header container - fixed, full width, z-index sticky */
+.section-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--z-index-sticky);
+  transition: background-color 0.3s ease;
+}
+
+/* Background states - controlled by Alpine.js */
+.section-header--transparent {
+  background-color: transparent;
+}
+
+.section-header--solid {
+  background-color: #ffffff;
+}
+
+/* Header inner container */
+.section-header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* =====================================================
+   LEFT GROUP: Hamburger Menu + Search
+   ===================================================== */
+
+.section-header__left {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+
+/* Button base styles */
+.section-header__button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Button color states - controlled by Alpine.js */
+.section-header__button--light {
+  color: #ffffff;
+}
+
+.section-header__button--dark {
+  color: #000000;
+}
+
+/* Search button with text (desktop/tablet) */
+.section-header__search-button {
+  display: none;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-header__search-text-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.section-header__search-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Underline for text elements */
+.section-header__underline {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 0.5px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Search icon only (mobile) */
+.section-header__search-icon {
+  display: flex;
+}
+
+/* =====================================================
+   CENTER GROUP: Logo
+   ===================================================== */
+
+.section-header__logo-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.section-header__logo-link {
+  display: block;
+}
+
+.section-header__logo-image {
+  width: auto;
+  height: 52px;
+}
+
+/* Logo text fallback */
+.section-header__logo-text {
+  font-family: var(--font-display);
+  font-size: 24px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.section-header__logo-text--light {
+  color: #ffffff;
+}
+
+.section-header__logo-text--dark {
+  color: #000000;
+}
+
+/* =====================================================
+   RIGHT GROUP: Account + Cart
+   ===================================================== */
+
+.section-header__right {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  flex-shrink: 0;
+}
+
+/* Account/Login link - desktop text */
+.section-header__account-link {
+  display: none;
+  text-decoration: none;
+  padding: 8px;
+}
+
+.section-header__account-text-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.section-header__account-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.section-header__account-link--light {
+  color: #ffffff;
+}
+
+.section-header__account-link--dark {
+  color: #000000;
+}
+
+/* Account icon - mobile */
+.section-header__account-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 32px;
+  height: 32px;
+}
+
+.section-header__account-icon--light {
+  color: #ffffff;
+}
+
+.section-header__account-icon--dark {
+  color: #000000;
+}
+
+/* User icon - scaled to fit container */
+.section-header__account-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cart link */
+.section-header__cart-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 32px;
+  height: 32px;
+}
+
+.section-header__cart-link--light {
+  color: #ffffff;
+}
+
+.section-header__cart-link--dark {
+  color: #000000;
+}
+
+/* T-shirt icon - scaled to fit container */
+.section-header__cart-link svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cart badge - Orange dot at top right */
+.section-header__cart-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #FF6B35;
+  z-index: 10;
+}
+
+/* =====================================================
+   RESPONSIVE BREAKPOINTS (Desktop-First)
+   ===================================================== */
+
+/* Desktop (1440px) - Base styles show search text + icon */
+.section-header__search-button {
+  display: flex;
+}
+
+.section-header__search-icon {
+  display: none;
+}
+
+.section-header__account-link {
+  display: block;
+}
+
+.section-header__account-icon {
+  display: none;
+}
+
+/* Tablet (1024px) - Hide search text, show only icon */
+@media (max-width: 1024px) {
+  .section-header__search-button {
+    display: none;
+  }
+
+  .section-header__search-icon {
+    display: flex;
+  }
+}
+
+/* Mobile (700px) */
+@media (max-width: 700px) {
+  .section-header__container {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+
+  .section-header__account-link {
+    display: none;
+  }
+
+  .section-header__account-icon {
+    display: flex;
+    width: 24px;
+    height: 24px;
+  }
+
+  .section-header__cart-link {
+    width: 24px;
+    height: 24px;
+  }
+
+  .section-header__logo-text {
+    font-size: 20px;
+  }
+}
+
+/* Small Mobile (412px) */
+@media (max-width: 412px) {
+  .section-header__container {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .section-header__logo-text {
+    font-size: 18px;
+  }
+}
+
+/* =====================================================
+   ICON STACK - Outline & Filled Versions
+   ===================================================== */
+
+/* Container for stacked icons */
+.icon-stack {
+  position: relative;
+  display: inline-block;
+}
+
+/* Outline version - visible by default */
+.icon-outline {
+  position: relative;
+  display: block;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+/* Filled version - hidden by default, positioned on top */
+.icon-filled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
