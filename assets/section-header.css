@@ -230,7 +230,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #FF6B35;
+  background-color: #ff6b35;
   z-index: 10;
 }
 
@@ -302,6 +302,13 @@
 
   .section-header__logo-text {
     font-size: 18px;
+  }
+}
+
+/* Extra Small Mobile (375px) - Logo resize */
+@media (max-width: 375px) {
+  .section-header__logo-image {
+    height: 40px;
   }
 }
 

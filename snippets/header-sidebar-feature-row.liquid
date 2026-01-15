@@ -1,0 +1,28 @@
+{%- liquid
+  # Header Sidebar Featured Row
+  # Renders a featured collection row with image and title
+  # Parameters: block (required)
+
+  assign title = block.settings.title
+  assign url = block.settings.url
+  assign image = block.settings.image
+-%}
+
+<div class="sidebar-drawer__feature-row sidebar-drawer__item" {{ block.shopify_attributes }}>
+  <a href="{{ url }}" class="sidebar-drawer__feature-link">
+    <h3 class="sidebar-drawer__feature-title">
+      {{ title }}
+      <span class="sidebar-drawer__link-underline"></span>
+    </h3>
+    {%- if image != blank -%}
+      <div class="sidebar-drawer__feature-image-wrapper">
+        <img
+          src="{{ image | image_url: width: 200 }}"
+          alt="{{ title | escape }}"
+          loading="lazy"
+          class="sidebar-drawer__feature-image"
+        >
+      </div>
+    {%- endif -%}
+  </a>
+</div>

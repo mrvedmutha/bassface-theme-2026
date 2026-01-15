@@ -1,0 +1,382 @@
+{%- liquid
+  # Header Sidebar (Menu Drawer) - Main Controller
+  # Desktop: Two-column layout
+  # Tablet (1024px): Two-column, no exclusive card
+  # Medium (700px): Single column with images
+  # Mobile (<700px): Two-level drawer, text-only featured collections
+  # Dependencies: Alpine.js, GSAP
+
+  # Get settings from section
+  assign utility_menu = section.settings.utility_menu
+  assign product_categories_menu = section.settings.product_categories_menu
+  assign collections_menu = section.settings.collections_menu
+  assign blog_limit = section.settings.blog_posts_limit | default: 8
+  assign contact_phone = section.settings.contact_phone
+  assign contact_email = section.settings.contact_email
+
+  # Split collections menu into two columns (5 left, rest right)
+  assign collections_links = linklists[collections_menu].links
+  assign collections_left = collections_links | slice: 0, 5
+  assign collections_right = collections_links | offset: 5
+
+  # Get recent blog posts
+  assign recent_posts = blogs[section.settings.blog_handle].articles | limit: blog_limit
+-%}
+
+{{ 'snippet-header-sidebar.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Main Sidebar Drawer {%- endcomment -%}
+<div
+  x-data="headerSidebar()"
+  x-show="$store.sidebar.open"
+  x-cloak
+  class="sidebar-drawer"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Navigation Menu"
+>
+  {%- comment -%} Overlay Background {%- endcomment -%}
+  <div
+    @click="$store.sidebar.toggle()"
+    class="sidebar-drawer__overlay"
+  ></div>
+
+  {%- comment -%} Drawer Content Container {%- endcomment -%}
+  <div class="sidebar-drawer__container">
+
+    {%- comment -%} Close Button {%- endcomment -%}
+    <button
+      @click="$store.sidebar.toggle()"
+      aria-label="Close Menu"
+      class="sidebar-drawer__close"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="sidebar-drawer__close-icon">
+        <line x1="6" y1="12" x2="18" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="sidebar-drawer__close-line sidebar-drawer__close-line--top"/>
+        <line x1="6" y1="12" x2="18" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="sidebar-drawer__close-line sidebar-drawer__close-line--bottom"/>
+      </svg>
+    </button>
+
+    {%- comment -%} Desktop/Tablet/700px: Two-Column Layout | Mobile: Two-Level Drawer {%- endcomment -%}
+    <div class="sidebar-drawer__content">
+
+      {%- comment -%} ========================================
+           LEVEL 1: Main Menu (Mobile) & Full Layout (Desktop)
+           ======================================== {%- endcomment -%}
+      <div
+        class="sidebar-drawer__level sidebar-drawer__level--1"
+        :class="{ 'sidebar-drawer__level--hidden': currentLevel === 2 }"
+      >
+
+        {%- comment -%} Utility Navigation (Top - Full Width) {%- endcomment -%}
+        {%- if utility_menu != blank -%}
+          <nav class="sidebar-drawer__utility-nav sidebar-drawer__item" aria-label="Utility Navigation">
+            <ul class="sidebar-drawer__utility-list">
+              {%- for link in linklists[utility_menu].links -%}
+                <li>
+                  <a
+                    href="{{ link.url }}"
+                    class="sidebar-drawer__utility-link"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                    <span class="sidebar-drawer__link-underline"></span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+
+        {%- comment -%} Two-Column Wrapper: Left Content + Right Card {%- endcomment -%}
+        <div class="sidebar-drawer__columns-wrapper">
+
+          {%- comment -%} LEFT COLUMN: Product Categories + Collections + Featured Cards + Blog {%- endcomment -%}
+          <div class="sidebar-drawer__left-column">
+
+          {%- comment -%} Top Section: Categories + Collections Side-by-Side {%- endcomment -%}
+          <div class="sidebar-drawer__top-sections">
+
+          {%- comment -%} Product Categories Section {%- endcomment -%}
+          {%- if product_categories_menu != blank -%}
+            <div class="sidebar-drawer__section sidebar-drawer__item">
+
+              {%- comment -%} Mobile: Clickable button to Level 2 {%- endcomment -%}
+              <button
+                @click="showLevel2('categories')"
+                class="sidebar-drawer__section-header sidebar-drawer__section-header--mobile-only"
+              >
+                <h2 class="sidebar-drawer__section-title">Product Categories</h2>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="sidebar-drawer__arrow-icon">
+                  <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              {%- comment -%} Desktop/Tablet/700px: Show categories list (max 10 items: 5+5) {%- endcomment -%}
+              <div class="sidebar-drawer__section-content sidebar-drawer__section-content--desktop">
+                <h2 class="sidebar-drawer__section-title">Product Categories</h2>
+                <ul class="sidebar-drawer__categories-list">
+                  {%- for link in linklists[product_categories_menu].links limit: 10 -%}
+                    <li>
+                      <a
+                        href="{{ link.url }}"
+                        class="sidebar-drawer__category-link"
+                        {% if link.current %}aria-current="page"{% endif %}
+                      >
+                        {{ link.title }}
+                        <span class="sidebar-drawer__link-underline"></span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Collections Section {%- endcomment -%}
+          {%- if collections_menu != blank -%}
+            <div class="sidebar-drawer__section sidebar-drawer__item">
+
+              {%- comment -%} Mobile: Clickable button to Level 2 {%- endcomment -%}
+              <button
+                @click="showLevel2('collections')"
+                class="sidebar-drawer__section-header sidebar-drawer__section-header--mobile-only"
+              >
+                <h2 class="sidebar-drawer__section-title">Collections</h2>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="sidebar-drawer__arrow-icon">
+                  <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              {%- comment -%} Desktop/Tablet/700px: Show collections list (max 10 items: 5+5) {%- endcomment -%}
+              <div class="sidebar-drawer__section-content sidebar-drawer__section-content--desktop">
+                <h2 class="sidebar-drawer__section-title">Collections</h2>
+                <ul class="sidebar-drawer__collections-list">
+                  {%- for link in linklists[collections_menu].links limit: 10 -%}
+                    <li>
+                      <a
+                        href="{{ link.url }}"
+                        class="sidebar-drawer__collection-link"
+                        {% if link.current %}aria-current="page"{% endif %}
+                      >
+                        {{ link.title }}
+                        <span class="sidebar-drawer__link-underline"></span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          {%- endif -%}
+
+          </div>
+          {%- comment -%} End of top-sections {%- endcomment -%}
+
+          {%- comment -%} Featured Collections (Images on Desktop/Tablet/700px, Text-only on Mobile) {%- endcomment -%}
+          {%- if section.blocks.size > 0 -%}
+            <div class="sidebar-drawer__featured-section sidebar-drawer__item">
+
+              {%- comment -%} Desktop/Tablet/700px: Featured rows WITH images in 2-column grid {%- endcomment -%}
+              <div class="sidebar-drawer__featured-rows sidebar-drawer__featured-rows--with-images">
+                {%- for block in section.blocks limit: 6 -%}
+                  {%- if block.type == 'featured_collection' -%}
+                    {% render 'header-sidebar-feature-row', block: block %}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              {%- comment -%} Mobile: Featured collections as TEXT ONLY (no images) {%- endcomment -%}
+              <div class="sidebar-drawer__featured-text sidebar-drawer__featured-text--mobile-only">
+                {%- for block in section.blocks limit: 6 -%}
+                  {%- if block.type == 'featured_collection' -%}
+                    <div class="sidebar-drawer__item">
+                      {%- if block.settings.url != blank and block.settings.title != blank -%}
+                        <a href="{{ block.settings.url }}" class="sidebar-drawer__featured-link">
+                          {{ block.settings.title }}
+                          <span class="sidebar-drawer__link-underline"></span>
+                        </a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Blog Section (House of Bassface) {%- endcomment -%}
+          {%- if recent_posts.size > 0 -%}
+            <div class="sidebar-drawer__blog-section sidebar-drawer__item">
+
+              {%- comment -%} Mobile: Clickable button to Level 2 {%- endcomment -%}
+              <button
+                @click="showLevel2('blog')"
+                class="sidebar-drawer__section-header sidebar-drawer__section-header--mobile-only"
+              >
+                <h2 class="sidebar-drawer__section-title">House of Bassface</h2>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="sidebar-drawer__arrow-icon">
+                  <path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+              {%- comment -%} Desktop/Tablet/700px: Show blog list {%- endcomment -%}
+              <div class="sidebar-drawer__section-content sidebar-drawer__section-content--desktop">
+                <h2 class="sidebar-drawer__section-title">House of Bassface</h2>
+                <ul class="sidebar-drawer__blog-list">
+                  {%- for article in recent_posts -%}
+                    <li>
+                      <a href="{{ article.url }}" class="sidebar-drawer__blog-link">
+                        {{ article.title }}
+                        <span class="sidebar-drawer__link-underline"></span>
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Contact Information {%- endcomment -%}
+          {%- if contact_phone != blank or contact_email != blank -%}
+            <div class="sidebar-drawer__contact sidebar-drawer__item">
+              {%- if contact_phone != blank -%}
+                <a href="tel:{{ contact_phone | replace: ' ', '' }}" class="sidebar-drawer__contact-link">
+                  T: {{ contact_phone }}
+                </a>
+              {%- endif -%}
+              {%- if contact_email != blank -%}
+                <a href="mailto:{{ contact_email }}" class="sidebar-drawer__contact-link sidebar-drawer__contact-link--email">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M2 6L10 11L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+        </div>
+
+        {%- comment -%} RIGHT COLUMN: Exclusive Card Only {%- endcomment -%}
+        <div class="sidebar-drawer__right-column">
+
+          {%- comment -%} Exclusive Card (1440px only) {%- endcomment -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'exclusive_card' -%}
+              <div class="sidebar-drawer__exclusive-card sidebar-drawer__item" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.title | escape }}"
+                    loading="lazy"
+                    class="sidebar-drawer__exclusive-image"
+                  >
+                {%- endif -%}
+                <div class="sidebar-drawer__exclusive-content">
+                  {%- if block.settings.label != blank -%}
+                    <p class="sidebar-drawer__exclusive-label">{{ block.settings.label }}</p>
+                  {%- endif -%}
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="sidebar-drawer__exclusive-title">{{ block.settings.title }}</h3>
+                  {%- endif -%}
+                  {%- if block.settings.button_text != blank and block.settings.button_url != blank -%}
+                    <a href="{{ block.settings.button_url }}" class="sidebar-drawer__exclusive-button">
+                      {{ block.settings.button_text }}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+        </div>
+
+        </div>
+        {%- comment -%} End of columns-wrapper {%- endcomment -%}
+
+      </div>
+
+      {%- comment -%} ========================================
+           LEVEL 2: Detail Views (Mobile Only - 3 Different Views)
+           ======================================== {%- endcomment -%}
+      <div
+        class="sidebar-drawer__level sidebar-drawer__level--2"
+        :class="{ 'sidebar-drawer__level--active': currentLevel === 2 }"
+      >
+
+        {%- comment -%} Back Button (Dynamic Title) {%- endcomment -%}
+        <button
+          @click="showLevel1()"
+          class="sidebar-drawer__back-button sidebar-drawer__item"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span x-text="level2BackTitle"></span>
+        </button>
+
+        {%- comment -%} View 1: Product Categories List {%- endcomment -%}
+        <div x-show="level2View === 'categories'" class="sidebar-drawer__level2-content">
+          {%- if product_categories_menu != blank -%}
+            <h2 class="sidebar-drawer__section-title sidebar-drawer__item">Product Categories</h2>
+            <ul class="sidebar-drawer__categories-list">
+              {%- for link in linklists[product_categories_menu].links -%}
+                <li class="sidebar-drawer__item">
+                  <a
+                    href="{{ link.url }}"
+                    class="sidebar-drawer__category-link"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                    <span class="sidebar-drawer__link-underline"></span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} View 2: Collections List {%- endcomment -%}
+        <div x-show="level2View === 'collections'" class="sidebar-drawer__level2-content">
+          {%- if collections_menu != blank -%}
+            <h2 class="sidebar-drawer__section-title sidebar-drawer__item">Collections</h2>
+            <ul class="sidebar-drawer__collections-list sidebar-drawer__collections-list--level2">
+              {%- for link in linklists[collections_menu].links -%}
+                <li class="sidebar-drawer__item">
+                  <a
+                    href="{{ link.url }}"
+                    class="sidebar-drawer__collection-link"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title }}
+                    <span class="sidebar-drawer__link-underline"></span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} View 3: Blog Posts List {%- endcomment -%}
+        <div x-show="level2View === 'blog'" class="sidebar-drawer__level2-content">
+          {%- if recent_posts.size > 0 -%}
+            <h2 class="sidebar-drawer__section-title sidebar-drawer__item">House of Bassface</h2>
+            <ul class="sidebar-drawer__blog-list sidebar-drawer__blog-list--level2">
+              {%- for article in recent_posts -%}
+                <li class="sidebar-drawer__item">
+                  <a href="{{ article.url }}" class="sidebar-drawer__blog-link">
+                    {{ article.title }}
+                    <span class="sidebar-drawer__link-underline"></span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="{{ 'snippet-header-sidebar.js' | asset_url }}" defer></script>

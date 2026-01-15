@@ -31,7 +31,7 @@
     <div class="section-header__left">
       {%- comment -%} Hamburger Menu Button {%- endcomment -%}
       <button
-        @click="menuOpen = !menuOpen"
+        @click="$store.sidebar.toggle()"
         @mouseenter="animateHamburgerEnter($el)"
         @mouseleave="animateHamburgerExit($el)"
         aria-label="Toggle Menu"
@@ -209,12 +209,134 @@
   at the layout level or per-page template using pt-header class
 {%- endcomment -%}
 
+{%- comment -%} Sidebar Drawer {%- endcomment -%}
+{% render 'header-sidebar', section: section %}
+
 <script src="{{ 'section-header.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
   "name": "Header",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sidebar Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "utility_menu",
+      "label": "Utility Menu",
+      "info": "Top navigation links (Homepage, About, Shop, Contact)"
+    },
+    {
+      "type": "link_list",
+      "id": "product_categories_menu",
+      "label": "Product Categories Menu",
+      "info": "Navigation for product categories (shows in Level 2 on mobile)"
+    },
+    {
+      "type": "link_list",
+      "id": "collections_menu",
+      "label": "Collections Menu",
+      "info": "Collections list (splits 5 left, rest right on desktop)"
+    },
+    {
+      "type": "header",
+      "content": "Blog Settings"
+    },
+    {
+      "type": "blog",
+      "id": "blog_handle",
+      "label": "Blog",
+      "info": "Select blog for 'House of Bassface' section"
+    },
+    {
+      "type": "range",
+      "id": "blog_posts_limit",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 8,
+      "label": "Number of Blog Posts",
+      "info": "Recent posts to display (4-8)"
+    },
+    {
+      "type": "header",
+      "content": "Contact Information"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone Number",
+      "placeholder": "+91 9941 864844"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email Address",
+      "placeholder": "info@bassface.com"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Featured Collection Row",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Collection Name",
+          "default": "HARDWELL"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Collection URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Collection Image"
+        }
+      ]
+    },
+    {
+      "type": "exclusive_card",
+      "name": "Exclusive Collection Card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "EXCLUSIVE COLLECTION"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Description",
+          "default": "This Week's Highlights one of the explicit collection"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "THIS IS BUTTON"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
   "class": "header-section"
 }
 {% endschema %}
