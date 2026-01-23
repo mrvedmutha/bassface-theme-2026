@@ -8,5 +8,9 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "logo_light": "shopify://shop_images/bassface-logo-white.svg",
+    "logo_dark": "shopify://shop_images/bassface-logo-black.svg",
+    "content_for_index": []
+  }
 }

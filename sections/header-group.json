@@ -94,8 +94,18 @@
     },
     "search-overlay": {
       "type": "search-overlay",
-      "settings": {}
+      "settings": {
+        "trending_title": "CURRENTLY TRENDING",
+        "product_1": "afrojack-bringin-it-back-oversized-t-shirt-black",
+        "product_2": "asot-lifting-you-higher-regular-t-shirt-brown",
+        "product_3": "asot-reflexion-regular-t-shirt-red",
+        "discover_title": "DISCOVER MORE",
+        "blog_handle": ""
+      }
     }
   },
-  "order": ["header", "search-overlay"]
+  "order": [
+    "header",
+    "search-overlay"
+  ]
 }
