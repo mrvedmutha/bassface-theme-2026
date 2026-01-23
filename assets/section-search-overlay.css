@@ -1,0 +1,649 @@
+/* ==========================================
+   SEARCH OVERLAY COMPONENT
+   ========================================== */
+
+/* Hide Alpine.js templates until loaded */
+[x-cloak] { display: none !important; }
+
+/* ==========================================
+   BACKDROP & CONTAINER
+   ========================================== */
+
+.search-overlay__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  /* Prevent scroll on backdrop */
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Desktop: 528px overlay positioned at x:10, y:10 */
+.search-overlay__container {
+  background-color: #efefef;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 528px;
+  max-height: calc(100vh - 20px);
+  height: auto;
+  /* Allow touch actions inside container */
+  touch-action: auto;
+}
+
+/* ==========================================
+   SEARCH BAR - Fixed at Top
+   ========================================== */
+
+.search-overlay__search-bar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #efefef;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.search-overlay__search-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding-left: 64px;
+  padding-right: 24px;
+}
+
+.search-overlay__search-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.search-overlay__search-left svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-text-secondary, #787878);
+}
+
+.search-overlay__search-input {
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #000;
+  outline: none;
+  flex: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.search-overlay__search-input::placeholder {
+  color: rgba(120, 120, 120, 0.8);
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+.search-overlay__close-button {
+  width: 46px;
+  height: 46px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  transition: opacity 0.2s ease;
+  margin-left: 48px;
+}
+
+.search-overlay__close-button:hover {
+  opacity: 0.7;
+}
+
+.search-overlay__close-button svg {
+  width: 100%;
+  height: 100%;
+}
+
+.search-overlay__search-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================
+   CONTENT AREA - Scrollable
+   ========================================== */
+
+.search-overlay__content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  /* Enable smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  /* Ensure content can scroll */
+  min-height: 0;
+  max-height: calc(100vh - 20px - 49px); /* Viewport - container margin - search bar height */
+  /* Allow vertical scrolling only */
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
+/* Custom scrollbar for webkit browsers */
+.search-overlay__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search-overlay__content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.search-overlay__content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 2px solid #efefef;
+}
+
+.search-overlay__content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Firefox scrollbar styling */
+.search-overlay__content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   SECTIONS
+   ========================================== */
+
+.search-overlay__section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+.search-overlay__section-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: #fe7f2d;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================
+   PRODUCT CARDS - Currently Trending
+   ========================================== */
+
+.search-overlay__products {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-overlay__product-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.search-overlay__product-card:hover {
+  opacity: 0.8;
+}
+
+.search-overlay__product-image {
+  width: 80px;
+  height: 80px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-overlay__product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.search-overlay__product-placeholder {
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.search-overlay__product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.search-overlay__product-category {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  color: #787878;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.search-overlay__product-title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  color: #000;
+  margin: 0;
+}
+
+/* ==========================================
+   SEARCH RESULT BUTTONS
+   ========================================== */
+
+.search-overlay__button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 40px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+  width: auto;
+  align-self: flex-start;
+}
+
+.search-overlay__button:disabled {
+  cursor: not-allowed;
+  border-color: #666;
+}
+
+.search-overlay__button-fill {
+  position: absolute;
+  background-color: #000;
+  border-radius: 50%;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.search-overlay__button-text {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 300;
+  color: #000;
+  transition: color 0.3s ease;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* Hover state - text becomes white */
+.search-overlay__button--hover .search-overlay__button-text {
+  color: #fff;
+}
+
+/* Loading state - dark grey background */
+.search-overlay__button--loading {
+  background-color: #666;
+  border-color: #666;
+}
+
+.search-overlay__button--loading .search-overlay__button-text {
+  color: #fff;
+}
+
+/* Touch devices - simple tap state */
+@media (hover: none) and (pointer: coarse) {
+  .search-overlay__button:active {
+    background-color: #000;
+    border-color: #000;
+  }
+
+  .search-overlay__button:active .search-overlay__button-text {
+    color: #fff;
+  }
+}
+
+/* ==========================================
+   SKELETON LOADERS
+   ========================================== */
+
+/* Shimmer animation keyframes */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+/* Base skeleton styles */
+.search-overlay__skeleton {
+  pointer-events: none;
+  cursor: default;
+}
+
+.search-overlay__skeleton-box,
+.search-overlay__skeleton-text {
+  background: linear-gradient(
+    90deg,
+    #e0e0e0 0px,
+    #f0f0f0 40px,
+    #e0e0e0 80px
+  );
+  background-size: 468px 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* Product image skeleton */
+.search-overlay__skeleton-box {
+  background: linear-gradient(
+    90deg,
+    #e0e0e0 0px,
+    #f0f0f0 40px,
+    #e0e0e0 80px
+  );
+  background-size: 468px 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 5px;
+}
+
+/* Text skeleton variants */
+.search-overlay__skeleton-text {
+  height: 12px;
+  margin-bottom: 4px;
+}
+
+.search-overlay__skeleton-text--sm {
+  width: 80px;
+  height: 10px;
+}
+
+.search-overlay__skeleton-text--md {
+  width: 140px;
+  height: 16px;
+}
+
+.search-overlay__skeleton-text--lg {
+  width: 280px;
+  height: 14px;
+}
+
+/* Product info skeleton spacing */
+.search-overlay__skeleton .search-overlay__product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Arrow should remain visible but dimmed */
+.search-overlay__skeleton .search-overlay__blog-arrow {
+  opacity: 0.3;
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .search-overlay__skeleton-text--lg {
+    width: 220px;
+  }
+
+  .search-overlay__skeleton-text--md {
+    width: 120px;
+  }
+}
+
+/* ==========================================
+   FALLBACK CONTENT
+   ========================================== */
+
+.search-overlay__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 270px; /* Approximate height of 3 product cards (80px + 10px gap) * 3 */
+  padding: 40px 20px;
+}
+
+.search-overlay__fallback-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  color: #787878;
+  text-align: center;
+  margin: 0;
+}
+
+/* For blogs section fallback */
+.search-overlay__section--blogs .search-overlay__fallback {
+  min-height: 178px; /* Approximate height of 3 blog links (56px + 5px gap) * 3 */
+}
+
+/* ==========================================
+   BLOG LINKS - Discover More
+   ========================================== */
+
+.search-overlay__section--blogs {
+  gap: 10px;
+}
+
+.search-overlay__blogs {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.search-overlay__blog-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 20px 20px 20px 0;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.search-overlay__blog-link:hover {
+  opacity: 0.7;
+}
+
+.search-overlay__blog-link--placeholder {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.search-overlay__blog-link--placeholder:hover {
+  opacity: 0.5;
+}
+
+.search-overlay__blog-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+  flex: 1;
+}
+
+.search-overlay__blog-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6px;
+  height: 10px;
+  flex-shrink: 0;
+  color: #000;
+}
+
+.search-overlay__blog-arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================
+   TABLET & MOBILE - Full Screen
+   Below 700px viewport
+   ========================================== */
+
+@media (max-width: 700px) {
+  .search-overlay__backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .search-overlay__container {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    background-color: #efefef;
+  }
+
+  .search-overlay__search-bar {
+    background-color: #efefef;
+  }
+
+  .search-overlay__search-content {
+    padding-left: 25px;
+    padding-right: 25px;
+    height: 56px;
+  }
+
+  .search-overlay__search-left {
+    gap: 18px;
+  }
+
+  .search-overlay__close-button {
+    margin-left: 0;
+  }
+
+  .search-overlay__content {
+    padding: 40px 40px 56px;
+    gap: 30px;
+    max-height: calc(100vh - 57px); /* Full viewport - search bar height */
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+
+  .search-overlay__section-title {
+    font-size: 18px;
+  }
+
+  /* Product cards larger on mobile */
+  .search-overlay__product-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .search-overlay__product-card {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .search-overlay__product-info {
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .search-overlay__product-title {
+    font-size: 16px;
+  }
+
+  /* Adjust fallback height for larger mobile product cards */
+  .search-overlay__fallback {
+    min-height: 360px; /* Approximate height for 3 larger product cards (100px + 10px gap) * 3 + padding */
+  }
+
+  /* Button adjustments for mobile */
+  .search-overlay__button {
+    padding: 16px 30px;
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   MOBILE SMALL - 412px and below
+   ========================================== */
+
+@media (max-width: 412px) {
+  .search-overlay__content {
+    padding: 20px 20px 30px;
+    gap: 10px;
+    max-height: calc(100vh - 57px); /* Ensure scrolling works */
+  }
+
+  .search-overlay__section {
+    gap: 10px;
+  }
+
+  .search-overlay__section-title {
+    font-size: 18px;
+  }
+
+  .search-overlay__product-card {
+    padding: 10px;
+  }
+
+  .search-overlay__blog-link {
+    height: 56px;
+  }
+}
+
+/* ==========================================
+   ANIMATIONS
+   Note: GSAP animations are handled in JS
+   ========================================== */
+
+.search-overlay__container {
+  /* Initial state for GSAP animation - positioned above viewport */
+  transform: translateY(-100%);
+  will-change: transform;
+}
+
+/* Prevent body scroll when overlay is open */
+body.search-overlay-open {
+  overflow: hidden !important;
+}

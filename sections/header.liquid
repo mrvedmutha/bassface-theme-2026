@@ -43,7 +43,7 @@
 
       {%- comment -%} Search Button - Desktop/Tablet (with text) {%- endcomment -%}
       <button
-        @click="searchOpen = !searchOpen"
+        @click="$store.searchOverlay.toggle()"
         @mouseenter="animateTextEnter($el)"
         @mouseleave="animateTextExit($el)"
         aria-label="Search"
@@ -59,7 +59,7 @@
 
       {%- comment -%} Search Icon Only - Mobile {%- endcomment -%}
       <button
-        @click="searchOpen = !searchOpen"
+        @click="$store.searchOverlay.toggle()"
         aria-label="Search"
         :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
         class="section-header__button section-header__search-icon"

@@ -91,7 +91,11 @@
         "contact_phone": "",
         "contact_email": ""
       }
+    },
+    "search-overlay": {
+      "type": "search-overlay",
+      "settings": {}
     }
   },
-  "order": ["header"]
+  "order": ["header", "search-overlay"]
 }
