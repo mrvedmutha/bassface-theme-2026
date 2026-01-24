@@ -1,0 +1,193 @@
+{% comment %}
+  Cart Drawer Item
+  Renders a single cart item with product details, quantity controls, and options
+
+  Accepts:
+  - item: {Object} Cart line item object
+
+  Usage:
+  {% render 'cart-drawer-item', item: item %}
+{% endcomment %}
+
+{%- assign note_exists = false -%}
+{%- if item.properties['Note'] != blank -%}
+  {%- assign note_exists = true -%}
+{%- endif -%}
+
+<div
+  class="cart-drawer__item"
+  :class="{ 'cart-drawer__item--removing': isRemoving }"
+  data-cart-item="{{ item.key }}"
+  x-data="{
+    noteOpen: {{ note_exists }},
+    noteValue: '{{ item.properties['Note'] | escape }}',
+    quantity: {{ item.quantity }},
+    isRemoving: false
+  }"
+  @cart-item-updated.window="
+    if ($event.detail.key === '{{ item.key }}') {
+      quantity = $event.detail.quantity || 0;
+      isRemoving = false;
+    }
+  "
+>
+  {%- comment -%} Show skeleton when removing {%- endcomment -%}
+  <template x-if="isRemoving">
+    <div style="display: contents;">
+      {% render 'cart-item-skeleton' %}
+    </div>
+  </template>
+
+  {%- comment -%} Show actual content when not removing {%- endcomment -%}
+  <template x-if="!isRemoving">
+    <div style="display: contents;" data-cart-item-content>
+      {%- comment -%} Product Image {%- endcomment -%}
+      <div class="cart-drawer__item-image">
+        <div class="cart-drawer__item-image-wrapper">
+          {% if item.image %}
+            <img
+              src="{{ item.image | image_url: width: 300 }}"
+              alt="{{ item.image.alt | escape }}"
+              width="150"
+              height="150"
+              loading="lazy"
+            >
+          {% endif %}
+        </div>
+      </div>
+
+      {%- comment -%} Product Details Container - Expands when note is shown {%- endcomment -%}
+      <div class="cart-drawer__item-details-container">
+        {%- comment -%} Product Details {%- endcomment -%}
+        <div class="cart-drawer__item-details">
+          {%- comment -%} Left Column: Product Info + Options {%- endcomment -%}
+          <div class="cart-drawer__item-info">
+            {%- comment -%} Product Info {%- endcomment -%}
+            <div class="cart-drawer__item-product-info">
+              {% if item.product.type != blank %}
+                <p class="cart-drawer__item-category">{{ item.product.type | upcase }}</p>
+              {% endif %}
+
+              <div class="cart-drawer__item-title-variant">
+                <h3 class="cart-drawer__item-title">{{ item.product.title }}</h3>
+                {% unless item.variant.title contains 'Default' %}
+                  {% for option in item.options_with_values %}
+                    <p class="cart-drawer__item-variant">{{ option.name | upcase }}: {{ option.value }}</p>
+                  {% endfor %}
+                {% endunless %}
+              </div>
+            </div>
+
+            {%- comment -%} Gift Box & Add Note Options {%- endcomment -%}
+            <div class="cart-drawer__item-options">
+              {%- comment -%} Gift Box Option {%- endcomment -%}
+              <div class="cart-drawer__item-option">
+                <button
+                  type="button"
+                  class="cart-drawer__item-checkbox"
+                  data-option="gift-box"
+                  data-item-key="{{ item.key }}"
+                  aria-label="Add gift box"
+                  x-data="{ checked: {{ item.properties['Gift Box'] | default: false }} }"
+                  @click.stop="checked = !checked; $dispatch('update-cart-attribute', { key: '{{ item.key }}', property: 'Gift Box', value: checked })"
+                >
+                  <span class="cart-drawer__checkbox-icon" :class="checked ? 'cart-drawer__checkbox-icon--checked' : ''">
+                    {% render 'icon', icon: 'checkmark-pending' %}
+                    {% render 'icon', icon: 'checkmark-done' %}
+                  </span>
+                </button>
+                <span class="cart-drawer__item-option-label">Gift Box</span>
+              </div>
+
+              {%- comment -%} Add a Note Option {%- endcomment -%}
+              <div class="cart-drawer__item-option">
+                <button
+                  type="button"
+                  class="cart-drawer__item-checkbox"
+                  data-option="add-note"
+                  data-item-key="{{ item.key }}"
+                  aria-label="Add a note"
+                  @click.stop="noteOpen = !noteOpen"
+                >
+                  <span class="cart-drawer__checkbox-icon" :class="noteOpen ? 'cart-drawer__checkbox-icon--checked' : ''">
+                    {% render 'icon', icon: 'checkmark-pending' %}
+                    {% render 'icon', icon: 'checkmark-done' %}
+                  </span>
+                </button>
+                <span class="cart-drawer__item-option-label">Add a Note</span>
+              </div>
+            </div>
+          </div>
+
+          {%- comment -%} Right Column: Price, Quantity, Remove {%- endcomment -%}
+          <div class="cart-drawer__item-actions">
+            {%- comment -%} Row 1: Price (Unit Price - Static) {%- endcomment -%}
+            <div class="cart-drawer__item-price-row">
+              <p class="cart-drawer__item-price">{{ item.final_price | money }}</p>
+            </div>
+
+            {%- comment -%} Row 2: Quantity Controls {%- endcomment -%}
+            <div class="cart-drawer__item-quantity">
+              <button
+                type="button"
+                class="cart-drawer__quantity-btn cart-drawer__quantity-btn--plus"
+                aria-label="Increase quantity"
+                @click.stop="quantity++; $dispatch('update-quantity', { key: '{{ item.key }}', quantity: quantity })"
+              >
+                {% render 'icon', icon: 'plus' %}
+              </button>
+              <span class="cart-drawer__quantity-value" x-text="quantity">{{ item.quantity }}</span>
+              <button
+                type="button"
+                class="cart-drawer__quantity-btn cart-drawer__quantity-btn--minus"
+                aria-label="Decrease quantity"
+                @click.stop="
+                  if (quantity === 1) {
+                    isRemoving = true;
+                  }
+                  quantity > 0 ? quantity-- : quantity = 0;
+                  $dispatch('update-quantity', { key: '{{ item.key }}', quantity: quantity })
+                "
+              >
+                {% render 'icon', icon: 'minus' %}
+              </button>
+            </div>
+
+            {%- comment -%} Row 3: Remove Button {%- endcomment -%}
+            <button
+              type="button"
+              class="cart-drawer__remove"
+              aria-label="Remove item"
+              @click.stop="isRemoving = true; quantity = 0; $dispatch('remove-item', { key: '{{ item.key }}' })"
+            >
+              <span class="cart-drawer__remove-text">Remove</span>
+              <span class="cart-drawer__remove-icon">
+                {% render 'icon', icon: 'trash-outline' %}
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {%- comment -%} Add Note Textarea (expands when note option is checked) {%- endcomment -%}
+        <div
+          class="cart-drawer__item-note"
+          x-show="noteOpen"
+          x-transition:enter="cart-drawer__item-note--enter"
+          x-transition:enter-start="cart-drawer__item-note--enter-start"
+          x-transition:enter-end="cart-drawer__item-note--enter-end"
+          x-transition:leave="cart-drawer__item-note--leave"
+          x-transition:leave-start="cart-drawer__item-note--leave-start"
+          x-transition:leave-end="cart-drawer__item-note--leave-end"
+        >
+          <textarea
+            class="cart-drawer__note-textarea"
+            placeholder="Add your note here..."
+            rows="3"
+            @input.stop="$dispatch('update-cart-attribute', { key: '{{ item.key }}', property: 'Note', value: $event.target.value })"
+            x-model="noteValue"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>

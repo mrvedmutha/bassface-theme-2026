@@ -200,7 +200,9 @@
    ===================================================== */
 
 .sidebar-drawer__level {
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
 }
 
 /* Small Mobile (412px-699px): NO level system, show all content */

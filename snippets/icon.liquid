@@ -1,0 +1,32 @@
+{% comment %}
+  Icon Renderer
+  Renders SVG icons from the assets folder
+
+  Accepts:
+  - icon: {String} Icon name (without 'icon-' prefix and '.svg' extension)
+
+  Usage:
+  {% render 'icon', icon: 'plus' %}
+  {% render 'icon', icon: 'minus' %}
+{% endcomment %}
+
+{%- case icon -%}
+  {%- when 'plus' -%}
+    {{ 'icon-plus.svg' | inline_asset_content }}
+  {%- when 'minus' -%}
+    {{ 'icon-minus.svg' | inline_asset_content }}
+  {%- when 'trash-outline' -%}
+    {{ 'icon-trash-outline.svg' | inline_asset_content }}
+  {%- when 'checkmark-pending' -%}
+    {{ 'icon-checkmark-pending.svg' | inline_asset_content }}
+  {%- when 'checkmark-done' -%}
+    {{ 'icon-checkmark-done.svg' | inline_asset_content }}
+  {%- when 'close-button' -%}
+    {{ 'icon-close-button.svg' | inline_asset_content }}
+  {%- when 'sheild-tick-orange-outline' -%}
+    {{ 'icon-sheild-tick-orange-outline.svg' | inline_asset_content }}
+  {%- when 'tick-sq-rounded-outline' -%}
+    {{ 'icon-tick-sq-rounded-outline.svg' | inline_asset_content }}
+  {%- else -%}
+    {{ icon | prepend: 'icon-' | append: '.svg' | inline_asset_content }}
+{%- endcase -%}

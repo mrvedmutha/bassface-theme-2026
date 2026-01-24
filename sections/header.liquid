@@ -175,11 +175,14 @@
       {% endif %}
 
       {%- comment -%} Cart Icon {%- endcomment -%}
-      <a
-        href="{{ routes.cart_url }}"
+      <button
+        type="button"
+        @click="$dispatch('open-cart')"
         @mouseenter="animateIconFillEnter($el)"
         @mouseleave="animateIconFillExit($el)"
-        aria-label="Cart ({{ cart.item_count }} items)"
+        x-data="{ cartCount: {{ cart.item_count }} }"
+        @cart:count-updated.window="cartCount = $event.detail.count"
+        :aria-label="`Cart (${cartCount} items)`"
         :class="{ 'section-header__cart-link--dark': sticky, 'section-header__cart-link--light': !sticky }"
         class="section-header__cart-link"
       >
@@ -195,10 +198,8 @@
         </span>
 
         {%- comment -%} Cart Badge - Orange dot if items present {%- endcomment -%}
-        {% if cart.item_count > 0 %}
-          <span class="section-header__cart-badge"></span>
-        {% endif %}
-      </a>
+        <span x-show="cartCount > 0" class="section-header__cart-badge"></span>
+      </button>
     </div>
 
   </div>

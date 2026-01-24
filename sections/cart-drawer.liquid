@@ -1,0 +1,343 @@
+{% comment %}
+  Cart Drawer
+  A slide-out cart drawer with skew animation
+
+  Features:
+  - Right-to-left skew entry animation
+  - Sticky header and footer
+  - Scrollable cart items
+  - Add note and gift box options
+  - Coupon code application
+  - Real-time AJAX updates
+{% endcomment %}
+
+{{ 'section-cart-drawer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+<div
+  id="cart-drawer"
+  class="cart-drawer"
+  x-data="cartDrawer()"
+  x-show="isOpen"
+  x-cloak
+  @open-cart.window="openDrawer()"
+  @close-cart.window="closeDrawer()"
+  @update-quantity.window="updateQuantity($event.detail)"
+  @remove-item.window="removeItem($event.detail)"
+  @update-cart-attribute.window="updateCartAttribute($event.detail)"
+  @keydown.escape.window="closeDrawer()"
+>
+  {%- comment -%} Backdrop {%- endcomment -%}
+  <div
+    class="cart-drawer__backdrop"
+    x-show="isOpen"
+    x-transition:enter="cart-drawer__backdrop--enter"
+    x-transition:enter-start="cart-drawer__backdrop--enter-start"
+    x-transition:enter-end="cart-drawer__backdrop--enter-end"
+    x-transition:leave="cart-drawer__backdrop--leave"
+    x-transition:leave-start="cart-drawer__backdrop--leave-start"
+    x-transition:leave-end="cart-drawer__backdrop--leave-end"
+    @click="closeDrawer()"
+    aria-hidden="true"
+  ></div>
+
+  {%- comment -%} Drawer Container {%- endcomment -%}
+  <div
+    class="cart-drawer__container"
+    x-show="isOpen"
+    x-transition:enter="cart-drawer__container--enter"
+    x-transition:enter-start="cart-drawer__container--enter-start"
+    x-transition:enter-end="cart-drawer__container--enter-end"
+    x-transition:leave="cart-drawer__container--leave"
+    x-transition:leave-start="cart-drawer__container--leave-start"
+    x-transition:leave-end="cart-drawer__container--leave-end"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Shopping cart"
+  >
+    {%- comment -%} Drawer Content (cropped, not skewed) {%- endcomment -%}
+    <div class="cart-drawer__content">
+
+      {%- comment -%} Header (Sticky) {%- endcomment -%}
+      <div class="cart-drawer__header">
+        <h2 class="cart-drawer__title" x-text="cartCount > 0 ? `${cartCount} ITEM${cartCount > 1 ? 'S' : ''} IN YOUR CART` : 'YOUR CART IS EMPTY'">
+          {{ cart.item_count }} ITEM{{ cart.item_count | pluralize: '', 'S' }} IN YOUR CART
+        </h2>
+        <button
+          type="button"
+          class="cart-drawer__close"
+          @click="closeDrawer()"
+          aria-label="Close cart"
+        >
+          {% render 'icon', icon: 'close-button' %}
+        </button>
+      </div>
+
+      {%- comment -%} Cart Items (Scrollable) {%- endcomment -%}
+      <div class="cart-drawer__body">
+        <template x-if="cartCount === 0">
+          <div class="cart-drawer__empty">
+            {%- comment -%} Empty state - just the header and close button {%- endcomment -%}
+          </div>
+        </template>
+
+        <template x-if="cartCount > 0">
+          <div class="cart-drawer__items-wrapper">
+            <div class="cart-drawer__items" id="cart-drawer-items">
+              {% for item in cart.items %}
+                {% render 'cart-drawer-item', item: item %}
+              {% endfor %}
+            </div>
+
+            {%- comment -%} Coupon/Gift Card Section {%- endcomment -%}
+            <div class="cart-drawer__coupon-section">
+              <div class="cart-drawer__coupon-label">
+                <span>COUPON CODE/<br>GIFT CARD</span>
+              </div>
+              <div class="cart-drawer__coupon-input-wrapper" x-data="{
+                couponCode: '',
+                couponState: 'idle',
+                errorMessage: '',
+                init() {
+                  console.log('TODO: Coupon component initialized');
+                  this.$watch('couponState', value => console.log('TODO: couponState changed to:', value));
+                  this.$watch('errorMessage', value => console.log('TODO: errorMessage changed to:', value));
+
+                  const savedCoupon = sessionStorage.getItem('discount_code');
+                  if (savedCoupon) {
+                    console.log('TODO: Found saved coupon:', savedCoupon);
+                    this.couponCode = savedCoupon;
+                    this.couponState = 'valid';
+                  }
+                },
+                async clearCoupon() {
+                  console.log('TODO: Clearing coupon');
+                  sessionStorage.removeItem('discount_code');
+                  this.couponCode = '';
+                  this.couponState = 'idle';
+                  this.errorMessage = '';
+
+                  this.$root.isPriceUpdating = true;
+                  await new Promise(resolve => setTimeout(resolve, 300));
+                  this.$root.isPriceUpdating = false;
+
+                  console.log('TODO: Coupon cleared, prices restored');
+                },
+                async applyCoupon() {
+                  console.log('TODO: applyCoupon called with code:', this.couponCode);
+
+                  if (!this.couponCode || this.couponCode.trim() === '') {
+                    console.log('TODO: Empty code, returning idle state');
+                    return {
+                      state: 'idle',
+                      message: ''
+                    };
+                  }
+
+                  try {
+                    const trimmedCode = this.couponCode.trim().toUpperCase();
+                    console.log('TODO: Trimmed code:', trimmedCode);
+
+                    const response = await fetch('/cart.js');
+                    const cart = await response.json();
+                    console.log('TODO: Cart data:', cart);
+
+                    if (cart.item_count === 0) {
+                      console.log('TODO: Cart is empty, returning invalid');
+                      return {
+                        state: 'invalid',
+                        message: 'Your added coupon is not valid. Please try again.'
+                      };
+                    }
+
+                    try {
+                      console.log('TODO: Attempting to validate discount code...');
+                      const discountResponse = await fetch('/discount/' + trimmedCode, {
+                        method: 'HEAD',
+                        redirect: 'manual'
+                      });
+
+                      console.log('TODO: Discount response status:', discountResponse.status);
+                      console.log('TODO: Discount response type:', discountResponse.type);
+
+                      if (discountResponse.status === 303 || discountResponse.type === 'opaqueredirect') {
+                        sessionStorage.setItem('discount_code', trimmedCode);
+                        console.log('TODO: Valid discount code ' + trimmedCode + ' saved to session');
+
+                        this.$root.isPriceUpdating = true;
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                        this.$root.isPriceUpdating = false;
+
+                        return {
+                          state: 'valid',
+                          message: ''
+                        };
+                      } else {
+                        console.log('TODO: Invalid discount code - status not 303/opaqueredirect');
+                        return {
+                          state: 'invalid',
+                          message: 'Your added coupon is not valid. Please try again.'
+                        };
+                      }
+                    } catch (fetchError) {
+                      console.log('TODO: Fetch error during validation:', fetchError);
+                      console.log('TODO: Assuming valid and letting checkout handle validation');
+                      sessionStorage.setItem('discount_code', trimmedCode);
+
+                      this.$root.isPriceUpdating = true;
+                      await new Promise(resolve => setTimeout(resolve, 300));
+                      this.$root.isPriceUpdating = false;
+
+                      return {
+                        state: 'valid',
+                        message: ''
+                      };
+                    }
+                  } catch (error) {
+                    console.error('TODO: Error in applyCoupon:', error);
+                    return {
+                      state: 'invalid',
+                      message: 'Your added coupon is not valid. Please try again.'
+                    };
+                  }
+                }
+              }">
+                <div class="cart-drawer__coupon-input-container">
+                  <input
+                    type="text"
+                    class="cart-drawer__coupon-input"
+                    :class="{ 'cart-drawer__coupon-input--error': couponState === 'invalid', 'cart-drawer__coupon-input--applied': couponState === 'valid' }"
+                    placeholder="INSERT..."
+                    x-model="couponCode"
+                    :readonly="couponState === 'valid'"
+                    @keydown.enter.stop="if (couponState !== 'valid') { applyCoupon().then(result => { console.log('TODO: Coupon result (Enter):', result); couponState = result.state; errorMessage = result.message; if (result.state === 'invalid') { setTimeout(() => { console.log('TODO: Clearing input after 3s'); couponCode = ''; couponState = 'idle'; errorMessage = ''; }, 3000); } }); }"
+                    @click.stop
+                    @input="if (couponState !== 'idle' && couponState !== 'valid') { couponState = 'idle'; errorMessage = ''; }"
+                  >
+                  <button
+                    type="button"
+                    class="cart-drawer__coupon-apply"
+                    @click.stop="console.log('TODO: Button clicked, code:', couponCode, 'state:', couponState); if (couponState === 'valid') { clearCoupon(); } else { applyCoupon().then(result => { console.log('TODO: Coupon result:', result); couponState = result.state; errorMessage = result.message; console.log('TODO: State updated to:', couponState); if (result.state === 'invalid') { setTimeout(() => { console.log('TODO: Clearing input after 3s'); couponCode = ''; couponState = 'idle'; errorMessage = ''; }, 3000); } }); }"
+                    :disabled="!couponCode && couponState !== 'valid'"
+                    aria-label="Apply or clear coupon"
+                  >
+                    <span
+                      class="cart-drawer__coupon-icon"
+                      x-show="couponState === 'idle' || couponState === 'invalid'"
+                    >
+                      {% render 'icon', icon: 'tick-sq-rounded-outline' %}
+                    </span>
+                    <span
+                      class="cart-drawer__coupon-icon"
+                      x-show="couponState === 'valid'"
+                      x-cloak
+                    >
+                      {% render 'icon', icon: 'tick-sq-rounded-fill' %}
+                    </span>
+                  </button>
+                </div>
+                <div
+                  class="cart-drawer__coupon-error"
+                  x-show="couponState === 'invalid'"
+                  x-text="errorMessage"
+                  x-transition:enter="cart-drawer__coupon-error--enter"
+                  x-transition:enter-start="cart-drawer__coupon-error--enter-start"
+                  x-transition:enter-end="cart-drawer__coupon-error--enter-end"
+                  x-transition:leave="cart-drawer__coupon-error--leave"
+                  x-transition:leave-start="cart-drawer__coupon-error--leave-start"
+                  x-transition:leave-end="cart-drawer__coupon-error--leave-end"
+                  x-cloak
+                ></div>
+                <div
+                  class="cart-drawer__coupon-success"
+                  x-show="couponState === 'valid'"
+                  x-transition:enter="cart-drawer__coupon-success--enter"
+                  x-transition:enter-start="cart-drawer__coupon-success--enter-start"
+                  x-transition:enter-end="cart-drawer__coupon-success--enter-end"
+                  x-transition:leave="cart-drawer__coupon-success--leave"
+                  x-transition:leave-start="cart-drawer__coupon-success--leave-start"
+                  x-transition:leave-end="cart-drawer__coupon-success--leave-end"
+                  x-cloak
+                >
+                  Discount will be applied at checkout
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      {%- comment -%} Footer (Sticky) {%- endcomment -%}
+      <template x-if="cartCount > 0">
+        <div class="cart-drawer__footer" :class="isCheckingOut ? 'cart-drawer__footer--checking-out' : ''">
+          <template x-if="!isCheckingOut">
+            <div class="cart-drawer__footer-content">
+              <div class="cart-drawer__checkout-button-wrapper">
+                <button
+                  type="button"
+                  class="cart-drawer__checkout-button"
+                  @click.stop="proceedToCheckout()"
+                  :disabled="isCheckingOut"
+                >
+                  <span class="cart-drawer__checkout-text">PROCEED TO CHECKOUT</span>
+                  <span class="cart-drawer__checkout-icon">
+                    {% render 'icon', icon: 'sheild-tick-orange-outline' %}
+                  </span>
+                </button>
+              </div>
+              <div class="cart-drawer__total">
+                <template x-if="!isPriceUpdating">
+                  <span class="cart-drawer__total-amount" x-text="formatMoney(cartTotal)">
+                    {{ cart.total_price | money }}
+                  </span>
+                </template>
+                <template x-if="isPriceUpdating">
+                  <div>
+                    {% render 'cart-checkout-price-skeleton' %}
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="isCheckingOut">
+            <div class="cart-drawer__checking-out">
+              <span>CHECKING OUT...</span>
+            </div>
+          </template>
+        </div>
+      </template>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart Drawer Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gift_box",
+      "label": "Enable gift box option",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_notes",
+      "label": "Enable add note option",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_coupon",
+      "label": "Enable coupon code input",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
