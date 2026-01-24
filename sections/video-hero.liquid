@@ -1,0 +1,84 @@
+{%- comment -%}
+  Video Hero Section
+  Full-screen video with scroll animation and audio control
+{%- endcomment -%}
+
+{{ 'section-video-hero.css' | asset_url | stylesheet_tag }}
+
+<div 
+  class="video-hero" 
+  data-section-id="{{ section.id }}"
+  x-data="videoHero()"
+  x-init="init()"
+>
+  {%- comment -%} Full-screen video background {%- endcomment -%}
+  <video 
+    class="video-hero__video"
+    autoplay
+    muted
+    loop
+    playsinline
+    x-ref="video"
+  >
+    {%- if section.settings.video_url != blank -%}
+      <source src="{{ section.settings.video_url }}" type="video/mp4">
+    {%- endif -%}
+  </video>
+
+  {%- comment -%} Bottom overlay with controls {%- endcomment -%}
+  <div class="video-hero__overlay">
+    <div class="video-hero__controls">
+      {%- comment -%} Left: Empty spacer (100x100) {%- endcomment -%}
+      <div class="video-hero__controls-left">
+        &nbsp;
+      </div>
+
+      {%- comment -%} Center: Scroll indicator animation (100x100) {%- endcomment -%}
+      <div class="video-hero__controls-center">
+        {% render 'scroll-indicator' %}
+      </div>
+
+      {%- comment -%} Right: Audio control button (100x100) {%- endcomment -%}
+      <div class="video-hero__controls-right">
+        <button 
+          class="audio-control" 
+          @click="toggleAudio()"
+          :class="{ 'is-playing': isAudioPlaying }"
+          :aria-label="isAudioPlaying ? 'Mute audio' : 'Unmute audio'"
+          type="button"
+        >
+          <div class="audio-control__bars">
+            <span class="audio-control__bar">&nbsp;</span>
+            <span class="audio-control__bar">&nbsp;</span>
+            <span class="audio-control__bar">&nbsp;</span>
+            <span class="audio-control__bar">&nbsp;</span>
+            <span class="audio-control__bar">&nbsp;</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'section-video-hero.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Video Hero",
+  "tag": "section",
+  "class": "section-video-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Enter the Shopify CDN URL for your video"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP Bouncing Ellipses</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #1a1a1a;
+        overflow: hidden;
+      }
+
+      .loader-container {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        padding: 20px 0;
+        box-sizing: border-box;
+      }
+
+      .ellipse {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .ellipse-1 {
+        background: #ffffff;
+        z-index: 1;
+        top: 80px;
+      }
+
+      .ellipse-2 {
+        background: #eaeaea;
+        z-index: 2;
+        top: 60px;
+      }
+
+      .ellipse-3 {
+        background: #e1e1e1;
+        z-index: 3;
+        top: 40px;
+      }
+
+      .ellipse-4 {
+        background: #e3e3e3;
+        z-index: 4;
+        top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader-container">
+      <div class="ellipse ellipse-1"></div>
+      <div class="ellipse ellipse-2"></div>
+      <div class="ellipse ellipse-3"></div>
+      <div class="ellipse ellipse-4"></div>
+    </div>
+
+    <script>
+      const ellipses = document.querySelectorAll(".ellipse");
+      const timeline = gsap.timeline({ repeat: -1 });
+
+      let zIndexOrder = [1, 2, 3, 4];
+
+      function createBounceSequence() {
+        ellipses.forEach((ellipse, i) => {
+          const delay = i * 0.15;
+
+          // Bounce down
+          timeline.to(
+            ellipse,
+            {
+              y: 15,
+              duration: 0.5,
+              ease: "power1.out",
+              delay: delay,
+            },
+            0,
+          );
+
+          // Bounce back up
+          timeline.to(
+            ellipse,
+            {
+              y: 0,
+              duration: 0.7,
+              ease: "elastic.out(1, 0.5)",
+              onComplete: function () {
+                if (i === 3) {
+                  cycleZIndex();
+                }
+              },
+            },
+            0.5 + delay,
+          );
+        });
+
+        timeline.to({}, { duration: 0.5 });
+      }
+
+      function cycleZIndex() {
+        const first = zIndexOrder.shift();
+        zIndexOrder.push(first);
+
+        ellipses.forEach((ellipse, i) => {
+          ellipse.style.zIndex = zIndexOrder[i];
+        });
+      }
+
+      createBounceSequence();
+    </script>
+  </body>
+</html>
