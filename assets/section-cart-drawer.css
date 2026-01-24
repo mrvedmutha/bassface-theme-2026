@@ -182,6 +182,8 @@
   min-height: 0;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  touch-action: pan-y; /* Allow vertical scrolling/touch gestures */
+  will-change: scroll-position; /* Optimize scroll performance */
 }
 
 /* Custom scrollbar */
@@ -210,6 +212,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  min-height: min-content; /* Allow content to grow and trigger scrolling */
 }
 
 .cart-drawer__items {

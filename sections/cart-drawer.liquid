@@ -74,7 +74,7 @@
       </div>
 
       {%- comment -%} Cart Items (Scrollable) {%- endcomment -%}
-      <div class="cart-drawer__body">
+      <div class="cart-drawer__body" data-lenis-prevent>
         <template x-if="cartCount === 0">
           <div class="cart-drawer__empty">
             {%- comment -%} Empty state - just the header and close button {%- endcomment -%}
