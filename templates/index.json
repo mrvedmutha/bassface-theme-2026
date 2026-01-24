@@ -9,9 +9,16 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "video_hero_tzMDef": {
+      "type": "video-hero",
+      "name": "Video Hero",
+      "settings": {
+        "video_url_1": "https://cdn.shopify.com/videos/c/o/v/77c52dc2daf24ad1958d2cf27b09f874.mp4",
+        "video_url_2": "https://cdn.shopify.com/videos/c/o/v/38e08c49411648e08f5393aad5fefa44.mp4",
+        "video_url_3": "https://cdn.shopify.com/videos/c/o/v/0677bb5a538a4bd8a7c721bba4f8716c.mp4",
+        "video_url_4": "https://cdn.shopify.com/videos/c/o/v/e20aca9427844d039893c8a97c6830fd.mp4",
+        "video_url_5": "https://cdn.shopify.com/videos/c/o/v/0677bb5a538a4bd8a7c721bba4f8716c.mp4"
+      }
     },
     "collections_4bFJ9g": {
       "type": "collections",
@@ -23,7 +30,7 @@
     }
   },
   "order": [
-    "main",
+    "video_hero_tzMDef",
     "collections_4bFJ9g"
   ]
 }
