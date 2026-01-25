@@ -51,7 +51,9 @@
       this.artistNames = section.querySelectorAll("[data-artist]");
       this.cta = section.querySelector("[data-cta]");
       this.ctaHeading = section.querySelector(".tshirt-rotation__cta-heading");
-      this.ctaParagraph = section.querySelector(".tshirt-rotation__cta-paragraph");
+      this.ctaParagraph = section.querySelector(
+        ".tshirt-rotation__cta-paragraph",
+      );
       this.ctaButton = section.querySelector("[data-cta-button]");
       this.spacer = section.querySelector("[data-spacer]");
 
@@ -61,22 +63,15 @@
       this.currentFrame = 0;
       this.isLoading = true;
       this.criticalFramesLoaded = false;
+      this.lastLoggedProgress = -1; // Track last logged progress percentage
 
       // Initialize
       this.init();
     }
 
     async init() {
-      console.log(
-        "T-Shirt Rotation: Initializing with",
-        this.totalFrames,
-        "frames",
-      );
-      console.log("First image URL:", this.imageUrls[0]);
-
       // Start loading critical frames first (first 30 frames)
       await this.loadCriticalFrames();
-      console.log("Critical frames loaded");
 
       // Setup animations once critical frames are loaded
       this.setupScrollTrigger();
@@ -132,14 +127,10 @@
         img.onload = () => {
           this.images[index] = img;
           this.loadedImages++;
-          console.log(`Loaded image ${index}/${this.totalFrames - 1}`);
           resolve();
         };
 
         img.onerror = () => {
-          console.error(
-            `Failed to load image ${index}: ${this.imageUrls[index]}`,
-          );
           // Resolve anyway to not block other images
           resolve();
         };
@@ -190,11 +181,21 @@
           onUpdate: (self) => {
             // Update frame based on scroll progress
             const progress = self.progress;
+            const progressPercent = Math.round(progress * 100);
 
-            // First 82% of scroll = rotation (0-150 frames) = 820vh
-            // 82-100% = final state (T-shirt resting + CTA reveals + breathing) = 180vh
-            if (progress < 0.82) {
-              const rotationProgress = progress / 0.82;
+            // Log progress in 10% increments
+            if (
+              progressPercent % 10 === 0 &&
+              progressPercent !== this.lastLoggedProgress
+            ) {
+              console.log(`Animation Progress: ${progressPercent}% completed`);
+              this.lastLoggedProgress = progressPercent;
+            }
+
+            // Rotation continues from 0-70% (not frozen at 65%)
+            // 70-100% = final state (T-shirt resting + CTA reveals + breathing)
+            if (progress < 0.7) {
+              const rotationProgress = progress / 0.7;
               const targetFrame = Math.floor(
                 rotationProgress * (this.totalFrames - 1),
               );
@@ -208,16 +209,17 @@
       });
 
       // T-shirt movement to final position
-      // During scroll 82-85% (30vh), move T-shirt down to rest at 40% position
+      // During scroll 60-70%, move T-shirt down to rest at 70vh (40% position)
+      // This happens WHILE rotation continues (no frozen state)
       tl.to(
         this.canvas,
         {
-          y: "40%", // Move down to 40% position (desktop)
+          y: "40%", // Move down to 40% position (70vh on desktop)
           scale: 1, // Keep original size (no shrinking)
-          duration: 0.03,
+          duration: 0.1, // 10% of timeline = 60% to 70%
           ease: "power2.out",
         },
-        0.82,
+        0.6, // Start at 60%, end at 70%
       );
 
       // Artist names animation
@@ -243,9 +245,12 @@
         const startY = -200; // Start above viewport
         const endY = window.innerHeight + 200; // End below viewport
 
-        // Names appear between 15% to 70% of scroll progress (3 names spread evenly)
-        const appearStart = 0.15 + index * 0.2; // More spacing between names
-        const appearEnd = appearStart + 0.2; // Longer duration per name
+        // Artist reveals during rotation phase
+        // Console logs show ~25% delay between set value and actual appearance
+        // To appear at 10%, 25%, 40% actual scroll, set at -15%, 0%, 15%
+        // Since negative won't work, shifting: appear at 15%, 30%, 45% actual
+        const appearStart = -0.1 + index * 0.15; // Start at -10%, 5%, 20%
+        const appearEnd = appearStart + 0.15; // Each lasts 15% of scroll
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -269,6 +274,12 @@
             opacity: 1,
             duration: 0.05,
             ease: "none",
+            onStart: () => {
+              const artistName = name.textContent.trim();
+              console.log(
+                `🎨 ${artistName} appearing at ${Math.round(appearStart * 100)}%`,
+              );
+            },
           },
           appearStart,
         );
@@ -291,6 +302,12 @@
             opacity: 0,
             duration: 0.05,
             ease: "none",
+            onStart: () => {
+              const artistName = name.textContent.trim();
+              console.log(
+                `👋 ${artistName} disappearing at ${Math.round((appearEnd - 0.05) * 100)}%`,
+              );
+            },
           },
           appearEnd - 0.05,
         );
@@ -299,7 +316,7 @@
 
     /**
      * Setup T-shirt breathing animation during final breathing space
-     * Subtle elevation movement (85-100% scroll progress = 850vh to 1000vh)
+     * Subtle elevation movement (88-100% scroll progress = 1232vh to 1400vh)
      */
     setupTShirtBreathingAnimation() {
       const breathingTl = gsap.timeline({
@@ -311,44 +328,44 @@
         },
       });
 
-      // From 85-100% (150vh of scrolling), add subtle breathing elevation
+      // From 88-100% (168vh of scrolling), add subtle breathing elevation
       // Very subtle movement - stays at bottom, doesn't escape viewport
       breathingTl
         .to(
           this.canvas,
           {
             y: "39%", // Elevate up slightly (40% to 39%)
-            duration: 0.05,
+            duration: 0.04,
             ease: "sine.inOut",
           },
-          0.85
+          0.88,
         )
         .to(
           this.canvas,
           {
             y: "41%", // Drop down slightly (39% to 41%)
-            duration: 0.05,
+            duration: 0.04,
             ease: "sine.inOut",
           },
-          0.90
+          0.92,
         )
         .to(
           this.canvas,
           {
             y: "39.5%", // Elevate up again (41% to 39.5%)
-            duration: 0.05,
+            duration: 0.04,
             ease: "sine.inOut",
           },
-          0.95
+          0.96,
         )
         .to(
           this.canvas,
           {
             y: "40%", // Return to rest position (39.5% to 40%)
-            duration: 0.04,
+            duration: 0.03,
             ease: "sine.inOut",
           },
-          0.96
+          0.98,
         );
     }
 
@@ -360,7 +377,7 @@
       // Set initial states (hidden, positioned above)
       gsap.set([this.ctaHeading, this.ctaParagraph, this.ctaButton], {
         opacity: 0,
-        y: -50 // Start from above (top to bottom fade)
+        y: -50, // Start from above (top to bottom fade)
       });
 
       const tl = gsap.timeline({
@@ -371,7 +388,7 @@
           scrub: 1,
           onUpdate: (self) => {
             // Enable pointer events when button is visible
-            if (self.progress > 0.89) {
+            if (self.progress > 0.82) {
               this.cta.classList.add("is-active");
             } else {
               this.cta.classList.remove("is-active");
@@ -380,31 +397,31 @@
         },
       });
 
-      // 1. Heading reveals first (85-87% of scroll) - 20vh of scrolling
+      // 1. Heading reveals first (70-76% of scroll) - 84vh of scrolling
       tl.fromTo(
         this.ctaHeading,
         { opacity: 0, y: -50 },
-        { opacity: 1, y: 0, duration: 0.02, ease: "power2.out" },
-        0.85
+        { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" },
+        0.7,
       );
 
-      // 2. Paragraph reveals second (87-89% of scroll) - 20vh of scrolling
+      // 2. Paragraph reveals second (76-82% of scroll) - 84vh of scrolling
       tl.fromTo(
         this.ctaParagraph,
         { opacity: 0, y: -50 },
-        { opacity: 1, y: 0, duration: 0.02, ease: "power2.out" },
-        0.87
+        { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" },
+        0.76,
       );
 
-      // 3. Button reveals last (89-91% of scroll) - 20vh of scrolling
+      // 3. Button reveals last (82-88% of scroll) - 84vh of scrolling
       tl.fromTo(
         this.ctaButton,
         { opacity: 0, y: -50 },
-        { opacity: 1, y: 0, duration: 0.02, ease: "power2.out" },
-        0.89
+        { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" },
+        0.82,
       );
 
-      // 91-100% = BREATHING SPACE (90vh - everything visible + T-shirt breathing!)
+      // 88-100% = BREATHING SPACE (168vh - everything visible + T-shirt breathing!)
       // This gives viewers time to read and absorb the CTA while T-shirt gently floats
     }
 

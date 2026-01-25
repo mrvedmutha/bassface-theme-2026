@@ -264,7 +264,7 @@
 
 .tshirt-rotation__artist-name {
   position: absolute;
-  font-family: "Work Sans", var(--font-body), sans-serif;
+  font-family: "Gruppo", "Work Sans", var(--font-body), sans-serif;
   font-weight: 300;
   font-size: 120px;
   color: #ffffff;
@@ -401,7 +401,7 @@
    ========================================== */
 
 .tshirt-rotation__spacer {
-  height: 1000vh;
+  height: 1400vh;
   position: relative;
   z-index: 0;
   pointer-events: none;
