@@ -17,14 +17,18 @@
    ========================================== */
 
 /* Outer wrapper - full width fluid background */
+
+.section-rich-text-reveal {
+  display: block;
+}
 .rich-text-reveal__wrapper {
   width: 100%;
-  background-color: var(--color-background-secondary);
 }
 
 /* Section container */
 .rich-text-reveal {
   width: 100%;
+  background-color: var(--color-background-secondary);
 }
 
 /* Inner container - constrained width */

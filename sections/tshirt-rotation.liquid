@@ -1,0 +1,91 @@
+{% comment %}
+  T-Shirt 3D Rotation Section
+  - 360° rotation on scroll
+  - Artist names animation
+  - Gradient background
+  - Final CTA state
+{% endcomment %}
+
+{{ 'section-tshirt-rotation.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Outer wrapper - full width fluid background {%- endcomment -%}
+<div class="tshirt-rotation__wrapper">
+  <div class="tshirt-rotation" data-section-id="{{ section.id }}">
+  {%- comment -%} Pinned Content Container {%- endcomment -%}
+  <div class="tshirt-rotation__pinned" data-pinned-container>
+    {%- comment -%} Gradient Background (Inside Pinned) {%- endcomment -%}
+    <div class="tshirt-rotation__gradient-container">
+      <div class="tshirt-rotation__gradient-layer">&nbsp;</div>
+      <div class="tshirt-rotation__gradient-layer">&nbsp;</div>
+      <div class="tshirt-rotation__gradient-layer">&nbsp;</div>
+    </div>
+
+    {%- comment -%} Canvas for T-Shirt Sequence {%- endcomment -%}
+    <canvas
+      class="tshirt-rotation__canvas"
+      data-canvas
+      width="1200"
+      height="1200"
+      aria-label="Rotating 3D t-shirt animation"
+    ></canvas>
+
+    {%- comment -%} Artist Names (Animated) {%- endcomment -%}
+    <div class="tshirt-rotation__artist-names" data-artist-names>
+      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="1">HARDWELL</div>
+      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--front" data-artist="2">MARTIN GARRIX</div>
+      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="3">AFROJACK</div>
+    </div>
+
+    {%- comment -%} Final CTA Section {%- endcomment -%}
+    <div class="tshirt-rotation__cta" data-cta>
+      <h2 class="tshirt-rotation__cta-heading">WEAR TO RAVE</h2>
+      <p class="tshirt-rotation__cta-paragraph">
+        Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage.
+      </p>
+      <button
+        class="tshirt-rotation__button"
+        onclick="window.location.href='/collections/all'"
+        data-cta-button
+      >
+        <span class="tshirt-rotation__button-fill"></span>
+        <span class="tshirt-rotation__button-text">EXPLORE OUR COLLECTIONS</span>
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} Spacer for Scroll Distance (400vh) {%- endcomment -%}
+  <div class="tshirt-rotation__spacer" data-spacer></div>
+
+  {%- comment -%} Preload Image Data {%- endcomment -%}
+  <script>
+    window.tshirtRotationData = window.tshirtRotationData || {};
+    window.tshirtRotationData['{{ section.id }}'] = {
+      imageUrls: [
+        {%- for i in (0..150) -%}
+          "{{ 't_shirt-animation-3d/images/img_' | append: i | append: '.webp' | asset_url }}"{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    };
+  </script>
+  </div>
+</div>
+
+<script src="{{ 'section-tshirt-rotation.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "T-Shirt Rotation",
+  "class": "section-tshirt-rotation",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "3D T-shirt rotation animation with artist names and CTA. Scroll-based animation using GSAP."
+    }
+  ],
+  "presets": [
+    {
+      "name": "T-Shirt Rotation"
+    }
+  ]
+}
+{% endschema %}

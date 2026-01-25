@@ -17,12 +17,13 @@
 {{ 'section-rich-text-reveal.css' | asset_url | stylesheet_tag }}
 
 {%- comment -%} Outer wrapper - full width fluid background {%- endcomment -%}
-<div class="rich-text-reveal__wrapper full-width">
-  <section
+   <section
     class="rich-text-reveal"
     data-animation-enabled="{{ section.settings.enable_animation }}"
     aria-label="{{ section.settings.heading | strip_html | truncate: 50 }}"
   >
+<div class="rich-text-reveal__wrapper full-width">
+
     <div class="rich-text-reveal__container">
       <div class="rich-text-reveal__content">
         {%- comment -%} Heading with blur reveal animation {%- endcomment -%}
@@ -46,8 +47,9 @@
         </div>
       </div>
     </div>
-  </section>
+
 </div>
+  </section>
 
 {%- comment -%} Load GSAP and ScrollTrigger for animations {%- endcomment -%}
 {%- if section.settings.enable_animation -%}

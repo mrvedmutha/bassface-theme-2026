@@ -1,0 +1,521 @@
+/* ==========================================
+   T-SHIRT ROTATION SECTION
+   ========================================== */
+
+/* Reset Shopify section defaults */
+.section-tshirt-rotation {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Outer wrapper - full width fluid background */
+.tshirt-rotation__wrapper {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.tshirt-rotation {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* GSAP pin-spacer full width */
+/* .tshirt-rotation .pin-spacer {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+} */
+
+/* ==========================================
+   GRADIENT BACKGROUND
+   ========================================== */
+
+.tshirt-rotation__gradient-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+}
+
+.tshirt-rotation__gradient-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(20px);
+  pointer-events: none;
+}
+
+.tshirt-rotation__gradient-layer {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(
+    ellipse at center,
+    #fe7f2d 0%,
+    #030029 25%,
+    #000000 50%,
+    #000000 75%
+  );
+  opacity: 0.4;
+  animation: morphWave 20s ease-in-out infinite;
+  filter: blur(120px);
+  will-change: transform, border-radius;
+}
+
+.tshirt-rotation__gradient-layer:nth-child(2) {
+  animation: morphWave2 26.6s ease-in-out infinite;
+  animation-delay: -5s;
+  opacity: 0.27;
+}
+
+.tshirt-rotation__gradient-layer:nth-child(3) {
+  animation: morphWave3 33.4s ease-in-out infinite;
+  animation-delay: -10s;
+  opacity: 0.2;
+}
+
+/* Gradient Animation Keyframes */
+@keyframes morphWave {
+  0% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+  12.5% {
+    transform: translate(8%, -5%) scale(1.05) rotate(15deg);
+    border-radius: 45% 55% 60% 40% / 50% 65% 35% 50%;
+  }
+  25% {
+    transform: translate(-5%, 10%) scale(1.1) rotate(-10deg);
+    border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
+  }
+  37.5% {
+    transform: translate(12%, 8%) scale(0.95) rotate(25deg);
+    border-radius: 40% 60% 45% 55% / 60% 40% 60% 40%;
+  }
+  50% {
+    transform: translate(-8%, -8%) scale(1.05) rotate(-20deg);
+    border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
+  }
+  62.5% {
+    transform: translate(15%, -3%) scale(1.08) rotate(5deg);
+    border-radius: 65% 35% 50% 50% / 45% 55% 45% 55%;
+  }
+  75% {
+    transform: translate(-10%, 12%) scale(1.02) rotate(-15deg);
+    border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+  }
+  87.5% {
+    transform: translate(5%, -10%) scale(1.06) rotate(20deg);
+    border-radius: 55% 45% 40% 60% / 50% 50% 50% 50%;
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+}
+
+@keyframes morphWave2 {
+  0% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+  }
+  12.5% {
+    transform: translate(-10%, 8%) scale(1.06) rotate(-18deg);
+    border-radius: 55% 45% 65% 35% / 40% 60% 40% 60%;
+  }
+  25% {
+    transform: translate(7%, -12%) scale(0.98) rotate(12deg);
+    border-radius: 48% 52% 42% 58% / 68% 38% 62% 32%;
+  }
+  37.5% {
+    transform: translate(-15%, -5%) scale(1.08) rotate(-25deg);
+    border-radius: 35% 65% 55% 45% / 50% 50% 50% 50%;
+  }
+  50% {
+    transform: translate(10%, 15%) scale(1.03) rotate(8deg);
+    border-radius: 60% 40% 38% 62% / 45% 70% 30% 55%;
+  }
+  62.5% {
+    transform: translate(-8%, -10%) scale(1.1) rotate(-15deg);
+    border-radius: 52% 48% 60% 40% / 58% 42% 58% 42%;
+  }
+  75% {
+    transform: translate(13%, 6%) scale(0.96) rotate(22deg);
+    border-radius: 43% 57% 48% 52% / 65% 55% 45% 35%;
+  }
+  87.5% {
+    transform: translate(-6%, 10%) scale(1.05) rotate(-10deg);
+    border-radius: 58% 42% 52% 48% / 48% 62% 38% 52%;
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+  }
+}
+
+@keyframes morphWave3 {
+  0% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 60% 40% 40% 60% / 50% 50% 50% 50%;
+  }
+  12.5% {
+    transform: translate(12%, 10%) scale(1.04) rotate(28deg);
+    border-radius: 38% 62% 58% 42% / 55% 45% 55% 45%;
+  }
+  25% {
+    transform: translate(-12%, -7%) scale(1.09) rotate(-16deg);
+    border-radius: 62% 38% 45% 55% / 42% 68% 32% 58%;
+  }
+  37.5% {
+    transform: translate(8%, -15%) scale(0.97) rotate(18deg);
+    border-radius: 50% 50% 62% 38% / 58% 48% 52% 42%;
+  }
+  50% {
+    transform: translate(-15%, 5%) scale(1.06) rotate(-22deg);
+    border-radius: 42% 58% 50% 50% / 65% 35% 65% 35%;
+  }
+  62.5% {
+    transform: translate(10%, 12%) scale(1.02) rotate(10deg);
+    border-radius: 56% 44% 44% 56% / 48% 58% 42% 52%;
+  }
+  75% {
+    transform: translate(-5%, -12%) scale(1.07) rotate(-8deg);
+    border-radius: 48% 52% 55% 45% / 60% 40% 60% 40%;
+  }
+  87.5% {
+    transform: translate(14%, -6%) scale(0.99) rotate(24deg);
+    border-radius: 54% 46% 38% 62% / 52% 54% 46% 48%;
+  }
+  100% {
+    transform: translate(0%, 0%) scale(1) rotate(0deg);
+    border-radius: 60% 40% 40% 60% / 50% 50% 50% 50%;
+  }
+}
+
+/* ==========================================
+   PINNED CONTAINER
+   ========================================== */
+
+.tshirt-rotation__pinned {
+  position: relative;
+  width: 100vw !important;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ==========================================
+   CANVAS (T-SHIRT SEQUENCE)
+   ========================================== */
+
+.tshirt-rotation__canvas {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px;
+  height: 1200px;
+  max-width: 100%;
+  max-height: 100vh;
+  object-fit: contain;
+  z-index: 2;
+}
+
+/* ==========================================
+   ARTIST NAMES
+   ========================================== */
+
+.tshirt-rotation__artist-names {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.tshirt-rotation__artist-name {
+  position: absolute;
+  font-family: "Work Sans", var(--font-body), sans-serif;
+  font-weight: 300;
+  font-size: 120px;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+/* Alternate z-index for parallax depth */
+.tshirt-rotation__artist-name--back {
+  z-index: 1; /* Behind T-shirt */
+}
+
+.tshirt-rotation__artist-name--front {
+  z-index: 3; /* Above T-shirt */
+}
+
+/* ==========================================
+   CTA SECTION
+   ========================================== */
+
+.tshirt-rotation__cta {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.tshirt-rotation__cta.is-active {
+  pointer-events: auto;
+}
+
+.tshirt-rotation__cta-heading {
+  font-family: "Work Sans", var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 48px;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  letter-spacing: 2px;
+  opacity: 0;
+}
+
+.tshirt-rotation__cta-paragraph {
+  font-family: "Work Sans", var(--font-body), sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #ffffff;
+  margin: 0 0 30px 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+}
+
+/* ==========================================
+   BUTTON (with Ripple Effect)
+   ========================================== */
+
+.tshirt-rotation__button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 40px;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
+  background-color: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  opacity: 0;
+}
+
+.tshirt-rotation__button:hover {
+  border-color: #ffffff;
+}
+
+.tshirt-rotation__button:disabled {
+  cursor: not-allowed;
+  border-color: #666;
+}
+
+.tshirt-rotation__button-fill {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.tshirt-rotation__button-text {
+  position: relative;
+  font-family: "Work Sans", var(--font-body), sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #ffffff;
+  transition: color 0.3s ease;
+  z-index: 2;
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+
+/* Hover state - text becomes black */
+.tshirt-rotation__button--hover .tshirt-rotation__button-text {
+  color: #000000;
+}
+
+/* Touch devices - simple tap state */
+@media (hover: none) and (pointer: coarse) {
+  .tshirt-rotation__button:active {
+    background-color: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .tshirt-rotation__button:active .tshirt-rotation__button-text {
+    color: #000000;
+  }
+}
+
+/* ==========================================
+   SPACER
+   ========================================== */
+
+.tshirt-rotation__spacer {
+  height: 1000vh;
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+/* Tablet - 1024px and below */
+@media (max-width: 1024px) {
+  .tshirt-rotation__canvas {
+    width: 100vw;
+    height: 100vw;
+    max-width: 800px;
+    max-height: 800px;
+  }
+
+  .tshirt-rotation__artist-name {
+    font-size: 80px;
+  }
+
+  .tshirt-rotation__cta {
+    top: 8%;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 36px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 14px;
+  }
+
+  .tshirt-rotation__button {
+    padding: 16px 32px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 14px;
+  }
+}
+
+/* Mobile - 768px and below */
+@media (max-width: 768px) {
+  .tshirt-rotation__canvas {
+    width: 90vw;
+    height: 90vw;
+    max-width: 600px;
+    max-height: 600px;
+  }
+
+  .tshirt-rotation__artist-name {
+    font-size: 50px;
+  }
+
+  .tshirt-rotation__cta {
+    max-width: 90%;
+    top: 15%;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .tshirt-rotation__button {
+    padding: 14px 28px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 13px;
+  }
+}
+
+/* Mobile Small - 412px and below */
+@media (max-width: 412px) {
+  .tshirt-rotation__canvas {
+    width: 100vw;
+    height: 100vw;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .tshirt-rotation__artist-name {
+    font-size: 36px;
+  }
+
+  .tshirt-rotation__cta {
+    top: 12%;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 11px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .tshirt-rotation__button {
+    padding: 12px 24px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 12px;
+  }
+}
