@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Spotify Iframe Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #121212;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .spotify-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Spotify Iframe Test</h1>
+
+        <div class="info">
+            <p><strong>Purpose:</strong> Test if Spotify iframe loads correctly</p>
+            <p><strong>Expected:</strong> You should see a Spotify playlist player below</p>
+        </div>
+
+        <div class="spotify-container">
+            <h2>Spotify Player (As-Is):</h2>
+
+            <!-- Spotify iframe exactly as provided -->
+            <iframe
+                data-testid="embed-iframe"
+                style="border-radius:12px"
+                src="https://open.spotify.com/embed/playlist/0nV9HfNblnCX3PhYT4ryE2?utm_source=generator"
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <div class="info" style="margin-top: 20px;">
+            <p><strong>✅ If you see the player:</strong> The iframe works correctly</p>
+            <p><strong>❌ If you don't see anything:</strong> There might be CORS or network issues</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Playlist Explorer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #121212;
+      color: #fff;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #1DB954;
+    }
+
+    .subtitle {
+      color: #b3b3b3;
+      margin-bottom: 30px;
+    }
+
+    .credentials-section {
+      background: #282828;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .credentials-section h2 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #1DB954;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #b3b3b3;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px;
+      background: #121212;
+      border: 1px solid #535353;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #1DB954;
+    }
+
+    .search-section {
+      background: #282828;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .search-mode {
+      margin-bottom: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-box input {
+      flex: 1;
+    }
+
+    button {
+      padding: 12px 30px;
+      background: #1DB954;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      background: #1ed760;
+    }
+
+    button:disabled {
+      background: #535353;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #535353;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .btn-secondary:hover {
+      background: #656565;
+    }
+
+    .btn-danger {
+      background: #e22134;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    .btn-danger:hover {
+      background: #f5384b;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #b3b3b3;
+    }
+
+    .error {
+      background: #e22134;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .success {
+      background: #1DB954;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #282828;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1DB954;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #b3b3b3;
+      font-size: 14px;
+    }
+
+    .tracks-grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .track-card {
+      background: #282828;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #535353;
+    }
+
+    .track-card.has-preview {
+      border-left-color: #1DB954;
+    }
+
+    .track-card.no-preview {
+      border-left-color: #e22134;
+      opacity: 0.7;
+    }
+
+    .track-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 10px;
+      gap: 15px;
+    }
+
+    .track-info {
+      flex: 1;
+    }
+
+    .track-info h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .track-info p {
+      color: #b3b3b3;
+      font-size: 14px;
+    }
+
+    .track-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .preview-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .preview-badge.available {
+      background: #1DB954;
+      color: #fff;
+    }
+
+    .preview-badge.unavailable {
+      background: #535353;
+      color: #b3b3b3;
+    }
+
+    .accordion {
+      margin-top: 10px;
+      border-top: 1px solid #535353;
+      padding-top: 10px;
+    }
+
+    .accordion-header {
+      cursor: pointer;
+      padding: 8px;
+      background: #121212;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: #1a1a1a;
+    }
+
+    .accordion-content {
+      display: none;
+      margin-top: 10px;
+      padding: 15px;
+      background: #121212;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    .accordion-content.open {
+      display: block;
+    }
+
+    .accordion-content pre {
+      margin: 0;
+      color: #b3b3b3;
+      font-size: 12px;
+    }
+
+    .collection-section {
+      background: #282828;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 30px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .collection-section h2 {
+      margin-bottom: 15px;
+      color: #1DB954;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .collection-count {
+      font-size: 14px;
+      color: #b3b3b3;
+      font-weight: normal;
+    }
+
+    .collection-item {
+      background: #121212;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .collection-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .collection-item-info h4 {
+      font-size: 14px;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .collection-item-info p {
+      font-size: 12px;
+      color: #b3b3b3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .json-preview {
+      background: #121212;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+      max-height: 300px;
+      margin-top: 15px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #b3b3b3;
+    }
+
+    .instructions {
+      background: #282828;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      color: #b3b3b3;
+      font-size: 14px;
+    }
+
+    .instructions h3 {
+      color: #1DB954;
+      margin-bottom: 10px;
+    }
+
+    .instructions ol {
+      margin-left: 20px;
+    }
+
+    .instructions li {
+      margin-bottom: 5px;
+    }
+
+    .chevron {
+      transition: transform 0.2s;
+    }
+
+    .chevron.open {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎵 Spotify Track Explorer</h1>
+    <p class="subtitle">Search playlists or individual tracks and build your custom JSON collection</p>
+
+    <div class="instructions">
+      <h3>How to use:</h3>
+      <ol>
+        <li>Enter your Spotify API credentials below</li>
+        <li>Choose to search by <strong>Playlist URL</strong> or <strong>Track ID/URL</strong></li>
+        <li>Browse results and click "Add to Collection" for tracks with preview URLs</li>
+        <li>Build your custom collection and copy the final JSON</li>
+      </ol>
+      <p style="margin-top: 10px;"><strong>Tip:</strong> Click "View JSON Data" on any track to see full details</p>
+    </div>
+
+    <div class="credentials-section">
+      <h2>Spotify API Credentials</h2>
+      <div class="input-group">
+        <label>Client ID</label>
+        <input type="text" id="clientId" placeholder="Enter your Spotify Client ID">
+      </div>
+      <div class="input-group">
+        <label>Client Secret</label>
+        <input type="password" id="clientSecret" placeholder="Enter your Spotify Client Secret">
+      </div>
+    </div>
+
+    <div class="search-section">
+      <div class="input-group search-mode">
+        <label>Search Mode</label>
+        <select id="searchMode" onchange="updateSearchPlaceholder()">
+          <option value="playlist">Playlist URL</option>
+          <option value="track">Track ID or URL</option>
+        </select>
+      </div>
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Paste Spotify playlist URL"
+        >
+        <button id="searchBtn" onclick="performSearch()">Search</button>
+      </div>
+    </div>
+
+    <div id="message"></div>
+    <div id="stats"></div>
+    <div id="results"></div>
+
+    <div class="collection-section">
+      <h2>
+        Your Collection
+        <span class="collection-count" id="collectionCount">0 tracks</span>
+      </h2>
+      <div id="collectionItems"></div>
+      <div id="collectionJson"></div>
+    </div>
+  </div>
+
+  <script>
+    let myCollection = [];
+
+    function updateSearchPlaceholder() {
+      const mode = document.getElementById('searchMode').value;
+      const input = document.getElementById('searchInput');
+
+      if (mode === 'playlist') {
+        input.placeholder = 'Paste Spotify playlist URL (e.g., https://open.spotify.com/playlist/37i9dQZF1DX...)';
+      } else {
+        input.placeholder = 'Paste Spotify track ID or URL (e.g., 3n3Ppam7vgaVa1iaRUc9Lp or https://open.spotify.com/track/...)';
+      }
+    }
+
+    function showMessage(message, type = 'error') {
+      const messageDiv = document.getElementById('message');
+      messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
+      setTimeout(() => {
+        messageDiv.innerHTML = '';
+      }, 5000);
+    }
+
+    function extractPlaylistId(url) {
+      const match = url.match(/playlist\/([a-zA-Z0-9]+)/);
+      return match ? match[1] : null;
+    }
+
+    function extractTrackId(input) {
+      // Try to extract from URL first
+      const urlMatch = input.match(/track\/([a-zA-Z0-9]+)/);
+      if (urlMatch) return urlMatch[1];
+
+      // If not a URL, assume it's already an ID
+      return input.trim();
+    }
+
+    async function getAccessToken(clientId, clientSecret) {
+      const response = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Basic ' + btoa(clientId + ':' + clientSecret)
+        },
+        body: 'grant_type=client_credentials'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get access token. Check your credentials.');
+      }
+
+      const data = await response.json();
+      return data.access_token;
+    }
+
+    async function fetchPlaylistTracks(playlistId, accessToken) {
+      const response = await fetch(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+        {
+          headers: {
+            'Authorization': 'Bearer ' + accessToken
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch playlist. Make sure the playlist is public.');
+      }
+
+      const data = await response.json();
+      return data.items;
+    }
+
+    async function fetchTrack(trackId, accessToken) {
+      const response = await fetch(
+        `https://api.spotify.com/v1/tracks/${trackId}`,
+        {
+          headers: {
+            'Authorization': 'Bearer ' + accessToken
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch track. Check the track ID/URL.');
+      }
+
+      const data = await response.json();
+      return data;
+    }
+
+    async function performSearch() {
+      const clientId = document.getElementById('clientId').value.trim();
+      const clientSecret = document.getElementById('clientSecret').value.trim();
+      const searchInput = document.getElementById('searchInput').value.trim();
+      const searchMode = document.getElementById('searchMode').value;
+
+      if (!clientId || !clientSecret) {
+        showMessage('Please enter your Spotify API credentials', 'error');
+        return;
+      }
+
+      if (!searchInput) {
+        showMessage('Please enter a search value', 'error');
+        return;
+      }
+
+      const searchBtn = document.getElementById('searchBtn');
+      searchBtn.disabled = true;
+      searchBtn.textContent = 'Searching...';
+
+      document.getElementById('results').innerHTML = '<div class="loading">Loading data...</div>';
+      document.getElementById('stats').innerHTML = '';
+
+      try {
+        const accessToken = await getAccessToken(clientId, clientSecret);
+
+        if (searchMode === 'playlist') {
+          await searchPlaylist(searchInput, accessToken);
+        } else {
+          await searchTrack(searchInput, accessToken);
+        }
+
+      } catch (error) {
+        showMessage(error.message, 'error');
+        document.getElementById('results').innerHTML = '';
+      } finally {
+        searchBtn.disabled = false;
+        searchBtn.textContent = 'Search';
+      }
+    }
+
+    async function searchPlaylist(playlistUrl, accessToken) {
+      const playlistId = extractPlaylistId(playlistUrl);
+      if (!playlistId) {
+        throw new Error('Invalid playlist URL format');
+      }
+
+      const items = await fetchPlaylistTracks(playlistId, accessToken);
+      const tracksData = items
+        .map(item => item.track)
+        .filter(track => track !== null)
+        .map(track => processTrackData(track));
+
+      const totalTracks = tracksData.length;
+      const tracksWithPreview = tracksData.filter(t => t.preview_url).length;
+      const tracksWithoutPreview = totalTracks - tracksWithPreview;
+      const percentageWithPreview = totalTracks > 0 ? Math.round((tracksWithPreview / totalTracks) * 100) : 0;
+
+      displayStats(totalTracks, tracksWithPreview, tracksWithoutPreview, percentageWithPreview);
+      displayTracks(tracksData);
+      showMessage(`Successfully loaded ${totalTracks} tracks!`, 'success');
+    }
+
+    async function searchTrack(trackInput, accessToken) {
+      const trackId = extractTrackId(trackInput);
+      const track = await fetchTrack(trackId, accessToken);
+      const trackData = processTrackData(track);
+
+      displayStats(1, trackData.preview_url ? 1 : 0, trackData.preview_url ? 0 : 1, trackData.preview_url ? 100 : 0);
+      displayTracks([trackData]);
+      showMessage('Track loaded successfully!', 'success');
+    }
+
+    function processTrackData(track) {
+      return {
+        id: track.id,
+        name: track.name,
+        artist: track.artists.map(a => a.name).join(', '),
+        album: track.album.name,
+        preview_url: track.preview_url,
+        spotify_url: track.external_urls.spotify,
+        duration_ms: track.duration_ms,
+        explicit: track.explicit,
+        popularity: track.popularity,
+        release_date: track.album.release_date
+      };
+    }
+
+    function displayStats(total, withPreview, withoutPreview, percentage) {
+      const statsHtml = `
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value">${total}</div>
+            <div class="stat-label">Total Tracks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${withPreview}</div>
+            <div class="stat-label">With Preview URL</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${withoutPreview}</div>
+            <div class="stat-label">Without Preview</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${percentage}%</div>
+            <div class="stat-label">Availability</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('stats').innerHTML = statsHtml;
+    }
+
+    function displayTracks(tracks) {
+      const tracksHtml = tracks.map((track, index) => `
+        <div class="track-card ${track.preview_url ? 'has-preview' : 'no-preview'}">
+          <div class="track-header">
+            <div class="track-info">
+              <h3>${track.name}</h3>
+              <p>${track.artist}</p>
+              <p style="font-size: 12px; margin-top: 5px;">Album: ${track.album} (${track.release_date})</p>
+            </div>
+            <div class="track-actions">
+              <span class="preview-badge ${track.preview_url ? 'available' : 'unavailable'}">
+                ${track.preview_url ? '✓ Has Preview' : '✗ No Preview'}
+              </span>
+              ${track.preview_url ? `<button class="btn-secondary" onclick="addToCollection('${index}', ${JSON.stringify(track).replace(/"/g, '&quot;')})">Add to Collection</button>` : ''}
+            </div>
+          </div>
+          <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(${index})">
+              <span>View JSON Data</span>
+              <span class="chevron" id="chevron-${index}">▼</span>
+            </div>
+            <div class="accordion-content" id="accordion-${index}">
+              <pre>${JSON.stringify(track, null, 2)}</pre>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('results').innerHTML = `
+        <div class="tracks-grid">
+          ${tracksHtml}
+        </div>
+      `;
+    }
+
+    function toggleAccordion(index) {
+      const content = document.getElementById(`accordion-${index}`);
+      const chevron = document.getElementById(`chevron-${index}`);
+
+      content.classList.toggle('open');
+      chevron.classList.toggle('open');
+    }
+
+    function addToCollection(index, track) {
+      // Check if already in collection
+      if (myCollection.some(t => t.id === track.id)) {
+        showMessage('This track is already in your collection', 'error');
+        return;
+      }
+
+      myCollection.push({
+        id: track.id,
+        name: track.name,
+        artist: track.artist,
+        preview_url: track.preview_url
+      });
+
+      updateCollection();
+      showMessage(`Added "${track.name}" to collection`, 'success');
+    }
+
+    function removeFromCollection(trackId) {
+      myCollection = myCollection.filter(t => t.id !== trackId);
+      updateCollection();
+      showMessage('Track removed from collection', 'success');
+    }
+
+    function clearCollection() {
+      if (confirm('Are you sure you want to clear your entire collection?')) {
+        myCollection = [];
+        updateCollection();
+        showMessage('Collection cleared', 'success');
+      }
+    }
+
+    function updateCollection() {
+      const count = document.getElementById('collectionCount');
+      count.textContent = `${myCollection.length} track${myCollection.length !== 1 ? 's' : ''}`;
+
+      const itemsContainer = document.getElementById('collectionItems');
+
+      if (myCollection.length === 0) {
+        itemsContainer.innerHTML = '<div class="empty-state">No tracks added yet. Search and add tracks with preview URLs.</div>';
+        document.getElementById('collectionJson').innerHTML = '';
+        return;
+      }
+
+      const itemsHtml = myCollection.map(track => `
+        <div class="collection-item">
+          <div class="collection-item-info">
+            <h4>${track.name}</h4>
+            <p>${track.artist}</p>
+          </div>
+          <button class="btn-danger" onclick="removeFromCollection('${track.id}')">Remove</button>
+        </div>
+      `).join('');
+
+      itemsContainer.innerHTML = itemsHtml;
+
+      // Generate JSON
+      const jsonData = myCollection.map(({ id, ...rest }) => rest); // Remove ID from export
+      const jsonString = JSON.stringify(jsonData, null, 2);
+
+      document.getElementById('collectionJson').innerHTML = `
+        <div style="margin-top: 20px;">
+          <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <button onclick="copyCollectionJson()" style="flex: 1;">Copy JSON</button>
+            <button class="btn-danger" onclick="clearCollection()">Clear All</button>
+          </div>
+          <div class="json-preview">
+            <pre id="collectionJsonCode">${jsonString}</pre>
+          </div>
+        </div>
+      `;
+    }
+
+    function copyCollectionJson() {
+      const jsonCode = document.getElementById('collectionJsonCode').textContent;
+      navigator.clipboard.writeText(jsonCode).then(() => {
+        showMessage('JSON copied to clipboard!', 'success');
+      });
+    }
+
+    // Initialize
+    updateCollection();
+
+    // Allow Enter key to search
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+  </script>
+</body>
+</html>

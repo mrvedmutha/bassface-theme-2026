@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Hero Replica - Spotify Player Test</title>
+
+    <!-- GSAP for animations (same as Shopify theme) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        /* Video Hero - Main Container */
+        .video-hero {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        /* Black background instead of video */
+        .video-hero__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            z-index: 1;
+        }
+
+        /* Overlay Controls Container */
+        .video-hero__overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            padding: 10px 40px;
+        }
+
+        .video-hero__controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .video-hero__controls-left,
+        .video-hero__controls-center,
+        .video-hero__controls-right {
+            width: 40px;
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        .video-hero__controls-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Audio Control Button */
+        .audio-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 1px solid #ffffff;
+            border-radius: 2px;
+            cursor: pointer;
+            padding: 0;
+            margin: auto;
+            transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .audio-control:hover {
+            border-color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .audio-control__bars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            height: 100%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .audio-control__bar {
+            display: block;
+            width: 1px;
+            height: 6px;
+            background: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: height;
+        }
+
+        /* Audio Playing State - Waveform Animation */
+        .audio-control.is-playing .audio-control__bar {
+            animation: waveform 0.8s ease-in-out infinite;
+        }
+
+        .audio-control.is-playing .audio-control__bar:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .audio-control.is-playing .audio-control__bar:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .audio-control.is-playing .audio-control__bar:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .audio-control.is-playing .audio-control__bar:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .audio-control.is-playing .audio-control__bar:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes waveform {
+            0%, 100% {
+                height: 6px;
+            }
+            50% {
+                height: 16px;
+            }
+        }
+
+        /* Chevron when open */
+        .audio-control.is-open .audio-control__bars {
+            transform: rotate(180deg);
+        }
+
+        .audio-control.is-open .audio-control__bar {
+            animation: none !important;
+        }
+
+        .audio-control.is-open .audio-control__bar:nth-child(1) {
+            height: 0;
+            opacity: 0;
+        }
+
+        .audio-control.is-open .audio-control__bar:nth-child(2) {
+            height: 10px;
+            transform: translateX(-2px) rotate(-45deg);
+            transform-origin: bottom center;
+        }
+
+        .audio-control.is-open .audio-control__bar:nth-child(3) {
+            height: 0;
+            opacity: 0;
+        }
+
+        .audio-control.is-open .audio-control__bar:nth-child(4) {
+            height: 10px;
+            transform: translateX(2px) rotate(45deg);
+            transform-origin: bottom center;
+        }
+
+        .audio-control.is-open .audio-control__bar:nth-child(5) {
+            height: 0;
+            opacity: 0;
+        }
+
+        /* Spotify Player Container */
+        .spotify-player-container {
+            position: absolute;
+            bottom: 80px;
+            right: 40px;
+            z-index: 3;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(20px);
+            will-change: transform, opacity;
+        }
+
+        /* Close Button */
+        .spotify-player-close {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .spotify-player-close:hover {
+            background: rgba(0, 0, 0, 1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Spotify Player Wrapper */
+        .spotify-player-wrapper {
+            position: relative;
+            /* Debug background to see container */
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            min-width: 300px;
+            min-height: 100px;
+        }
+
+        .spotify-player-wrapper iframe {
+            display: block;
+            border: none;
+            min-width: 300px;
+            min-height: 380px;
+        }
+
+        /* Debug info */
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            z-index: 1000;
+            max-width: 350px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+        }
+
+        .debug-info div {
+            margin: 5px 0;
+        }
+
+        .debug-info strong {
+            color: #00ff00;
+        }
+
+        .debug-track-playing {
+            color: #ffff00;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .debug-separator {
+            border-top: 1px solid rgba(0, 255, 0, 0.2);
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Debug Info Panel -->
+    <div class="debug-info">
+        <div><strong>🐛 DEBUG PANEL</strong></div>
+        <div class="debug-separator"></div>
+        <div class="debug-track-playing">🎵 Track Playing: <span id="debugTrackPlaying">FALSE</span></div>
+        <div class="debug-separator"></div>
+        <div>Player State: <span id="debugState">CLOSED</span></div>
+        <div>Waveform Animation: <span id="debugWaveform">NO</span></div>
+        <div class="debug-separator"></div>
+        <div>Container Opacity: <span id="debugOpacity">0</span></div>
+        <div>Container Visibility: <span id="debugVisibility">hidden</span></div>
+        <div>Timeline: <span id="debugTimeline">-</span></div>
+        <div class="debug-separator"></div>
+        <div>Last Message: <span id="debugLastMessage">None</span></div>
+    </div>
+
+    <!-- Video Hero Container -->
+    <div class="video-hero">
+        <!-- Black background instead of video -->
+        <div class="video-hero__background"></div>
+
+        <!-- Bottom overlay with controls -->
+        <div class="video-hero__overlay">
+            <div class="video-hero__controls">
+                <!-- Left: Empty spacer -->
+                <div class="video-hero__controls-left"></div>
+
+                <!-- Center: Empty for now -->
+                <div class="video-hero__controls-center"></div>
+
+                <!-- Right: Audio/Music control button -->
+                <div class="video-hero__controls-right">
+                    <button
+                        class="audio-control"
+                        id="audioButton"
+                        type="button"
+                        aria-label="Open music player"
+                    >
+                        <div class="audio-control__bars">
+                            <span class="audio-control__bar"></span>
+                            <span class="audio-control__bar"></span>
+                            <span class="audio-control__bar"></span>
+                            <span class="audio-control__bar"></span>
+                            <span class="audio-control__bar"></span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spotify Player Container -->
+        <div class="spotify-player-container" id="spotifyContainer">
+            <button
+                class="spotify-player-close"
+                id="closeButton"
+                aria-label="Close music player"
+                type="button"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="spotify-player-wrapper">
+                <!-- Spotify iframe -->
+                <iframe
+                    data-testid="embed-iframe"
+                    style="border-radius:12px"
+                    src="https://open.spotify.com/embed/playlist/0nV9HfNblnCX3PhYT4ryE2?utm_source=generator"
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allowfullscreen=""
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let isPlayerOpen = false;
+        let isPlayerPlaying = false;
+        let isTrackPlaying = false; // Actual Spotify playback state
+        let spotifyTimeline = null;
+
+        // DOM Elements
+        const audioButton = document.getElementById('audioButton');
+        const closeButton = document.getElementById('closeButton');
+        const spotifyContainer = document.getElementById('spotifyContainer');
+
+        // Debug elements
+        const debugState = document.getElementById('debugState');
+        const debugWaveform = document.getElementById('debugWaveform');
+        const debugOpacity = document.getElementById('debugOpacity');
+        const debugVisibility = document.getElementById('debugVisibility');
+        const debugTimeline = document.getElementById('debugTimeline');
+        const debugTrackPlaying = document.getElementById('debugTrackPlaying');
+        const debugLastMessage = document.getElementById('debugLastMessage');
+
+        // Initialize
+        function init() {
+            console.log('🎬 Video Hero Replica initialized');
+
+            // Check if GSAP is loaded
+            if (typeof gsap === 'undefined') {
+                console.error('❌ GSAP not loaded!');
+                alert('GSAP failed to load. Check internet connection.');
+                return;
+            }
+
+            console.log('✅ GSAP loaded');
+
+            // Initialize GSAP timeline
+            initGsapTimeline();
+
+            // Event listeners
+            audioButton.addEventListener('click', togglePlayer);
+            closeButton.addEventListener('click', closePlayer);
+
+            // Listen for ALL Spotify messages
+            window.addEventListener('message', (event) => {
+                // Log all messages from Spotify for debugging
+                if (event.origin === 'https://open.spotify.com') {
+                    console.log('📨 Spotify message received:', event.data);
+
+                    try {
+                        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+                        // Update last message in debug
+                        debugLastMessage.textContent = JSON.stringify(data).substring(0, 50) + '...';
+
+                        // Check for playback state
+                        if (data.type === 'playback_update') {
+                            isTrackPlaying = data.isPaused === false;
+                            console.log('🎵 Spotify playback state:', isTrackPlaying ? 'PLAYING ▶️' : 'PAUSED ⏸️');
+                            updateUI();
+                        }
+
+                        // Some Spotify embeds send different message formats
+                        if (data.method === 'isPaused') {
+                            isTrackPlaying = !data.result;
+                            console.log('🎵 Spotify isPaused method:', isTrackPlaying ? 'PLAYING ▶️' : 'PAUSED ⏸️');
+                            updateUI();
+                        }
+                    } catch (e) {
+                        // If not JSON, just log it
+                        debugLastMessage.textContent = String(event.data).substring(0, 50) + '...';
+                    }
+                }
+            });
+
+            console.log('✅ Initialization complete');
+        }
+
+        function initGsapTimeline() {
+            console.log('🎨 Initializing GSAP timeline...');
+
+            // Set initial state
+            gsap.set(spotifyContainer, {
+                opacity: 0,
+                visibility: 'hidden',
+                y: 20,
+            });
+
+            // Create timeline (paused by default)
+            spotifyTimeline = gsap.timeline({ paused: true });
+
+            spotifyTimeline.to(spotifyContainer, {
+                opacity: 1,
+                visibility: 'visible',
+                y: 0,
+                duration: 0.5,
+                ease: 'power3.out',
+                onStart: () => {
+                    spotifyContainer.style.pointerEvents = 'auto';
+                    console.log('🎵 Opening Spotify player');
+                    debugTimeline.textContent = 'PLAYING';
+                },
+                onUpdate: () => {
+                    updateDebugInfo();
+                },
+                onReverseComplete: () => {
+                    spotifyContainer.style.pointerEvents = 'none';
+                    console.log('🎵 Closing Spotify player');
+                    debugTimeline.textContent = 'REVERSED';
+                },
+            });
+
+            console.log('✅ GSAP timeline created');
+            debugTimeline.textContent = 'READY';
+        }
+
+        function togglePlayer() {
+            isPlayerOpen = !isPlayerOpen;
+            console.log('🎯 Toggle clicked. New state:', isPlayerOpen ? 'OPENING' : 'CLOSING');
+
+            if (spotifyTimeline) {
+                if (isPlayerOpen) {
+                    console.log('▶️ Playing animation');
+                    spotifyTimeline.play();
+                } else {
+                    console.log('◀️ Reversing animation');
+                    spotifyTimeline.reverse();
+                }
+            } else {
+                console.error('❌ Timeline not initialized');
+            }
+
+            updateUI();
+        }
+
+        function closePlayer() {
+            if (isPlayerOpen) {
+                console.log('❌ Close button clicked');
+                isPlayerOpen = false;
+                if (spotifyTimeline) {
+                    spotifyTimeline.reverse();
+                }
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            // Update button classes
+            if (isPlayerOpen) {
+                audioButton.classList.add('is-open');
+                audioButton.classList.remove('is-playing');
+            } else {
+                audioButton.classList.remove('is-open');
+                // Show waveform animation ONLY if track is actually playing and player is closed
+                if (isTrackPlaying) {
+                    audioButton.classList.add('is-playing');
+                } else {
+                    audioButton.classList.remove('is-playing');
+                }
+            }
+
+            // Update debug info
+            debugState.textContent = isPlayerOpen ? 'OPEN' : 'CLOSED';
+            debugTrackPlaying.textContent = isTrackPlaying ? 'TRUE ✅' : 'FALSE ❌';
+            debugTrackPlaying.style.color = isTrackPlaying ? '#00ff00' : '#ff0000';
+            debugWaveform.textContent = (isTrackPlaying && !isPlayerOpen) ? 'YES ✅' : 'NO ❌';
+            updateDebugInfo();
+        }
+
+        function updateDebugInfo() {
+            const computed = window.getComputedStyle(spotifyContainer);
+            debugOpacity.textContent = computed.opacity;
+            debugVisibility.textContent = computed.visibility;
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

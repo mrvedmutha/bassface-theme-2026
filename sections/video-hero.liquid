@@ -1,46 +1,18 @@
 {%- comment -%}
   Video Hero Section
-  Full-screen video with scroll animation and audio control
-  Randomly selects from available videos on each page load
+  Full-screen video with Spotify iframe player
 {%- endcomment -%}
 
 {{ 'section-video-hero.css' | asset_url | stylesheet_tag }}
 
-{%- comment -%} Collect all available video URLs into an array {%- endcomment -%}
-{%- capture video_urls -%}
-  {%- if section.settings.video_url_1 != blank -%}{{ section.settings.video_url_1 }}|{%- endif -%}
-  {%- if section.settings.video_url_2 != blank -%}{{ section.settings.video_url_2 }}|{%- endif -%}
-  {%- if section.settings.video_url_3 != blank -%}{{ section.settings.video_url_3 }}|{%- endif -%}
-  {%- if section.settings.video_url_4 != blank -%}{{ section.settings.video_url_4 }}|{%- endif -%}
-  {%- if section.settings.video_url_5 != blank -%}{{ section.settings.video_url_5 }}|{%- endif -%}
-{%- endcapture -%}
-
-{%- assign available_videos = video_urls | strip | split: '|' -%}
-{%- assign video_count = 0 -%}
-{%- for video in available_videos -%}
-  {%- if video != blank -%}
-    {%- assign video_count = video_count | plus: 1 -%}
-  {%- endif -%}
-{%- endfor -%}
-
-{%- comment -%} Generate random index based on current timestamp {%- endcomment -%}
-{%- assign selected_video = '' -%}
-{%- if video_count > 0 -%}
-  {%- assign random_seed = 'now' | date: '%s' | times: 17 | modulo: 1000 -%}
-  {%- assign random_index = random_seed | modulo: video_count -%}
-  {%- assign selected_video = available_videos[random_index] -%}
-{%- endif -%}
-
-<div 
-  class="video-hero" 
+<div
+  class="video-hero"
   data-section-id="{{ section.id }}"
-  data-video-count="{{ video_count }}"
-  data-selected-video="{{ selected_video }}"
   x-data="videoHero()"
   x-init="init()"
 >
   {%- comment -%} Full-screen video background {%- endcomment -%}
-  <video 
+  <video
     class="video-hero__video"
     autoplay
     muted
@@ -51,8 +23,8 @@
     @loadeddata="console.log('Video loaded successfully')"
     @error="console.error('Video failed to load')"
   >
-    {%- if selected_video != blank -%}
-      <source src="{{ selected_video }}" type="video/mp4">
+    {%- if section.settings.video_url != blank -%}
+      <source src="{{ section.settings.video_url }}" type="video/mp4">
     {%- endif -%}
   </video>
 
@@ -69,15 +41,17 @@
         {% render 'scroll-indicator' %}
       </div>
 
-      {%- comment -%} Right: Audio control button (100x100) {%- endcomment -%}
+      {%- comment -%} Right: Audio/Music control button (100x100) {%- endcomment -%}
       <div class="video-hero__controls-right">
-        <button 
-          class="audio-control" 
-          @click="toggleAudio()"
-          :class="{ 'is-playing': isAudioPlaying }"
-          :aria-label="isAudioPlaying ? 'Mute audio' : 'Unmute audio'"
+        <button
+          class="audio-control"
+          @click="togglePlayer()"
+          :class="{ 'is-playing': isPlayerPlaying, 'is-open': isPlayerOpen }"
+          :aria-label="isPlayerOpen ? 'Close music player' : 'Open music player'"
           type="button"
+          x-ref="audioButton"
         >
+          {%- comment -%} Waveform bars - shown when closed {%- endcomment -%}
           <div class="audio-control__bars">
             <span class="audio-control__bar">&nbsp;</span>
             <span class="audio-control__bar">&nbsp;</span>
@@ -85,19 +59,39 @@
             <span class="audio-control__bar">&nbsp;</span>
             <span class="audio-control__bar">&nbsp;</span>
           </div>
+
+          {%- comment -%} Chevron icon - shown when open {%- endcomment -%}
+          <div class="audio-control__chevron">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+              <polygon fill="#fff" points="9.09 7.99 5.06 3.83 .91 7.99 0 7.08 5.06 2.01 10 7.08 9.09 7.99"/>
+            </svg>
+          </div>
         </button>
-        
+
         {%- comment -%} Audio hint tooltip {%- endcomment -%}
-        <div 
+        <div
           class="audio-hint"
           x-show="showAudioHint"
           x-cloak
         >
-          To play audio, click here
+          Want to have some fun? Click here to play music
         </div>
       </div>
     </div>
   </div>
+
+  {%- comment -%} Spotify Player Container - Simple show/hide with Alpine.js {%- endcomment -%}
+  {%- if section.settings.spotify_iframe_code != blank -%}
+    <div
+      class="spotify-player-container"
+      x-show="isPlayerOpen"
+      x-cloak
+    >
+      <div class="spotify-player-wrapper">
+        {{ section.settings.spotify_iframe_code }}
+      </div>
+    </div>
+  {%- endif -%}
 </div>
 
 <script src="{{ 'section-video-hero.js' | asset_url }}" defer></script>
@@ -113,38 +107,24 @@
       "content": "Video Settings"
     },
     {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Enter the Shopify CDN URL for the background video"
+    },
+    {
+      "type": "header",
+      "content": "Spotify Player Settings"
+    },
+    {
       "type": "paragraph",
-      "content": "Add up to 5 videos. One will be randomly selected on each page load."
+      "content": "Add a Spotify playlist iframe embed code. Get it from Spotify: Share > Embed playlist > Copy entire iframe code"
     },
     {
-      "type": "text",
-      "id": "video_url_1",
-      "label": "Video URL 1",
-      "info": "Enter the Shopify CDN URL for video 1"
-    },
-    {
-      "type": "text",
-      "id": "video_url_2",
-      "label": "Video URL 2",
-      "info": "Enter the Shopify CDN URL for video 2"
-    },
-    {
-      "type": "text",
-      "id": "video_url_3",
-      "label": "Video URL 3",
-      "info": "Enter the Shopify CDN URL for video 3"
-    },
-    {
-      "type": "text",
-      "id": "video_url_4",
-      "label": "Video URL 4",
-      "info": "Enter the Shopify CDN URL for video 4"
-    },
-    {
-      "type": "text",
-      "id": "video_url_5",
-      "label": "Video URL 5",
-      "info": "Enter the Shopify CDN URL for video 5"
+      "type": "html",
+      "id": "spotify_iframe_code",
+      "label": "Spotify Embed Code",
+      "info": "Paste the entire iframe code from Spotify (e.g., <iframe src=\"https://open.spotify.com/embed/playlist/...\"></iframe>)"
     }
   ],
   "presets": [

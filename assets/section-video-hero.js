@@ -1,37 +1,38 @@
 /**
  * Video Hero Section
- * AlpineJS component for audio control and video playback
+ * AlpineJS component with Spotify iframe player and GSAP animations
  */
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("videoHero", () => ({
-    isAudioPlaying: false,
+    isPlayerOpen: false,
     showAudioHint: false,
+    hintTimeout: null, // Store timeout reference
 
     init() {
-      console.log("Video Hero initialized");
+      console.log("🎬 Video Hero initialized - SIMPLE VERSION (no animations)");
 
-      const container = this.$el;
-      const videoCount = container.dataset.videoCount;
-      const selectedVideo = container.dataset.selectedVideo;
-
-      console.log("Video count:", videoCount);
-      console.log("Selected video URL:", selectedVideo);
-
-      // Ensure video plays
       this.$nextTick(() => {
         this.ensureVideoPlays();
+
         // Show audio hint after a brief delay
         setTimeout(() => {
-          console.log("Showing audio hint");
+          console.log("💬 Showing audio hint");
           this.showAudioHint = true;
-          console.log("showAudioHint is now:", this.showAudioHint);
-          // Hide after 5 seconds
-          setTimeout(() => {
-            console.log("Hiding audio hint");
+
+          // Hide after 5 seconds - store timeout reference so we can clear it
+          this.hintTimeout = setTimeout(() => {
+            console.log("💬 Hiding audio hint (5 seconds elapsed)");
             this.showAudioHint = false;
+            this.hintTimeout = null;
           }, 5000);
         }, 500);
+
+        // Start waveform animation immediately - always playing
+        if (this.$refs.audioButton) {
+          this.$refs.audioButton.classList.add('is-playing');
+          console.log("🎵 Waveform animation started");
+        }
       });
 
       // Shopify theme editor support
@@ -39,6 +40,8 @@ document.addEventListener("alpine:init", () => {
         this.handleThemeEditor();
       }
     },
+
+    // REMOVED: No longer using GSAP animations - Alpine.js x-show handles visibility
 
     ensureVideoPlays() {
       const video = this.$refs.video;
@@ -67,14 +70,35 @@ document.addEventListener("alpine:init", () => {
       }
     },
 
-    toggleAudio() {
-      const video = this.$refs.video;
-      if (!video) return;
+    togglePlayer() {
+      // Hide audio hint immediately if user clicks within 5 seconds
+      if (this.showAudioHint) {
+        console.log("💬 User clicked during hint - hiding hint immediately");
+        this.showAudioHint = false;
 
-      this.isAudioPlaying = !this.isAudioPlaying;
-      video.muted = !this.isAudioPlaying;
+        // Clear the timeout so it doesn't try to hide again
+        if (this.hintTimeout) {
+          clearTimeout(this.hintTimeout);
+          this.hintTimeout = null;
+        }
+      }
 
-      console.log("Audio toggled:", this.isAudioPlaying ? "ON" : "OFF");
+      // Simply toggle the state - Alpine.js x-show handles the rest
+      this.isPlayerOpen = !this.isPlayerOpen;
+
+      console.log("🎯 Toggle clicked - New state:", this.isPlayerOpen ? "OPEN" : "CLOSED");
+
+      if (this.isPlayerOpen) {
+        // Opening player - show chevron instead of waveform
+        console.log("▶️ OPENING - Showing chevron, hiding waveform");
+        this.$refs.audioButton.classList.remove('is-playing');
+        this.$refs.audioButton.classList.add('is-open');
+      } else {
+        // Closing player - show waveform instead of chevron
+        console.log("◀️ CLOSING - Showing waveform, hiding chevron");
+        this.$refs.audioButton.classList.remove('is-open');
+        this.$refs.audioButton.classList.add('is-playing');
+      }
     },
 
     handleThemeEditor() {
