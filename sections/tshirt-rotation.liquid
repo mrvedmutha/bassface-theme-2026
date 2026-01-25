@@ -31,25 +31,37 @@
 
     {%- comment -%} Artist Names (Animated) {%- endcomment -%}
     <div class="tshirt-rotation__artist-names" data-artist-names>
-      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="1">HARDWELL</div>
-      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--front" data-artist="2">MARTIN GARRIX</div>
-      <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="3">AFROJACK</div>
+      {%- if section.settings.artist_1 != blank -%}
+        <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="1">{{ section.settings.artist_1 }}</div>
+      {%- endif -%}
+      {%- if section.settings.artist_2 != blank -%}
+        <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--front" data-artist="2">{{ section.settings.artist_2 }}</div>
+      {%- endif -%}
+      {%- if section.settings.artist_3 != blank -%}
+        <div class="tshirt-rotation__artist-name tshirt-rotation__artist-name--back" data-artist="3">{{ section.settings.artist_3 }}</div>
+      {%- endif -%}
     </div>
 
     {%- comment -%} Final CTA Section {%- endcomment -%}
     <div class="tshirt-rotation__cta" data-cta>
-      <h2 class="tshirt-rotation__cta-heading">WEAR TO RAVE</h2>
-      <p class="tshirt-rotation__cta-paragraph">
-        Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage.
-      </p>
-      <button
-        class="tshirt-rotation__button"
-        onclick="window.location.href='/collections/all'"
-        data-cta-button
-      >
-        <span class="tshirt-rotation__button-fill"></span>
-        <span class="tshirt-rotation__button-text">EXPLORE OUR COLLECTIONS</span>
-      </button>
+      {%- if section.settings.cta_heading != blank -%}
+        <h2 class="tshirt-rotation__cta-heading">{{ section.settings.cta_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.cta_paragraph != blank -%}
+        <p class="tshirt-rotation__cta-paragraph">
+          {{ section.settings.cta_paragraph }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.cta_button_text != blank -%}
+        <button
+          class="tshirt-rotation__button"
+          onclick="window.location.href='{{ section.settings.cta_button_link }}'"
+          data-cta-button
+        >
+          <span class="tshirt-rotation__button-fill"></span>
+          <span class="tshirt-rotation__button-text">{{ section.settings.cta_button_text }}</span>
+        </button>
+      {%- endif -%}
     </div>
   </div>
 
@@ -80,6 +92,56 @@
     {
       "type": "paragraph",
       "content": "3D T-shirt rotation animation with artist names and CTA. Scroll-based animation using GSAP."
+    },
+    {
+      "type": "header",
+      "content": "Artist Names"
+    },
+    {
+      "type": "text",
+      "id": "artist_1",
+      "label": "Artist 1",
+      "default": "HARDWELL"
+    },
+    {
+      "type": "text",
+      "id": "artist_2",
+      "label": "Artist 2",
+      "default": "MARTIN GARRIX"
+    },
+    {
+      "type": "text",
+      "id": "artist_3",
+      "label": "Artist 3",
+      "default": "AFROJACK"
+    },
+    {
+      "type": "header",
+      "content": "CTA Content"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "WEAR TO RAVE"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_paragraph",
+      "label": "CTA Paragraph",
+      "default": "Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "Button Text",
+      "default": "EXPLORE OUR COLLECTIONS"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
     }
   ],
   "presets": [
