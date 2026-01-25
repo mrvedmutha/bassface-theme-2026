@@ -26,6 +26,11 @@
         "enable_animation": true
       }
     },
+    "tshirt_rotation_4C8dWi": {
+      "type": "tshirt-rotation",
+      "name": "T-Shirt Rotation",
+      "settings": {}
+    },
     "collections_4bFJ9g": {
       "type": "collections",
       "name": "t:general.collections_grid",
@@ -38,6 +43,7 @@
   "order": [
     "video_hero_tzMDef",
     "rich_text_reveal_9nFjgi",
+    "tshirt_rotation_4C8dWi",
     "collections_4bFJ9g"
   ]
 }
