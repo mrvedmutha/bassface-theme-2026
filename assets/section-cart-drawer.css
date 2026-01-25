@@ -158,9 +158,17 @@
   align-items: center;
   justify-content: center;
   outline: none;
+  color: #000;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.cart-drawer__close:hover,
+.cart-drawer__close:active,
+.cart-drawer__close:visited,
 .cart-drawer__close:focus {
+  color: #000;
+  text-decoration: none;
   outline: none;
 }
 
@@ -168,6 +176,7 @@
   width: 100%;
   height: 100%;
   display: block;
+  color: inherit;
 }
 
 /* ============================================

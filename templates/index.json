@@ -13,11 +13,8 @@
       "type": "video-hero",
       "name": "Video Hero",
       "settings": {
-        "video_url_1": "https://cdn.shopify.com/videos/c/o/v/77c52dc2daf24ad1958d2cf27b09f874.mp4",
-        "video_url_2": "https://cdn.shopify.com/videos/c/o/v/38e08c49411648e08f5393aad5fefa44.mp4",
-        "video_url_3": "https://cdn.shopify.com/videos/c/o/v/0677bb5a538a4bd8a7c721bba4f8716c.mp4",
-        "video_url_4": "https://cdn.shopify.com/videos/c/o/v/e20aca9427844d039893c8a97c6830fd.mp4",
-        "video_url_5": "https://cdn.shopify.com/videos/c/o/v/0677bb5a538a4bd8a7c721bba4f8716c.mp4"
+        "video_url": "https://cdn.shopify.com/videos/c/o/v/39c7af563eb94f32bb245b11c8e0066e.mp4",
+        "spotify_iframe_code": "<iframe data-testid=\"embed-iframe\" style=\"border-radius:12px\" src=\"https://open.spotify.com/embed/playlist/0nV9HfNblnCX3PhYT4ryE2?utm_source=generator\" width=\"100%\" height=\"152\" frameborder=\"0\" allowfullscreen=\"\" allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\"></iframe>"
       }
     },
     "collections_4bFJ9g": {

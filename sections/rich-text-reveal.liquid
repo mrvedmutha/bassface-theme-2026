@@ -1,0 +1,100 @@
+{%- comment -%}
+  ==========================================
+  RICH TEXT REVEAL SECTION
+  ==========================================
+  
+  A rich text section with staggered layout and scroll-triggered
+  text reveal animations (blur reveal for heading, typing for body).
+  
+  Features:
+  - Heading with random character blur reveal animation
+  - Body text with typing cursor animation
+  - Responsive layout with content indent on desktop
+  - Animation toggle in theme customizer
+  - Accessible with reduced motion support
+{%- endcomment -%}
+
+{{ 'section-rich-text-reveal.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Outer wrapper - full width fluid background {%- endcomment -%}
+<div class="rich-text-reveal__wrapper full-width">
+  <section
+    class="rich-text-reveal"
+    data-animation-enabled="{{ section.settings.enable_animation }}"
+    aria-label="{{ section.settings.heading | strip_html | truncate: 50 }}"
+  >
+    <div class="rich-text-reveal__container">
+      <div class="rich-text-reveal__content">
+        {%- comment -%} Heading with blur reveal animation {%- endcomment -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="rich-text-reveal__heading">
+            {{- section.settings.heading -}}
+          </h2>
+        {%- else -%}
+          <h2 class="rich-text-reveal__heading">&nbsp;</h2>
+        {%- endif -%}
+
+        {%- comment -%} Body wrapper with indent {%- endcomment -%}
+        <div class="rich-text-reveal__body-wrapper">
+          {%- if section.settings.body != blank -%}
+            <p class="rich-text-reveal__body">
+              {{- section.settings.body -}}
+            </p>
+          {%- else -%}
+            <p class="rich-text-reveal__body">&nbsp;</p>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{%- comment -%} Load GSAP and ScrollTrigger for animations {%- endcomment -%}
+{%- if section.settings.enable_animation -%}
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
+  {{ 'section-rich-text-reveal.js' | asset_url | script_tag }}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Rich Text Reveal",
+  "tag": "section",
+  "class": "section-rich-text-reveal",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Established in India in 2018, Bassface was born from a passion for EDM culture"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body Text",
+      "default": "Bassface was established in India in 2018 — born from a collective of EDM fans driven by pure love for the culture. What started as a shared passion for electronic music has grown into an independent creative entity, translating sound, energy, and emotion into wearable form."
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable text reveal animation",
+      "default": true,
+      "info": "Heading reveals with blur effect, body text types in with cursor"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text Reveal",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}
