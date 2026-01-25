@@ -17,6 +17,15 @@
         "spotify_iframe_code": "<iframe data-testid=\"embed-iframe\" style=\"border-radius:12px\" src=\"https://open.spotify.com/embed/playlist/0nV9HfNblnCX3PhYT4ryE2?utm_source=generator\" width=\"100%\" height=\"152\" frameborder=\"0\" allowfullscreen=\"\" allow=\"autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture\" loading=\"lazy\"></iframe>"
       }
     },
+    "rich_text_reveal_9nFjgi": {
+      "type": "rich-text-reveal",
+      "name": "Rich Text Reveal",
+      "settings": {
+        "heading": "Established in India in 2018, Bassface was born from a passion for EDM culture",
+        "body": "Bassface was established in India in 2018 — born from a collective of EDM fans driven by pure love for the culture. What started as a shared passion for electronic music has grown into an independent creative entity, translating sound, energy, and emotion into wearable form.",
+        "enable_animation": true
+      }
+    },
     "collections_4bFJ9g": {
       "type": "collections",
       "name": "t:general.collections_grid",
@@ -28,6 +37,7 @@
   },
   "order": [
     "video_hero_tzMDef",
+    "rich_text_reveal_9nFjgi",
     "collections_4bFJ9g"
   ]
 }
