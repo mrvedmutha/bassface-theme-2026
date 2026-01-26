@@ -8,8 +8,8 @@
 
 {{ 'section-tshirt-rotation.css' | asset_url | stylesheet_tag }}
 
-{%- comment -%} Outer wrapper - full width fluid background {%- endcomment -%}
-<div class="tshirt-rotation__wrapper">
+{%- comment -%} Desktop Version - Scroll Scrub Animation {%- endcomment -%}
+<div class="tshirt-rotation__wrapper tshirt-rotation__wrapper--desktop">
   <div class="tshirt-rotation" data-section-id="{{ section.id }}">
   {%- comment -%} Pinned Content Container {%- endcomment -%}
   <div class="tshirt-rotation__pinned" data-pinned-container>
@@ -73,7 +73,8 @@
     window.tshirtRotationData = window.tshirtRotationData || {};
     window.tshirtRotationData['{{ section.id }}'] = {
       imageUrls: [
-        {%- for i in (0..150) -%}
+        {%- assign max_frame = section.settings.total_frames | minus: 1 -%}
+        {%- for i in (0..max_frame) -%}
           "{{ 't_shirt-animation-3d/images/img_' | append: i | append: '.webp' | asset_url }}"{% unless forloop.last %},{% endunless %}
         {%- endfor -%}
       ]
@@ -82,7 +83,60 @@
   </div>
 </div>
 
+{%- comment -%} Mobile Version - Play Once Animation {%- endcomment -%}
+<div class="tshirt-rotation-mobile__wrapper">
+  <div class="tshirt-rotation-mobile" data-section-id="{{ section.id }}">
+    {%- comment -%} Gradient Background {%- endcomment -%}
+    <div class="tshirt-rotation-mobile__gradient-container">
+      <div class="tshirt-rotation-mobile__gradient-layer">&nbsp;</div>
+      <div class="tshirt-rotation-mobile__gradient-layer">&nbsp;</div>
+      <div class="tshirt-rotation-mobile__gradient-layer">&nbsp;</div>
+    </div>
+
+    {%- comment -%} Canvas for T-Shirt (Last Frame Only) {%- endcomment -%}
+    <canvas
+      class="tshirt-rotation-mobile__canvas"
+      data-canvas-mobile
+      width="1200"
+      height="1200"
+      aria-label="3D t-shirt"
+    ></canvas>
+
+    {%- comment -%} CTA Content {%- endcomment -%}
+    <div class="tshirt-rotation-mobile__cta" data-cta-mobile>
+      {%- if section.settings.cta_heading != blank -%}
+        <h2 class="tshirt-rotation-mobile__cta-heading">{{ section.settings.cta_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.cta_paragraph != blank -%}
+        <p class="tshirt-rotation-mobile__cta-paragraph">
+          {{ section.settings.cta_paragraph }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.cta_button_text != blank -%}
+        <button
+          class="tshirt-rotation-mobile__button"
+          onclick="window.location.href='{{ section.settings.cta_button_link }}'"
+          data-cta-button-mobile
+        >
+          <span class="tshirt-rotation-mobile__button-fill"></span>
+          <span class="tshirt-rotation-mobile__button-text">{{ section.settings.cta_button_text }}</span>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} Preload Last Frame for Mobile {%- endcomment -%}
+  <script>
+    window.tshirtRotationMobileData = window.tshirtRotationMobileData || {};
+    {%- assign last_frame_index = section.settings.total_frames | minus: 1 -%}
+    window.tshirtRotationMobileData['{{ section.id }}'] = {
+      lastFrameUrl: "{{ 't_shirt-animation-3d/images/img_' | append: last_frame_index | append: '.webp' | asset_url }}"
+    };
+  </script>
+</div>
+
 <script src="{{ 'section-tshirt-rotation.js' | asset_url }}" defer></script>
+<script src="{{ 'section-tshirt-rotation-mobile.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -92,6 +146,17 @@
     {
       "type": "paragraph",
       "content": "3D T-shirt rotation animation with artist names and CTA. Scroll-based animation using GSAP."
+    },
+    {
+      "type": "header",
+      "content": "Animation Settings"
+    },
+    {
+      "type": "number",
+      "id": "total_frames",
+      "label": "Total Animation Frames",
+      "info": "Total number of frame images (img_0.webp to img_N.webp). Example: 151 means frames 0-150, 200 means frames 0-199",
+      "default": 151
     },
     {
       "type": "header",

@@ -10,19 +10,15 @@ document.addEventListener("alpine:init", () => {
     hintTimeout: null, // Store timeout reference
 
     init() {
-      console.log("🎬 Video Hero initialized - SIMPLE VERSION (no animations)");
-
       this.$nextTick(() => {
         this.ensureVideoPlays();
 
         // Show audio hint after a brief delay
         setTimeout(() => {
-          console.log("💬 Showing audio hint");
           this.showAudioHint = true;
 
           // Hide after 5 seconds - store timeout reference so we can clear it
           this.hintTimeout = setTimeout(() => {
-            console.log("💬 Hiding audio hint (5 seconds elapsed)");
             this.showAudioHint = false;
             this.hintTimeout = null;
           }, 5000);
@@ -30,8 +26,7 @@ document.addEventListener("alpine:init", () => {
 
         // Start waveform animation immediately - always playing
         if (this.$refs.audioButton) {
-          this.$refs.audioButton.classList.add('is-playing');
-          console.log("🎵 Waveform animation started");
+          this.$refs.audioButton.classList.add("is-playing");
         }
       });
 
@@ -49,8 +44,6 @@ document.addEventListener("alpine:init", () => {
         console.error("Video element not found");
         return;
       }
-
-      console.log("Video element found, attempting to play...");
 
       // Try to play the video
       const playPromise = video.play();
@@ -86,18 +79,21 @@ document.addEventListener("alpine:init", () => {
       // Simply toggle the state - Alpine.js x-show handles the rest
       this.isPlayerOpen = !this.isPlayerOpen;
 
-      console.log("🎯 Toggle clicked - New state:", this.isPlayerOpen ? "OPEN" : "CLOSED");
+      console.log(
+        "🎯 Toggle clicked - New state:",
+        this.isPlayerOpen ? "OPEN" : "CLOSED",
+      );
 
       if (this.isPlayerOpen) {
         // Opening player - show chevron instead of waveform
         console.log("▶️ OPENING - Showing chevron, hiding waveform");
-        this.$refs.audioButton.classList.remove('is-playing');
-        this.$refs.audioButton.classList.add('is-open');
+        this.$refs.audioButton.classList.remove("is-playing");
+        this.$refs.audioButton.classList.add("is-open");
       } else {
         // Closing player - show waveform instead of chevron
         console.log("◀️ CLOSING - Showing waveform, hiding chevron");
-        this.$refs.audioButton.classList.remove('is-open');
-        this.$refs.audioButton.classList.add('is-playing');
+        this.$refs.audioButton.classList.remove("is-open");
+        this.$refs.audioButton.classList.add("is-playing");
       }
     },
 

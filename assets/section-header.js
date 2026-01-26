@@ -38,7 +38,6 @@ document.addEventListener("alpine:init", () => {
 
         // Store globally for debugging
         window.lenis = lenis;
-        console.log("✅ Lenis initialized - Smooth scrolling active");
       } else {
         console.warn("⚠️ Lenis not loaded");
       }
@@ -46,9 +45,6 @@ document.addEventListener("alpine:init", () => {
       // Only enable scroll detection on transparent pages
       if (this.isTransparentPage) {
         window.addEventListener("scroll", () => this.handleScroll());
-        console.log("✅ Transparent page - Scroll detection enabled");
-      } else {
-        console.log("✅ Solid page - Header always solid");
       }
     },
 
@@ -58,13 +54,11 @@ document.addEventListener("alpine:init", () => {
 
       // Detect when crossing the threshold
       if (scrollY > threshold && !this.sticky && !this.isAnimating) {
-        console.log("🔽 TRIGGER: Becoming sticky at scrollY:", scrollY);
         // Activate sticky with GSAP slide-down animation
         this.isAnimating = true;
         this.animateHeaderIn();
         this.sticky = true;
       } else if (scrollY <= threshold && this.sticky && !this.isAnimating) {
-        console.log("🔼 TRIGGER: Becoming transparent at scrollY:", scrollY);
         // Deactivate sticky with slide-up animation
         // State will switch in onComplete
         this.isAnimating = true;
@@ -82,8 +76,6 @@ document.addEventListener("alpine:init", () => {
 
       const header = this.$el;
 
-      console.log("▶️ START: Slide DOWN animation");
-
       // Kill any existing animations
       gsap.killTweensOf(header);
 
@@ -98,10 +90,9 @@ document.addEventListener("alpine:init", () => {
           duration: 0.6,
           ease: "power3.out",
           onComplete: () => {
-            console.log("✅ COMPLETE: Slide DOWN animation");
             this.isAnimating = false; // Allow next animation
           },
-        }
+        },
       );
     },
 
@@ -110,16 +101,12 @@ document.addEventListener("alpine:init", () => {
 
       const header = this.$el;
 
-      console.log("▶️ START: Transition to transparent");
-
       // Kill any existing animations
       gsap.killTweensOf(header);
 
       // Instant transition - no slide animation
       this.sticky = false;
       gsap.set(header, { y: 0, clearProps: "transform" });
-
-      console.log("✅ COMPLETE: Instant transition");
       this.isAnimating = false; // Allow next animation
     },
 
@@ -147,7 +134,7 @@ document.addEventListener("alpine:init", () => {
           duration: 0.5,
           stagger: 0.15,
           ease: "power2.out",
-        }
+        },
       );
     },
 
@@ -167,7 +154,7 @@ document.addEventListener("alpine:init", () => {
       gsap.fromTo(
         underline,
         { scaleX: 0, transformOrigin: "left" },
-        { scaleX: 1, duration: 0.35, ease: "power2.out" }
+        { scaleX: 1, duration: 0.35, ease: "power2.out" },
       );
     },
 

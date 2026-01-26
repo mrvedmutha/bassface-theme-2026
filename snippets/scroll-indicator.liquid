@@ -79,8 +79,6 @@
       setTimeout(initScrollAnimation, 100);
       return;
     }
-
-    console.log('Initializing scroll indicator animation');
     
     const ellipses = container.querySelectorAll('.ellipse');
     
@@ -133,8 +131,6 @@
 
     // Pause before loop repeats
     timeline.to({}, { duration: 0.5 });
-
-    console.log('Scroll indicator animation started, duration:', timeline.duration());
   }
 
   // Handle scroll-based visibility

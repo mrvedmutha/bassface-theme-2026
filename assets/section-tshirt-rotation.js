@@ -188,7 +188,6 @@
               progressPercent % 10 === 0 &&
               progressPercent !== this.lastLoggedProgress
             ) {
-              console.log(`Animation Progress: ${progressPercent}% completed`);
               this.lastLoggedProgress = progressPercent;
             }
 
@@ -275,10 +274,7 @@
             duration: 0.05,
             ease: "none",
             onStart: () => {
-              const artistName = name.textContent.trim();
-              console.log(
-                `🎨 ${artistName} appearing at ${Math.round(appearStart * 100)}%`,
-              );
+              name.textContent.trim();
             },
           },
           appearStart,

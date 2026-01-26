@@ -35,20 +35,20 @@ document.addEventListener("alpine:init", () => {
 
           // Debug scroll after opening
           setTimeout(() => {
-            const drawer = document.querySelector('.sidebar-drawer');
-            const content = drawer?.querySelector('.sidebar-drawer__content');
+            const drawer = document.querySelector(".sidebar-drawer");
+            const content = drawer?.querySelector(".sidebar-drawer__content");
             if (content) {
-              console.log('📊 Scroll Debug After Open (CONTENT):', {
+              console.log("📊 Scroll Debug After Open (CONTENT):", {
                 scrollHeight: content.scrollHeight,
                 clientHeight: content.clientHeight,
                 canScroll: content.scrollHeight > content.clientHeight,
                 overflowY: window.getComputedStyle(content).overflowY,
-                pointerEvents: window.getComputedStyle(content).pointerEvents
+                pointerEvents: window.getComputedStyle(content).pointerEvents,
               });
 
               // Force scroll to be enabled on content
-              content.style.overflowY = 'auto';
-              console.log('🔧 Forced scroll enabled on CONTENT element');
+              content.style.overflowY = "auto";
+              console.log("🔧 Forced scroll enabled on CONTENT element");
             }
           }, 1000);
         }, 10);
@@ -85,27 +85,31 @@ document.addEventListener("alpine:init", () => {
     level2BackTitle: "Back",
 
     init() {
-      console.log("✅ Header Sidebar initialized");
-
       // Initialize hover events for underline animation
       this.initLinkHoverAnimations();
 
       // Prevent scroll events from bubbling to body
       this.$nextTick(() => {
-        const content = this.$root.querySelector('.sidebar-drawer__content');
+        const content = this.$root.querySelector(".sidebar-drawer__content");
         if (content) {
           // Stop wheel events from propagating to body
-          content.addEventListener('wheel', (e) => {
-            e.stopPropagation();
-            console.log('🛑 Scroll event captured by sidebar content');
-          }, { passive: false });
+          content.addEventListener(
+            "wheel",
+            (e) => {
+              e.stopPropagation();
+              console.log("🛑 Scroll event captured by sidebar content");
+            },
+            { passive: false },
+          );
 
           // Stop touch scroll events from propagating
-          content.addEventListener('touchmove', (e) => {
-            e.stopPropagation();
-          }, { passive: false });
-
-          console.log('✅ Scroll event listeners attached to content');
+          content.addEventListener(
+            "touchmove",
+            (e) => {
+              e.stopPropagation();
+            },
+            { passive: false },
+          );
         }
       });
     },
@@ -119,17 +123,13 @@ document.addEventListener("alpine:init", () => {
           ".sidebar-drawer__collection-link, " +
           ".sidebar-drawer__blog-link, " +
           ".sidebar-drawer__featured-link, " +
-          ".sidebar-drawer__feature-link" // For featured collection cards
+          ".sidebar-drawer__feature-link", // For featured collection cards
       );
 
       hoverableLinks.forEach((link) => {
         link.addEventListener("mouseenter", () => this.animateLinkEnter(link));
         link.addEventListener("mouseleave", () => this.animateLinkExit(link));
       });
-
-      console.log(
-        `✅ Initialized ${hoverableLinks.length} links with underline animation`
-      );
     },
 
     // GSAP Underline Animation - Enter (left to right)
@@ -137,7 +137,7 @@ document.addEventListener("alpine:init", () => {
       if (typeof gsap === "undefined") return;
 
       const underline = element.querySelector(
-        ".sidebar-drawer__link-underline"
+        ".sidebar-drawer__link-underline",
       );
       if (!underline) return;
 
@@ -145,7 +145,7 @@ document.addEventListener("alpine:init", () => {
       gsap.fromTo(
         underline,
         { scaleX: 0, transformOrigin: "left" },
-        { scaleX: 1, duration: 0.35, ease: "power2.out" }
+        { scaleX: 1, duration: 0.35, ease: "power2.out" },
       );
     },
 
@@ -154,7 +154,7 @@ document.addEventListener("alpine:init", () => {
       if (typeof gsap === "undefined") return;
 
       const underline = element.querySelector(
-        ".sidebar-drawer__link-underline"
+        ".sidebar-drawer__link-underline",
       );
       if (!underline) return;
 
@@ -209,12 +209,10 @@ function animateSidebarOpen() {
 
   const drawer = document.querySelector(".sidebar-drawer");
   const items = document.querySelectorAll(
-    ".sidebar-drawer__level--1 .sidebar-drawer__item"
+    ".sidebar-drawer__level--1 .sidebar-drawer__item",
   );
 
   if (!drawer) return;
-
-  console.log("▶️ START: Sidebar OPEN animation");
 
   // Kill any existing animations
   gsap.killTweensOf(drawer);
@@ -233,13 +231,13 @@ function animateSidebarOpen() {
       onComplete: () => {
         console.log("✅ COMPLETE: Drawer slide in");
         // Ensure scrolling is enabled after animation on CONTENT
-        const content = drawer.querySelector('.sidebar-drawer__content');
+        const content = drawer.querySelector(".sidebar-drawer__content");
         if (content) {
-          content.style.overflowY = 'auto';
+          content.style.overflowY = "auto";
           console.log("🔄 Content scroll re-enabled");
         }
       },
-    }
+    },
   );
 
   // Step 2: Stagger reveal content items (top to bottom)
@@ -262,7 +260,7 @@ function animateSidebarOpen() {
       onComplete: () => {
         console.log("✅ COMPLETE: Content stagger reveal");
       },
-    }
+    },
   );
 }
 
@@ -283,8 +281,6 @@ function animateSidebarClose(onComplete) {
     if (onComplete) onComplete();
     return;
   }
-
-  console.log("▶️ START: Sidebar CLOSE animation");
 
   // Kill any existing animations
   gsap.killTweensOf(drawer);
@@ -323,12 +319,10 @@ function animateLevel2Items() {
   if (typeof gsap === "undefined") return;
 
   const level2Items = document.querySelectorAll(
-    ".sidebar-drawer__level--2 .sidebar-drawer__item"
+    ".sidebar-drawer__level--2 .sidebar-drawer__item",
   );
 
   if (!level2Items.length) return;
-
-  console.log("▶️ START: Level 2 items stagger (Mobile)");
 
   // Kill any existing animations
   gsap.killTweensOf(level2Items);
@@ -349,14 +343,6 @@ function animateLevel2Items() {
         from: "start",
       },
       ease: "power2.out",
-      onComplete: () => {
-        console.log("✅ COMPLETE: Level 2 items revealed");
-      },
-    }
+    },
   );
 }
-
-// =====================================================
-// UTILITY: Log initialization
-// =====================================================
-console.log("✅ Header Sidebar JS loaded");
