@@ -271,12 +271,19 @@
       <template x-if="cartCount > 0">
         <div class="cart-drawer__footer" :class="isCheckingOut ? 'cart-drawer__footer--checking-out' : ''">
           <template x-if="!isCheckingOut">
-            <div class="cart-drawer__footer-content">
+            <div
+              class="cart-drawer__footer-content"
+              @click.stop="proceedToCheckout()"
+              x-data="{ isHovered: false }"
+              @mouseenter="isHovered = true"
+              @mouseleave="isHovered = false"
+              :class="{ 'cart-drawer__footer-content--hovered': isHovered }"
+            >
+              <div class="cart-drawer__footer-ripple">&nbsp;</div>
               <div class="cart-drawer__checkout-button-wrapper">
                 <button
                   type="button"
                   class="cart-drawer__checkout-button"
-                  @click.stop="proceedToCheckout()"
                   :disabled="isCheckingOut"
                 >
                   <span class="cart-drawer__checkout-text">PROCEED TO CHECKOUT</span>
