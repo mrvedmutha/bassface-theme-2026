@@ -29,14 +29,27 @@
     "tshirt_rotation_4C8dWi": {
       "type": "tshirt-rotation",
       "name": "T-Shirt Rotation",
-      "settings": {}
-    },
-    "collections_4bFJ9g": {
-      "type": "collections",
-      "name": "t:general.collections_grid",
       "settings": {
-        "grid_item_width": "collections--full",
-        "grid_gap": 10
+        "total_frames": 151,
+        "artist_1": "HARDWELL",
+        "artist_2": "MARTIN GARRIX",
+        "artist_3": "AFROJACK",
+        "cta_heading": "WEAR TO RAVE",
+        "cta_paragraph": "Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage.",
+        "cta_button_text": "EXPLORE OUR COLLECTIONS",
+        "cta_button_link": "shopify://collections/all"
+      }
+    },
+    "featured_hero_product_showcase_M7UNRt": {
+      "type": "featured-hero-product-showcase",
+      "name": "Featured Hero Product Showcase",
+      "settings": {
+        "hero_image": "shopify://shop_images/hardwell-confident-ai-image.webp",
+        "label_text": "WEAR THE LEGEND",
+        "heading_text": "HARDWELL",
+        "cta_text": "EXPLORE ALL",
+        "cta_link": "",
+        "product_collection": "hardwell"
       }
     }
   },
@@ -44,6 +57,6 @@
     "video_hero_tzMDef",
     "rich_text_reveal_9nFjgi",
     "tshirt_rotation_4C8dWi",
-    "collections_4bFJ9g"
+    "featured_hero_product_showcase_M7UNRt"
   ]
 }
