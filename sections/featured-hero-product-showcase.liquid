@@ -1,0 +1,224 @@
+{%- comment -%}
+  ==========================================
+  FEATURED HERO PRODUCT SHOWCASE SECTION
+  ==========================================
+
+  A featured collection hero with large artist/collection image,
+  overlay text, and product grid below.
+
+  Features:
+  - Full-width hero image (1024px height on desktop)
+  - Bottom overlay with label, heading, and CTA button
+  - Responsive product grid (4→3→2×2 cards)
+  - GSAP scroll-triggered stagger animations (play once)
+  - Ripple hover effect on CTA button (desktop only)
+  - Static button on mobile/tablet
+{%- endcomment -%}
+
+{{ 'section-featured-hero-product-showcase.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="featured-hero"
+  id="featured-hero-{{ section.id }}"
+  x-data="featuredHeroShowcase()"
+  x-init="init()"
+  aria-label="{{ section.settings.heading_text | strip_html | escape }}"
+>
+  {%- comment -%} Hero Image Container {%- endcomment -%}
+  <div class="featured-hero__image-wrapper">
+    {%- if section.settings.hero_image != blank -%}
+      <picture>
+        {%- comment -%} Mobile Image (< 700px) {%- endcomment -%}
+        {%- if section.settings.mobile_image != blank -%}
+          <source
+            media="(max-width: 699px)"
+            srcset="
+              {{ section.settings.mobile_image | image_url: width: 412 }} 412w,
+              {{ section.settings.mobile_image | image_url: width: 700 }} 700w,
+              {{ section.settings.mobile_image | image_url: width: 824 }} 824w,
+              {{ section.settings.mobile_image | image_url: width: 1400 }} 1400w
+            "
+            sizes="100vw"
+          >
+        {%- endif -%}
+
+        {%- comment -%} Desktop/Tablet Image (700px+) {%- endcomment -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 2880
+          | image_tag:
+            loading: 'eager',
+            class: 'featured-hero__image',
+            widths: '1440, 1920, 2400, 2880',
+            sizes: '100vw',
+            alt: section.settings.hero_image.alt | default: section.settings.heading_text
+        }}
+      </picture>
+    {%- else -%}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'featured-hero__placeholder' }}
+    {%- endif -%}
+
+    {%- comment -%} Gradient Shadow Overlay {%- endcomment -%}
+    <div class="featured-hero__shadow-overlay" aria-hidden="true">&nbsp;</div>
+
+    {%- comment -%} Bottom Overlay Bar - Label, Heading, CTA {%- endcomment -%}
+    <div class="featured-hero__overlay">
+      <div class="featured-hero__text">
+        {%- if section.settings.label_text != blank -%}
+          <p class="featured-hero__label">{{ section.settings.label_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading_text != blank -%}
+          <h2 class="featured-hero__heading">{{ section.settings.heading_text }}</h2>
+        {%- endif -%}
+      </div>
+
+      <div class="featured-hero__cta-wrapper">
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_link | default: '#' }}"
+            class="featured-hero__button"
+            x-ref="ctaBtn"
+            @mouseenter="handleButtonHover($event, $refs.ctaBtn)"
+            @mouseleave="handleButtonLeave($refs.ctaBtn)"
+          >
+            <span class="featured-hero__button-fill" aria-hidden="true">&nbsp;</span>
+            <span class="featured-hero__button-text">{{ section.settings.cta_text }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Product Grid - 4 cards from collection {%- endcomment -%}
+  <div class="featured-hero__products">
+    {%- liquid
+      assign collection = section.settings.product_collection
+      assign products_to_show = collection.products | default: blank
+    -%}
+
+    {%- if products_to_show != blank and products_to_show.size > 0 -%}
+      {%- for product in products_to_show limit: 4 -%}
+        <a
+          href="{{ product.url }}"
+          class="product-card"
+          aria-label="View {{ product.title }}"
+        >
+          <div class="product-card__image">
+            {%- if product.featured_image -%}
+              {{
+                product.featured_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(min-width: 1250px) 25vw, (min-width: 700px) 33vw, 50vw',
+                  alt: product.featured_image.alt | default: product.title
+              }}
+            {%- else -%}
+              {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+            {%- endif -%}
+          </div>
+
+          <div class="product-card__info">
+            {%- if product.type != blank -%}
+              <p class="product-card__category">{{ product.type }}</p>
+            {%- else -%}
+              <p class="product-card__category">PRODUCT</p>
+            {%- endif -%}
+
+            <h3 class="product-card__title">{{ product.title }}</h3>
+
+            {%- if product.price -%}
+              <p class="product-card__price">
+                From {{ product.price | money }}
+              </p>
+            {%- endif -%}
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Fallback: Show empty state if no products {%- endcomment -%}
+      <div class="featured-hero__empty-state">
+        <p>No products available. Please select a collection with products.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- comment -%} Load GSAP for animations {%- endcomment -%}
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
+<script src="{{ 'section-featured-hero-product-showcase.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Hero Product Showcase",
+  "tag": "section",
+  "class": "section-featured-hero-product-showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image (Desktop/Tablet)",
+      "info": "Recommended: 1440×1024px or larger. Shown on screens 700px and above."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Hero Image (Mobile)",
+      "info": "Optional: Upload a mobile-optimized image (412×400px or larger). Shown on screens below 700px. If not set, desktop image will be used."
+    },
+    {
+      "type": "header",
+      "content": "Overlay Content"
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label Text",
+      "default": "WEAR THE LEGEND",
+      "info": "Small text above heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading",
+      "default": "HARDWELL",
+      "info": "Large artist/collection name"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "EXPLORE ALL"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button Link",
+      "info": "Where the button should link to"
+    },
+    {
+      "type": "header",
+      "content": "Product Grid"
+    },
+    {
+      "type": "collection",
+      "id": "product_collection",
+      "label": "Collection",
+      "info": "First 4 products from this collection will be displayed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Hero Product Showcase",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
