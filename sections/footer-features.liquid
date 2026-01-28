@@ -1,0 +1,146 @@
+{% comment %}
+  Footer Features Bar Section
+  - 4 feature cards with icons, titles, descriptions
+  - Repeatable blocks for flexibility
+  - Scroll-triggered pull-up animation on desktop
+  - Flat layout on mobile/tablet
+{% endcomment %}
+
+{{ 'section-footer-features.css' | asset_url | stylesheet_tag }}
+
+<div class="footer-features" data-section-id="{{ section.id }}">
+  <div class="footer-features__container">
+    <div class="footer-features__inner">
+      {%- for block in section.blocks -%}
+        <div class="footer-features__card" {{ block.shopify_attributes }}>
+          {%- comment -%} Icon {%- endcomment -%}
+          {%- if block.settings.icon != blank -%}
+            <div class="footer-features__icon">
+              {{ block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: block.settings.title }}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Title {%- endcomment -%}
+          {%- if block.settings.title != blank -%}
+            <h3 class="footer-features__title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+
+          {%- comment -%} Description {%- endcomment -%}
+          {%- if block.settings.description != blank -%}
+            <p class="footer-features__description">{{ block.settings.description }}</p>
+          {%- endif -%}
+
+          {%- comment -%} Optional Link Arrow {%- endcomment -%}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="footer-features__link" aria-label="Learn more about {{ block.settings.title }}">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {%- else -%}
+            <div class="footer-features__arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Vertical Divider (not after last card) {%- endcomment -%}
+        {%- unless forloop.last -%}
+          <div class="footer-features__divider"></div>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'section-footer-features.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Footer Features",
+  "tag": "section",
+  "class": "section-footer-features",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable pull-up animation",
+      "default": true,
+      "info": "Desktop only. Features bar will pull up on scroll."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "40x40px recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description text goes here."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (Optional)",
+          "info": "If added, the arrow becomes clickable"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Features",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "SECURE CHECKOUT",
+            "description": "Our safety is our top priority, thus your payment information is processed securely."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "FREE SHIPPING",
+            "description": "Free domestic shipping on all the orders."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "TIMELY SHIPPING",
+            "description": "Our products are shipped within 3-4 Days"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "SUPPORT",
+            "description": "We are more than happy to reply to any questions and tell you more about our products"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

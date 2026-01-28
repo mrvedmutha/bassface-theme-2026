@@ -1,56 +1,370 @@
-<footer>
-  <div class="footer__copyright">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
+{% comment %}
+  Main Footer Section
+  - Three navigation columns
+  - Logo and social media icons
+  - Payment method icons
+  - Legal links and copyright
+{% endcomment %}
 
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
 
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+<footer class="footer" data-section-id="{{ section.id }}">
+  <div class="footer__container">
+
+    {%- comment -%} Top Section: Navigation Columns {%- endcomment -%}
+    <div class="footer__nav">
+
+      {%- comment -%} Column 1: Shop Now {%- endcomment -%}
+      <div class="footer__column footer__column--shop">
+        {%- if section.settings.shop_heading != blank -%}
+          <h3 class="footer__heading">{{ section.settings.shop_heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.shop_menu != blank -%}
+          {%- assign shop_menu = linklists[section.settings.shop_menu] -%}
+          {%- assign total_links = shop_menu.links.size -%}
+          {%- comment -%} Limit to max 10 items {%- endcomment -%}
+          {%- if total_links > 10 -%}
+            {%- assign total_links = 10 -%}
+          {%- endif -%}
+
+          {%- comment -%} If more than 5 items, split into two columns {%- endcomment -%}
+          {%- if total_links > 5 -%}
+            <div class="footer__links-grid">
+              {%- comment -%} Left Column: First 5 items {%- endcomment -%}
+              <div class="footer__links-column">
+                {%- for link in shop_menu.links limit: 5 -%}
+                  <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+                {%- endfor -%}
+              </div>
+
+              {%- comment -%} Right Column: Items 6-10 {%- endcomment -%}
+              <div class="footer__links-column">
+                {%- for link in shop_menu.links offset: 5 limit: 5 -%}
+                  <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            {%- comment -%} Single column for 5 or fewer items {%- endcomment -%}
+            <div class="footer__links-column">
+              {%- for link in shop_menu.links limit: 5 -%}
+                <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Column 2: Secure Purchases {%- endcomment -%}
+      <div class="footer__column footer__column--secure">
+        {%- if section.settings.secure_heading != blank -%}
+          <h3 class="footer__heading">{{ section.settings.secure_heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.secure_menu != blank -%}
+          {%- assign secure_menu = linklists[section.settings.secure_menu] -%}
+          {%- assign secure_total_links = secure_menu.links.size -%}
+          {%- comment -%} Limit to max 10 items {%- endcomment -%}
+          {%- if secure_total_links > 10 -%}
+            {%- assign secure_total_links = 10 -%}
+          {%- endif -%}
+
+          {%- comment -%} If more than 5 items, split into two columns {%- endcomment -%}
+          {%- if secure_total_links > 5 -%}
+            <div class="footer__links-grid">
+              {%- comment -%} Left Column: First 5 items {%- endcomment -%}
+              <div class="footer__links-column">
+                {%- for link in secure_menu.links limit: 5 -%}
+                  <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+                {%- endfor -%}
+              </div>
+
+              {%- comment -%} Right Column: Items 6-10 {%- endcomment -%}
+              <div class="footer__links-column">
+                {%- for link in secure_menu.links offset: 5 limit: 5 -%}
+                  <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            {%- comment -%} Single column for 5 or fewer items {%- endcomment -%}
+            <div class="footer__links-column">
+              {%- for link in secure_menu.links limit: 5 -%}
+                <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Column 3: Contact Us {%- endcomment -%}
+      <div class="footer__column footer__column--contact">
+        {%- if section.settings.contact_heading != blank -%}
+          <h3 class="footer__heading footer__heading--full">{{ section.settings.contact_heading }}</h3>
+        {%- endif -%}
+
+        <div class="footer__contact-wrapper">
+          {%- comment -%} Email & Phone Column (stacked vertically) {%- endcomment -%}
+          <div class="footer__contact-info">
+            {%- if section.settings.contact_email != blank -%}
+              <p class="footer__contact-text">E. {{ section.settings.contact_email }}</p>
+            {%- endif -%}
+            {%- if section.settings.contact_phone != blank -%}
+              <p class="footer__contact-text">T. {{ section.settings.contact_phone }}</p>
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Back to Top Button {%- endcomment -%}
+          <div class="footer__back-to-top">
+            <button
+              type="button"
+              class="footer__top-button"
+              onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+              aria-label="Back to top"
+            >
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 20L20 10M20 10L30 20M20 10L20 30" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Middle Section: Logo & Social {%- endcomment -%}
+    <div class="footer__brand">
+      {%- comment -%} Logo {%- endcomment -%}
+      <div class="footer__logo">
+        {%- if section.settings.logo != blank -%}
+          {{ section.settings.logo | image_url: width: 355 | image_tag: loading: 'lazy', alt: shop.name }}
+        {%- else -%}
+          <span class="footer__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Social Media Icons {%- endcomment -%}
+      <div class="footer__social">
+        {%- if section.settings.social_instagram != blank -%}
+          <a href="{{ section.settings.social_instagram }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="{{ 'icon-instagram-outline.svg' | asset_url }}" alt="Instagram" width="40" height="40">
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.social_facebook != blank -%}
+          <a href="{{ section.settings.social_facebook }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="{{ 'icon-facebook.svg' | asset_url }}" alt="Facebook" width="40" height="40">
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.social_youtube != blank -%}
+          <a href="{{ section.settings.social_youtube }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="YouTube">
+            <img src="{{ 'icon-youtube-fill.svg' | asset_url }}" alt="YouTube" width="40" height="40">
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Bottom Section: Legal & Payment {%- endcomment -%}
+    <div class="footer__bottom">
+      {%- comment -%} Legal Links {%- endcomment -%}
+      <div class="footer__legal">
+        <span class="footer__legal-text">© {{ shop.name | upcase }} {{ 'now' | date: '%Y' }}</span>
+        {%- if section.settings.legal_menu != blank -%}
+          {%- assign legal_menu = linklists[section.settings.legal_menu] -%}
+          {%- for link in legal_menu.links -%}
+            <a href="{{ link.url }}" class="footer__legal-text">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Payment Icons {%- endcomment -%}
+      <div class="footer__payment">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'payment_icon' -%}
+            <div class="footer__payment-icon" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != blank -%}
+                {{ block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: block.settings.name }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
   </div>
 </footer>
 
-{% stylesheet %}
-  footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-  }
-  footer a {
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  footer .footer__links,
-  footer .footer__payment {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+<script src="{{ 'section-footer.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
-  "name": "t:general.footer",
+  "name": "Footer",
+  "tag": "footer",
+  "class": "section-footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "header",
+      "content": "Shop Now Column"
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "text",
+      "id": "shop_heading",
+      "label": "Heading",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Shop Menu",
+      "info": "Max 10 links. Auto-splits into 2 columns when more than 5 links."
+    },
+    {
+      "type": "header",
+      "content": "Secure Purchases Column"
+    },
+    {
+      "type": "text",
+      "id": "secure_heading",
+      "label": "Heading",
+      "default": "SECURE PURCHASES"
+    },
+    {
+      "type": "link_list",
+      "id": "secure_menu",
+      "label": "Secure Menu",
+      "info": "Max 10 links. Auto-splits into 2 columns when more than 5 links."
+    },
+    {
+      "type": "header",
+      "content": "Contact Us Column"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Heading",
+      "default": "CONTACT US"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email",
+      "default": "HELLO@BASSFACE.IN"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone",
+      "default": "+91 99999-99999"
+    },
+    {
+      "type": "header",
+      "content": "Logo & Branding"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer Logo",
+      "info": "White version recommended"
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "header",
+      "content": "Legal Links"
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal Menu",
+      "info": "Terms, Privacy Policy, etc."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "payment_icon",
+      "name": "Payment Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Payment Icon",
+          "info": "40x40px recommended"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Payment Method Name",
+          "default": "Payment Method"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "settings": {
+        "shop_heading": "SHOP NOW",
+        "secure_heading": "SECURE PURCHASES",
+        "contact_heading": "CONTACT US",
+        "contact_email": "HELLO@BASSFACE.IN",
+        "contact_phone": "+91 99999-99999"
+      },
+      "blocks": [
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "American Express"
+          }
+        },
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "Google Pay"
+          }
+        },
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "UPI"
+          }
+        },
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "Paytm"
+          }
+        },
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "Mastercard"
+          }
+        },
+        {
+          "type": "payment_icon",
+          "settings": {
+            "name": "Visa"
+          }
+        }
+      ]
     }
   ]
 }

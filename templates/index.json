@@ -51,12 +51,25 @@
         "cta_link": "",
         "product_collection": "hardwell"
       }
+    },
+    "featured_hero_product_showcase_QyNXiU": {
+      "type": "featured-hero-product-showcase",
+      "name": "Featured Hero Product Showcase",
+      "settings": {
+        "hero_image": "shopify://shop_images/martin-garrix-b-w.png",
+        "label_text": "BE PROGRESSIVE",
+        "heading_text": "MARTIN GARRIX",
+        "cta_text": "EXPLORE ALL",
+        "cta_link": "shopify://collections/martin-garrix",
+        "product_collection": "martin-garrix"
+      }
     }
   },
   "order": [
     "video_hero_tzMDef",
     "rich_text_reveal_9nFjgi",
     "tshirt_rotation_4C8dWi",
-    "featured_hero_product_showcase_M7UNRt"
+    "featured_hero_product_showcase_M7UNRt",
+    "featured_hero_product_showcase_QyNXiU"
   ]
 }

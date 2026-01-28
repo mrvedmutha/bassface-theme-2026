@@ -1,0 +1,364 @@
+/* ============================================
+   Footer Features Section
+   - Desktop: Horizontal layout with floating animation
+   - Tablet/Mobile: Flat 2x2 grid layout
+   ============================================ */
+
+/* ============================================
+   Container & Wrapper
+   ============================================ */
+
+.footer-features {
+  position: relative;
+  width: 100%;
+  background-color: #000000;
+  padding: 20px;
+  z-index: 10;
+  overflow: visible;
+}
+
+.footer-features__container {
+  width: 100%;
+}
+
+.footer-features__inner {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 40px 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+/* ============================================
+   Feature Card
+   ============================================ */
+
+.footer-features__card {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 180px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.footer-features__icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.footer-features__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.footer-features__title {
+  font-family: "Work Sans", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: normal;
+  color: #000000;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.footer-features__description {
+  font-family: "Work Sans", sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: normal;
+  color: #000000;
+  width: 100%;
+  max-width: 340px;
+  margin: 10px 0;
+  white-space: break-spaces;
+}
+
+.footer-features__arrow,
+.footer-features__link {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #000000;
+}
+
+.footer-features__link {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.footer-features__link:hover {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   Divider
+   ============================================ */
+
+.footer-features__divider {
+  width: 1px;
+  height: 154px;
+  background-color: #000000;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Responsive: 1024px (Tablet)
+   - Flat layout (no animation)
+   - Horizontal 4 cards with smaller sizing
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .footer-features__inner {
+    padding: 40px 0;
+  }
+
+  .footer-features__card {
+    min-height: 154px;
+    padding: 0 15px;
+  }
+
+  .footer-features__icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .footer-features__title {
+    font-size: 18px;
+  }
+
+  .footer-features__description {
+    font-size: 12px;
+    max-width: 196px;
+  }
+
+  .footer-features__arrow,
+  .footer-features__link {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-features__divider {
+    height: 154px;
+  }
+}
+
+/* ============================================
+   Responsive: 700px
+   - 2x2 Grid Layout
+   ============================================ */
+
+@media (max-width: 700px) {
+  .footer-features {
+    padding: 20px;
+  }
+
+  .footer-features__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 40px;
+  }
+
+  /* Grid layout for 2x2 */
+  .footer-features__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 20px 0;
+    padding: 20px 40px;
+  }
+
+  /* Row 1 */
+  .footer-features__card:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .footer-features__divider:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .footer-features__card:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  /* Horizontal divider (hidden) */
+  .footer-features__divider:nth-child(4) {
+    display: none;
+  }
+
+  /* Row 2 */
+  .footer-features__card:nth-child(5) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .footer-features__divider:nth-child(6) {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .footer-features__card:nth-child(7) {
+    grid-column: 3;
+    grid-row: 3;
+  }
+
+  .footer-features__card {
+    min-height: 154px;
+    padding: 0 15px;
+  }
+
+  .footer-features__card:nth-child(1),
+  .footer-features__card:nth-child(3) {
+    min-height: 154px;
+  }
+
+  .footer-features__card:nth-child(5),
+  .footer-features__card:nth-child(7) {
+    min-height: 150px;
+  }
+
+  .footer-features__icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .footer-features__title {
+    font-size: 16px;
+  }
+
+  .footer-features__description {
+    font-size: 12px;
+    max-width: 196px;
+  }
+
+  .footer-features__arrow,
+  .footer-features__link {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Vertical dividers */
+  .footer-features__divider:nth-child(2),
+  .footer-features__divider:nth-child(6) {
+    width: 1px;
+    height: 132px;
+    background-color: #000000;
+  }
+}
+
+/* ============================================
+   Responsive: 412px (Mobile)
+   - 2x2 Grid Layout (Compact sizing)
+   - Matches Figma node 208:3162
+   - Total height: 252px (white container)
+   - 20px padding + 96px row + 20px gap + 96px row + 20px padding = 252px
+   ============================================ */
+
+@media (max-width: 412px) {
+  .footer-features {
+    padding: 20px;
+  }
+
+  .footer-features__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 96px 96px;
+    gap: 20px 0;
+    padding: 20px;
+  }
+
+  /* Row 1 */
+  .footer-features__card:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .footer-features__divider:nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .footer-features__card:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  /* Row 2 */
+  .footer-features__card:nth-child(5) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .footer-features__divider:nth-child(6) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .footer-features__card:nth-child(7) {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  /* Hide horizontal divider */
+  .footer-features__divider:nth-child(4) {
+    display: none;
+  }
+
+  .footer-features__card {
+    height: 96px;
+    min-height: 96px;
+    max-height: 96px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .footer-features__card:nth-child(1),
+  .footer-features__card:nth-child(3),
+  .footer-features__card:nth-child(5),
+  .footer-features__card:nth-child(7) {
+    min-height: 96px;
+    max-height: 96px;
+  }
+
+  .footer-features__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .footer-features__title {
+    font-size: 10px;
+    margin: 0;
+  }
+
+  .footer-features__description {
+    font-size: 8px;
+    max-width: 142px;
+    margin: 0;
+    line-height: normal;
+  }
+
+  .footer-features__arrow,
+  .footer-features__link {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Vertical dividers - match card height */
+  .footer-features__divider:nth-child(2),
+  .footer-features__divider:nth-child(6) {
+    width: 1px;
+    height: 96px;
+    align-self: center;
+  }
+}
