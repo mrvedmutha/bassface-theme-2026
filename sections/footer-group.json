@@ -11,15 +11,129 @@
   "type": "footer",
   "name": "t:general.footer",
   "sections": {
+    "footer_features_QtHrYU": {
+      "type": "footer-features",
+      "blocks": {
+        "feature_VHWQHY": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-lock-outline.svg",
+            "title": "SECURE CHECKOUT",
+            "description": "Our safety is our top priority, thus your payment information is processed securely.",
+            "link": ""
+          }
+        },
+        "feature_JHeN8j": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-package-outline.svg",
+            "title": "FREE SHIPPING",
+            "description": "Free domestic shipping on all the orders.",
+            "link": ""
+          }
+        },
+        "feature_Nz34Ra": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/t-shirt.svg",
+            "title": "TIMELY SHIPPING",
+            "description": "Our products are shipped within 3-4 Days",
+            "link": ""
+          }
+        },
+        "feature_jbjNec": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/icon-chat-outline.svg",
+            "title": "SUPPORT",
+            "description": "We are more than happy to reply to any questions and tell you more about our products",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "feature_VHWQHY",
+        "feature_JHeN8j",
+        "feature_Nz34Ra",
+        "feature_jbjNec"
+      ],
+      "name": "Footer Features",
+      "settings": {
+        "enable_animation": true
+      }
+    },
     "footer": {
       "type": "footer",
+      "blocks": {
+        "payment_icon_6MtQLU": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-gapy-grey-fill.svg",
+            "name": "Google Pay"
+          }
+        },
+        "payment_icon_Ui3FPx": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-paytm-grey-fill.svg",
+            "name": "PayTM"
+          }
+        },
+        "payment_icon_iCEHzG": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-upi-grey-outline.svg",
+            "name": "Upi"
+          }
+        },
+        "payment_icon_emJbHF": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-visa-grey-fill.svg",
+            "name": "Visa"
+          }
+        },
+        "payment_icon_z8my9F": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-mastercard-grey-fill.svg",
+            "name": "Mastercard"
+          }
+        },
+        "payment_icon_NfReBM": {
+          "type": "payment_icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon-amex-grey-fill.svg",
+            "name": "American Express"
+          }
+        }
+      },
+      "block_order": [
+        "payment_icon_6MtQLU",
+        "payment_icon_Ui3FPx",
+        "payment_icon_iCEHzG",
+        "payment_icon_emJbHF",
+        "payment_icon_z8my9F",
+        "payment_icon_NfReBM"
+      ],
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "shop_heading": "SHOP NOW",
+        "shop_menu": "product-categories",
+        "secure_heading": "SECURE PURCHASES",
+        "secure_menu": "footer-menu",
+        "contact_heading": "CONTACT US",
+        "contact_email": "HELLO@BASSFACE.IN",
+        "contact_phone": "+91 99999-99999",
+        "logo": "shopify://shop_images/bassface-logo-white.svg",
+        "social_instagram": "https://instagram.com/bassfacemusics.in",
+        "social_facebook": "https://facebook.com/bassfacemusics.in",
+        "social_youtube": "https://youtube.com/@bassfacemusics",
+        "legal_menu": ""
       }
     }
   },
   "order": [
+    "footer_features_QtHrYU",
     "footer"
   ]
 }
