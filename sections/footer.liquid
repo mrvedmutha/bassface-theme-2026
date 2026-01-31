@@ -14,12 +14,19 @@
     {%- comment -%} Top Section: Navigation Columns {%- endcomment -%}
     <div class="footer__nav">
 
-      {%- comment -%} Column 1: Shop Now {%- endcomment -%}
-      <div class="footer__column footer__column--shop">
-        {%- if section.settings.shop_heading != blank -%}
-          <h3 class="footer__heading">{{ section.settings.shop_heading }}</h3>
-        {%- endif -%}
-
+      {%- comment -%} Column 1: Shop Now (Accordion on mobile) {%- endcomment -%}
+      <div class="footer__column footer__column--shop footer__accordion" data-accordion>
+        <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
+          {%- if section.settings.shop_heading != blank -%}
+            <span class="footer__heading">{{ section.settings.shop_heading }}</span>
+          {%- endif -%}
+          <span class="footer__accordion-icon">
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="footer__accordion-content" data-accordion-content>
         {%- if section.settings.shop_menu != blank -%}
           {%- assign shop_menu = linklists[section.settings.shop_menu] -%}
           {%- assign total_links = shop_menu.links.size -%}
@@ -54,14 +61,23 @@
             </div>
           {%- endif -%}
         {%- endif -%}
+        </div>
+        <div class="footer__accordion-divider"></div>
       </div>
 
-      {%- comment -%} Column 2: Secure Purchases {%- endcomment -%}
-      <div class="footer__column footer__column--secure">
-        {%- if section.settings.secure_heading != blank -%}
-          <h3 class="footer__heading">{{ section.settings.secure_heading }}</h3>
-        {%- endif -%}
-
+      {%- comment -%} Column 2: Secure Purchases (Accordion on mobile) {%- endcomment -%}
+      <div class="footer__column footer__column--secure footer__accordion" data-accordion>
+        <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
+          {%- if section.settings.secure_heading != blank -%}
+            <span class="footer__heading">{{ section.settings.secure_heading }}</span>
+          {%- endif -%}
+          <span class="footer__accordion-icon">
+            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="footer__accordion-content" data-accordion-content>
         {%- if section.settings.secure_menu != blank -%}
           {%- assign secure_menu = linklists[section.settings.secure_menu] -%}
           {%- assign secure_total_links = secure_menu.links.size -%}
@@ -96,6 +112,8 @@
             </div>
           {%- endif -%}
         {%- endif -%}
+        </div>
+        <div class="footer__accordion-divider"></div>
       </div>
 
       {%- comment -%} Column 3: Contact Us {%- endcomment -%}
@@ -147,19 +165,39 @@
       <div class="footer__social">
         {%- if section.settings.social_instagram != blank -%}
           <a href="{{ section.settings.social_instagram }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="Instagram">
-            <img src="{{ 'icon-instagram-outline.svg' | asset_url }}" alt="Instagram" width="40" height="40">
+            <svg class="footer__social-border" viewBox="0 0 80 80" aria-hidden="true">
+              <circle class="footer__social-border__static" cx="40" cy="40" r="39" />
+              <circle class="footer__social-border__animated" cx="40" cy="40" r="39" />
+            </svg>
+            <svg class="footer__social-icon" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M50 75C63.8071 75 75 63.8071 75 50C75 36.1929 63.8071 25 50 25C36.1929 25 25 36.1929 25 50C25 63.8071 36.1929 75 50 75ZM50 66.6667C59.2046 66.6667 66.6667 59.2046 66.6667 50C66.6667 40.7952 59.2046 33.3333 50 33.3333C40.7952 33.3333 33.3333 40.7952 33.3333 50C33.3333 59.2046 40.7952 66.6667 50 66.6667Z" fill="currentColor"/>
+              <path d="M75.0002 20.8359C72.6989 20.8359 70.8335 22.7014 70.8335 25.0026C70.8335 27.3038 72.6989 29.1693 75.0002 29.1693C77.3014 29.1693 79.1668 27.3038 79.1668 25.0026C79.1668 22.7014 77.3014 20.8359 75.0002 20.8359Z" fill="currentColor"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.89134 17.8143C4.1665 23.1621 4.1665 30.1628 4.1665 44.1641V55.8307C4.1665 69.832 4.1665 76.8328 6.89134 82.1803C9.28817 86.8845 13.1127 90.7091 17.8168 93.1057C23.1645 95.8307 30.1652 95.8307 44.1665 95.8307H55.8332C69.8344 95.8307 76.8353 95.8307 82.1827 93.1057C86.8869 90.7091 90.7115 86.8845 93.1082 82.1803C95.8332 76.8328 95.8332 69.832 95.8332 55.8307V44.1641C95.8332 30.1628 95.8332 23.1621 93.1082 17.8143C90.7115 13.1102 86.8869 9.28573 82.1827 6.8889C76.8353 4.16406 69.8344 4.16406 55.8332 4.16406H44.1665C30.1652 4.16406 23.1645 4.16406 17.8168 6.8889C13.1127 9.28573 9.28817 13.1102 6.89134 17.8143ZM55.8332 12.4974H44.1665C37.0283 12.4974 32.1759 12.5039 28.4252 12.8103C24.7717 13.1088 22.9033 13.6499 21.6 14.3139C18.464 15.9119 15.9143 18.4615 14.3164 21.5976C13.6523 22.9009 13.1113 24.7692 12.8128 28.4227C12.5063 32.1734 12.4998 37.0259 12.4998 44.1641V55.8307C12.4998 62.9691 12.5063 67.8211 12.8128 71.572C13.1113 75.2257 13.6523 77.0941 14.3164 78.3974C15.9143 81.5332 18.464 84.0828 21.6 85.6807C22.9033 86.3449 24.7717 86.8861 28.4252 87.1845C32.1759 87.4907 37.0283 87.4974 44.1665 87.4974H55.8332C62.9715 87.4974 67.8236 87.4907 71.5744 87.1845C75.2282 86.8861 77.0965 86.3449 78.3998 85.6807C81.5357 84.0828 84.0853 81.5332 85.6832 78.3974C86.3473 77.0941 86.8886 75.2257 87.1869 71.572C87.4932 67.8211 87.4998 62.9691 87.4998 55.8307V44.1641C87.4998 37.0259 87.4932 32.1734 87.1869 28.4227C86.8886 24.7692 86.3473 22.9009 85.6832 21.5976C84.0853 18.4615 81.5357 15.9119 78.3998 14.3139C77.0965 13.6499 75.2282 13.1088 71.5744 12.8103C67.8236 12.5039 62.9715 12.4974 55.8332 12.4974Z" fill="currentColor"/>
+            </svg>
           </a>
         {%- endif -%}
 
         {%- if section.settings.social_facebook != blank -%}
           <a href="{{ section.settings.social_facebook }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="{{ 'icon-facebook.svg' | asset_url }}" alt="Facebook" width="40" height="40">
+            <svg class="footer__social-border" viewBox="0 0 80 80" aria-hidden="true">
+              <circle class="footer__social-border__static" cx="40" cy="40" r="39" />
+              <circle class="footer__social-border__animated" cx="40" cy="40" r="39" />
+            </svg>
+            <svg class="footer__social-icon" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M59.1064 100V55H72.7684L75 35H59.1064V25.2588C59.1064 20.1088 59.238 15 66.4345 15H73.7234V0.700684C73.7234 0.485684 67.4624 0 61.1284 0C47.9 0 39.617 8.28598 39.617 23.501V35H25V55H39.617V100H59.1064Z" fill="currentColor"/>
+            </svg>
           </a>
         {%- endif -%}
 
         {%- if section.settings.social_youtube != blank -%}
           <a href="{{ section.settings.social_youtube }}" class="footer__social-link" target="_blank" rel="noopener" aria-label="YouTube">
-            <img src="{{ 'icon-youtube-fill.svg' | asset_url }}" alt="YouTube" width="40" height="40">
+            <svg class="footer__social-border" viewBox="0 0 80 80" aria-hidden="true">
+              <circle class="footer__social-border__static" cx="40" cy="40" r="39" />
+              <circle class="footer__social-border__animated" cx="40" cy="40" r="39" />
+            </svg>
+            <svg class="footer__social-icon" width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M39.9422 62.9306V34.8715C49.9032 39.5586 57.618 44.0865 66.7423 48.9682C59.2167 53.1417 49.9032 57.8246 39.9422 62.9306ZM95.455 20.9164C93.7368 18.6526 90.8083 16.8904 87.6904 16.307C78.5263 14.5668 21.3549 14.5618 12.1958 16.307C9.69554 16.7757 7.46918 17.9087 5.55666 19.6689C-2.50181 27.1484 0.0233309 67.2585 1.96574 73.7558C2.78254 76.5681 3.83845 78.5963 5.16825 79.9277C6.88155 81.6878 9.22733 82.8998 11.9218 83.4433C19.4673 85.004 58.3402 85.8766 87.531 83.6777C90.2205 83.2089 92.6011 81.958 94.4788 80.123C101.93 72.6734 101.422 30.3107 95.455 20.9164Z" fill="currentColor"/>
+            </svg>
           </a>
         {%- endif -%}
       </div>
