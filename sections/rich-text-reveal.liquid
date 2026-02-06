@@ -1,61 +1,69 @@
 {%- comment -%}
   ==========================================
-  RICH TEXT REVEAL SECTION
+  RICH TEXT REVEAL SECTION (v2.0 - Optimized)
   ==========================================
   
-  A rich text section with staggered layout and scroll-triggered
-  text reveal animations (blur reveal for heading, typing for body).
+  A rich text section with scroll-triggered reveal animations.
+  Optimized for high-DPI Retina displays.
   
   Features:
-  - Heading with random character blur reveal animation
-  - Body text with typing cursor animation
+  - Heading with variable blur reveal (organic feel, GPU-friendly)
+  - Body text with line-by-line blur fade reveal
   - Responsive layout with content indent on desktop
   - Animation toggle in theme customizer
   - Accessible with reduced motion support
+  
+  Performance Optimizations:
+  - Lower blur values (3-6px instead of 10px)
+  - Opacity-based animations instead of heavy filters
+  - No character-level DOM manipulation for body
+  - Uses transform for GPU acceleration
 {%- endcomment -%}
 
 {{ 'section-rich-text-reveal.css' | asset_url | stylesheet_tag }}
 
-{%- comment -%} Outer wrapper - full width fluid background {%- endcomment -%}
-   <section
-    class="rich-text-reveal"
-    data-animation-enabled="{{ section.settings.enable_animation }}"
-    aria-label="{{ section.settings.heading | strip_html | truncate: 50 }}"
-  >
-<div class="rich-text-reveal__wrapper full-width">
-
+<section
+  class="rich-text-reveal"
+  data-section-id="{{ section.id }}"
+  data-animation-enabled="{{ section.settings.enable_animation }}"
+  aria-label="{{ section.settings.heading | strip_html | truncate: 50 }}"
+>
+  <div class="rich-text-reveal__wrapper">
     <div class="rich-text-reveal__container">
       <div class="rich-text-reveal__content">
+        
         {%- comment -%} Heading with blur reveal animation {%- endcomment -%}
         {%- if section.settings.heading != blank -%}
-          <h2 class="rich-text-reveal__heading">
+          <h2 class="rich-text-reveal__heading" data-heading>
             {{- section.settings.heading -}}
           </h2>
-        {%- else -%}
-          <h2 class="rich-text-reveal__heading">&nbsp;</h2>
         {%- endif -%}
 
-        {%- comment -%} Body wrapper with indent {%- endcomment -%}
+        {%- comment -%} Body wrapper with indent - Line-by-line reveal {%- endcomment -%}
         <div class="rich-text-reveal__body-wrapper">
           {%- if section.settings.body != blank -%}
-            <p class="rich-text-reveal__body">
-              {{- section.settings.body -}}
-            </p>
-          {%- else -%}
-            <p class="rich-text-reveal__body">&nbsp;</p>
+            <div class="rich-text-reveal__body" data-body>
+              {%- comment -%} Split body into lines for animation {%- endcomment -%}
+              {%- assign body_sentences = section.settings.body | split: '. ' -%}
+              {%- for sentence in body_sentences -%}
+                <span class="rich-text-reveal__line" data-line="{{ forloop.index }}">
+                  {{- sentence -}}{%- unless forloop.last -%}.{%- endunless -%}
+                </span>
+              {%- endfor -%}
+            </div>
           {%- endif -%}
         </div>
+
       </div>
     </div>
-
-</div>
-  </section>
+  </div>
+</section>
 
 {%- comment -%} Load GSAP and ScrollTrigger for animations {%- endcomment -%}
 {%- if section.settings.enable_animation -%}
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
-  {{ 'section-rich-text-reveal.js' | asset_url | script_tag }}
+  <script src="{{ 'section-rich-text-reveal.js' | asset_url }}" defer></script>
 {%- endif -%}
 
 {% schema %}
@@ -78,6 +86,7 @@
       "type": "textarea",
       "id": "body",
       "label": "Body Text",
+      "info": "Text will be split by periods (.) into separate lines for reveal animation.",
       "default": "Bassface was established in India in 2018 — born from a collective of EDM fans driven by pure love for the culture. What started as a shared passion for electronic music has grown into an independent creative entity, translating sound, energy, and emotion into wearable form."
     },
     {
@@ -89,7 +98,7 @@
       "id": "enable_animation",
       "label": "Enable text reveal animation",
       "default": true,
-      "info": "Heading reveals with blur effect, body text types in with cursor"
+      "info": "Heading reveals with blur effect, body lines fade in with blur"
     }
   ],
   "presets": [

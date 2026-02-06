@@ -16,16 +16,19 @@
 
       {%- comment -%} Column 1: Shop Now (Accordion on mobile) {%- endcomment -%}
       <div class="footer__column footer__column--shop footer__accordion" data-accordion>
-        <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
-          {%- if section.settings.shop_heading != blank -%}
-            <span class="footer__heading">{{ section.settings.shop_heading }}</span>
-          {%- endif -%}
-          <span class="footer__accordion-icon">
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
+        {%- if section.settings.shop_heading != blank -%}
+          <div class="footer__heading-wrapper">
+            <h3 class="footer__heading footer__heading--desktop">{{ section.settings.shop_heading }}</h3>
+            <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
+              <span class="footer__heading footer__heading--mobile">{{ section.settings.shop_heading }}</span>
+              <span class="footer__accordion-icon">
+                <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        {%- endif -%}
         <div class="footer__accordion-content" data-accordion-content>
         {%- if section.settings.shop_menu != blank -%}
           {%- assign shop_menu = linklists[section.settings.shop_menu] -%}
@@ -67,16 +70,19 @@
 
       {%- comment -%} Column 2: Secure Purchases (Accordion on mobile) {%- endcomment -%}
       <div class="footer__column footer__column--secure footer__accordion" data-accordion>
-        <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
-          {%- if section.settings.secure_heading != blank -%}
-            <span class="footer__heading">{{ section.settings.secure_heading }}</span>
-          {%- endif -%}
-          <span class="footer__accordion-icon">
-            <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </button>
+        {%- if section.settings.secure_heading != blank -%}
+          <div class="footer__heading-wrapper">
+            <h3 class="footer__heading footer__heading--desktop">{{ section.settings.secure_heading }}</h3>
+            <button class="footer__accordion-header" type="button" aria-expanded="false" data-accordion-trigger>
+              <span class="footer__heading footer__heading--mobile">{{ section.settings.secure_heading }}</span>
+              <span class="footer__accordion-icon">
+                <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        {%- endif -%}
         <div class="footer__accordion-content" data-accordion-content>
         {%- if section.settings.secure_menu != blank -%}
           {%- assign secure_menu = linklists[section.settings.secure_menu] -%}

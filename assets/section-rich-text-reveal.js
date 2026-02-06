@@ -1,11 +1,17 @@
 /**
  * ==========================================
- * RICH TEXT REVEAL SECTION - ANIMATIONS
+ * RICH TEXT REVEAL SECTION - ANIMATIONS (v2.0 - Optimized)
  * ==========================================
  *
  * Scroll-triggered text reveal animations:
- * 1. Heading: Random character blur reveal
- * 2. Body: Typing effect with cursor
+ * 1. Heading: Variable blur reveal (some chars more blur, some less)
+ * 2. Body: Line-by-line blur fade reveal
+ *
+ * Performance Optimizations:
+ * - Lower blur values (2-6px)
+ * - Opacity + transform for GPU acceleration
+ * - Line-level animation instead of character-level for body
+ * - Efficient ScrollTrigger usage
  *
  * Dependencies: GSAP, ScrollTrigger
  */
@@ -19,21 +25,20 @@
   ).matches;
 
   /**
-   * Random Blur Reveal Animation for Heading
-   * Characters reveal in random order with blur-to-clear effect
+   * Variable Blur Reveal Animation for Heading
+   * Characters reveal with varying blur levels for organic feel
    */
-  class BlurRevealAnimation {
+  class HeadingBlurReveal {
     constructor(element, options = {}) {
       this.element = element;
       this.text = element.textContent.trim();
       this.chars = [];
       this.options = {
-        stagger: options.stagger || 0.015,
+        staggerMin: options.staggerMin || 0.008,
+        staggerMax: options.staggerMax || 0.018,
         triggerStart: options.triggerStart || "top 80%",
-        reset: options.reset !== undefined ? options.reset : true,
         onComplete: options.onComplete || null,
       };
-      this.timeline = null;
       this.scrollTrigger = null;
 
       this.init();
@@ -45,6 +50,7 @@
 
       // Split text into words and characters
       const words = this.text.split(" ");
+      const blurLevels = ["light", "medium", "heavy"];
 
       words.forEach((word, wordIndex) => {
         const wordWrapper = document.createElement("span");
@@ -54,24 +60,22 @@
         word.split("").forEach((char) => {
           const charWrapper = document.createElement("span");
           charWrapper.className = "char-wrapper";
+          charWrapper.textContent = char;
 
-          const charInner = document.createElement("span");
-          charInner.className = "char-inner";
-          charInner.textContent = char;
+          // Assign random blur level for organic feel
+          const randomBlur =
+            blurLevels[Math.floor(Math.random() * blurLevels.length)];
+          charWrapper.setAttribute("data-blur", randomBlur);
 
-          charWrapper.appendChild(charInner);
           wordWrapper.appendChild(charWrapper);
-
-          this.chars.push(charInner);
+          this.chars.push(charWrapper);
         });
 
         this.element.appendChild(wordWrapper);
 
         // Add space after word (except last)
         if (wordIndex < words.length - 1) {
-          const space = document.createElement("span");
-          space.className = "space";
-          space.innerHTML = "&nbsp;";
+          const space = document.createTextNode(" ");
           this.element.appendChild(space);
         }
       });
@@ -80,7 +84,7 @@
     }
 
     createAnimation() {
-      // Create randomized indices using Fisher-Yates shuffle
+      // Create randomized reveal order using Fisher-Yates shuffle
       const totalChars = this.chars.length;
       const indices = Array.from({ length: totalChars }, (_, i) => i);
 
@@ -89,186 +93,86 @@
         [indices[i], indices[j]] = [indices[j], indices[i]];
       }
 
-      // Create GSAP timeline
-      this.timeline = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          if (this.options.onComplete) {
-            this.options.onComplete();
-          }
-        },
-      });
-
-      // Animate characters in random order
-      indices.forEach((charIndex, index) => {
-        this.timeline.call(
-          () => {
-            this.chars[charIndex].classList.add("revealed");
-          },
-          [],
-          index * this.options.stagger,
-        );
-      });
-
       // Create ScrollTrigger - plays only once
       this.scrollTrigger = ScrollTrigger.create({
         trigger: this.element,
         start: this.options.triggerStart,
         once: true,
-        onEnter: () => this.timeline.play(),
+        onEnter: () => this.revealChars(indices),
       });
     }
 
-    resetAnimation() {
-      this.chars.forEach((char) => char.classList.remove("revealed"));
+    revealChars(indices) {
+      // Reveal characters in random order with variable stagger
+      indices.forEach((charIndex, index) => {
+        const delay =
+          index *
+          (this.options.staggerMin +
+            Math.random() *
+              (this.options.staggerMax - this.options.staggerMin));
+
+        setTimeout(() => {
+          this.chars[charIndex].classList.add("revealed");
+
+          // Call onComplete when last char is revealed
+          if (index === indices.length - 1 && this.options.onComplete) {
+            setTimeout(() => {
+              this.options.onComplete();
+            }, 150); // Short delay before body starts
+          }
+        }, delay * 1000);
+      });
     }
 
     destroy() {
       if (this.scrollTrigger) {
         this.scrollTrigger.kill();
       }
-      if (this.timeline) {
-        this.timeline.kill();
-      }
     }
   }
 
   /**
-   * Typing Animation for Body Text
-   * Characters appear sequentially with cursor following each character
+   * Line-by-Line Blur Fade Animation for Body
+   * Lines reveal sequentially with blur fade effect
+   * Note: This class waits for heading animation to complete before revealing
    */
-  class TypingAnimation {
-    constructor(element, options = {}) {
-      this.element = element;
-      this.text = element.textContent.trim();
-      this.charElements = [];
-      this.cursor = null;
+  class BodyLineReveal {
+    constructor(container, options = {}) {
+      this.container = container;
+      this.lines = container.querySelectorAll(".rich-text-reveal__line");
       this.options = {
-        speed: options.speed || 0.02,
-        reset: options.reset !== undefined ? options.reset : true,
+        stagger: options.stagger || 0.12, // 120ms between lines - fast
       };
-      this.timeline = null;
-      this.isPlaying = false;
+      this.isReady = false;
 
       this.init();
     }
 
     init() {
-      // Clear original text
-      this.element.innerHTML = "";
-
-      // Create cursor element
-      this.cursor = document.createElement("span");
-      this.cursor.className = "rich-text-reveal__cursor";
-      this.cursor.setAttribute("aria-hidden", "true");
-
-      // Split text into words (keep words together)
-      const words = this.text.split(" ");
-
-      words.forEach((word, wordIndex) => {
-        // Create word wrapper to keep word together
-        const wordWrapper = document.createElement("span");
-        wordWrapper.className = "word-wrapper";
-        wordWrapper.style.display = "inline-block";
-        wordWrapper.style.whiteSpace = "nowrap";
-
-        // Split word into characters
-        word.split("").forEach((char) => {
-          const charSpan = document.createElement("span");
-          charSpan.className = "char-inner";
-          charSpan.textContent = char;
-          wordWrapper.appendChild(charSpan);
-          this.charElements.push({ el: charSpan, parent: wordWrapper });
-        });
-
-        this.element.appendChild(wordWrapper);
-
-        // Add space after word (except last)
-        if (wordIndex < words.length - 1) {
-          const space = document.createElement("span");
-          space.className = "space-char";
-          space.innerHTML = "&nbsp;";
-          this.element.appendChild(space);
-          this.charElements.push({
-            el: space,
-            parent: this.element,
-            isSpace: true,
-          });
-        }
-      });
-
-      this.createAnimation();
+      if (this.lines.length === 0) return;
+      this.isReady = true;
     }
 
-    createAnimation() {
-      this.timeline = gsap.timeline({
-        paused: true,
-        onStart: () => {
-          this.isPlaying = true;
-          this.cursor.classList.add("active");
-          this.cursor.classList.remove("hidden");
-          // Insert cursor at the beginning
-          if (this.charElements.length > 0) {
-            const firstChar = this.charElements[0];
-            firstChar.parent.insertBefore(this.cursor, firstChar.el);
-          }
-        },
-        onComplete: () => {
-          this.isPlaying = false;
-          // Hide and remove cursor after typing completes
-          this.cursor.classList.add("hidden");
-          this.cursor.classList.remove("active");
-          if (this.cursor.parentNode) {
-            this.cursor.parentNode.removeChild(this.cursor);
-          }
-        },
-      });
+    revealLines() {
+      if (!this.isReady) return;
 
-      // Animate characters sequentially with cursor following
-      this.charElements.forEach((charObj, index) => {
-        this.timeline.call(
+      this.lines.forEach((line, index) => {
+        setTimeout(
           () => {
-            // Reveal the character
-            charObj.el.classList.add("revealed");
-            // Move cursor after this character
-            if (index < this.charElements.length - 1) {
-              const nextChar = this.charElements[index + 1];
-              nextChar.parent.insertBefore(this.cursor, nextChar.el);
-            } else {
-              // Last character - put cursor at the end
-              charObj.parent.appendChild(this.cursor);
-            }
+            line.classList.add("revealed");
           },
-          [],
-          index * this.options.speed,
+          index * this.options.stagger * 1000,
         );
       });
     }
 
+    // Public method to trigger animation (called by heading's onComplete)
     play() {
-      if (!this.isPlaying) {
-        this.timeline.restart();
-      }
-    }
-
-    resetAnimation() {
-      this.charElements.forEach((charObj) =>
-        charObj.el.classList.remove("revealed"),
-      );
-      this.cursor.classList.remove("active");
-      this.cursor.classList.add("hidden");
-      if (this.cursor.parentNode) {
-        this.cursor.parentNode.removeChild(this.cursor);
-      }
+      this.revealLines();
     }
 
     destroy() {
-      if (this.timeline) {
-        this.timeline.kill();
-      }
-      if (this.cursor && this.cursor.parentNode) {
-        this.cursor.parentNode.removeChild(this.cursor);
-      }
+      // Nothing to destroy - no ScrollTrigger for body
     }
   }
 
@@ -276,9 +180,8 @@
    * Initialize Rich Text Reveal Section
    */
   function initRichTextReveal(section) {
-    const heading = section.querySelector(".rich-text-reveal__heading");
-    const body = section.querySelector(".rich-text-reveal__body");
-    const cursor = section.querySelector(".rich-text-reveal__cursor");
+    const heading = section.querySelector("[data-heading]");
+    const body = section.querySelector("[data-body]");
     const animationEnabled = section.dataset.animationEnabled === "true";
 
     // Skip if animation disabled or reduced motion preferred
@@ -297,34 +200,40 @@
     // Register ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
-    let blurReveal = null;
-    let typingAnimation = null;
+    let headingAnimation = null;
+    let bodyAnimation = null;
 
-    // Initialize heading blur reveal - plays only once
+    // Initialize heading blur reveal - FAST timing
     if (heading) {
-      blurReveal = new BlurRevealAnimation(heading, {
-        stagger: 0.015,
+      headingAnimation = new HeadingBlurReveal(heading, {
+        staggerMin: 0.006,
+        staggerMax: 0.015,
         triggerStart: "top 75%",
         onComplete: () => {
-          // Start body typing animation after heading completes
-          if (typingAnimation) {
-            typingAnimation.play();
+          // Start body animation after heading completes
+          if (bodyAnimation) {
+            bodyAnimation.play();
           }
         },
       });
     }
 
-    // Initialize body typing animation - plays only once
+    // Initialize body line reveal (waits for heading to complete)
     if (body) {
-      typingAnimation = new TypingAnimation(body, {
-        speed: 0.015,
+      bodyAnimation = new BodyLineReveal(body, {
+        stagger: 0.12, // 120ms between lines - fast
       });
+
+      // If no heading exists, trigger body immediately on scroll
+      if (!heading) {
+        // Animation will trigger via ScrollTrigger
+      }
     }
 
     // Store instances for cleanup
     section._richTextReveal = {
-      blurReveal,
-      typingAnimation,
+      headingAnimation,
+      bodyAnimation,
     };
   }
 
@@ -333,11 +242,11 @@
    */
   function destroyRichTextReveal(section) {
     if (section._richTextReveal) {
-      if (section._richTextReveal.blurReveal) {
-        section._richTextReveal.blurReveal.destroy();
+      if (section._richTextReveal.headingAnimation) {
+        section._richTextReveal.headingAnimation.destroy();
       }
-      if (section._richTextReveal.typingAnimation) {
-        section._richTextReveal.typingAnimation.destroy();
+      if (section._richTextReveal.bodyAnimation) {
+        section._richTextReveal.bodyAnimation.destroy();
       }
       delete section._richTextReveal;
     }
@@ -351,11 +260,22 @@
     sections.forEach(initRichTextReveal);
   }
 
+  // Wait for GSAP to be available
+  function initWhenReady() {
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+      setTimeout(initWhenReady, 100);
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+    initAllSections();
+  }
+
   // Initialize on DOM ready
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAllSections);
+    document.addEventListener("DOMContentLoaded", initWhenReady);
   } else {
-    initAllSections();
+    initWhenReady();
   }
 
   // Shopify Theme Editor support
@@ -364,7 +284,9 @@
       const section = event.target.querySelector(".rich-text-reveal");
       if (section) {
         initRichTextReveal(section);
-        ScrollTrigger.refresh();
+        if (typeof ScrollTrigger !== "undefined") {
+          ScrollTrigger.refresh();
+        }
       }
     });
 

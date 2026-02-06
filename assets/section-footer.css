@@ -45,6 +45,10 @@
   gap: 10px;
 }
 
+.footer__heading-wrapper {
+  position: relative;
+}
+
 .footer__heading {
   font-family: "Work Sans", sans-serif;
   font-weight: 400;
@@ -53,6 +57,16 @@
   color: #ffffff;
   margin: 0;
   padding: 15px 0;
+}
+
+/* Desktop heading visible by default */
+.footer__heading--desktop {
+  display: block;
+}
+
+/* Mobile heading hidden by default */
+.footer__heading--mobile {
+  display: none;
 }
 
 /* Shop Now Column (Two sub-columns) */
@@ -70,6 +84,11 @@
   flex: 1;
 }
 
+/* Single column in shop - add spacing from heading */
+.footer__column--shop .footer__accordion-content > .footer__links-column {
+  padding-top: 20px;
+}
+
 /* Secure Purchases Column */
 .footer__column--secure .footer__links-grid {
   display: flex;
@@ -78,8 +97,9 @@
   padding-top: 20px;
 }
 
-.footer__column--secure .footer__links-column {
-  padding-top: 40px;
+/* Single column in secure - add spacing from heading */
+.footer__column--secure .footer__accordion-content > .footer__links-column {
+  padding-top: 20px;
 }
 
 .footer__column--secure .footer__links-grid .footer__links-column {
@@ -754,6 +774,20 @@
     width: 100%;
   }
 
+  .footer__heading-wrapper {
+    display: block;
+  }
+
+  /* Hide desktop heading on mobile */
+  .footer__heading--desktop {
+    display: none;
+  }
+
+  /* Show mobile heading on mobile */
+  .footer__heading--mobile {
+    display: block;
+  }
+
   .footer__accordion-header {
     display: flex;
     align-items: center;
@@ -796,7 +830,7 @@
   .footer__accordion-content {
     /* GSAP handles height and opacity animations */
     /* Initial state set by JS, but provide fallback */
-    padding-top: 10px;
+    padding-top: 5px;
     overflow: hidden;
   }
 
@@ -814,6 +848,7 @@
     width: 100%;
     height: 1px;
     background-color: #747474;
+    margin-top: 5px;
   }
 
   .footer__links-column {

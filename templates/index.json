@@ -26,20 +26,6 @@
         "enable_animation": true
       }
     },
-    "tshirt_rotation_4C8dWi": {
-      "type": "tshirt-rotation",
-      "name": "T-Shirt Rotation",
-      "settings": {
-        "total_frames": 151,
-        "artist_1": "HARDWELL",
-        "artist_2": "MARTIN GARRIX",
-        "artist_3": "AFROJACK",
-        "cta_heading": "WEAR TO RAVE",
-        "cta_paragraph": "Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage.",
-        "cta_button_text": "EXPLORE OUR COLLECTIONS",
-        "cta_button_link": "shopify://collections/all"
-      }
-    },
     "featured_hero_product_showcase_M7UNRt": {
       "type": "featured-hero-product-showcase",
       "name": "Featured Hero Product Showcase",
@@ -68,7 +54,6 @@
   "order": [
     "video_hero_tzMDef",
     "rich_text_reveal_9nFjgi",
-    "tshirt_rotation_4C8dWi",
     "featured_hero_product_showcase_M7UNRt",
     "featured_hero_product_showcase_QyNXiU"
   ]

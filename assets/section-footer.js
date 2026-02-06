@@ -74,6 +74,7 @@
 
   /**
    * Initialize accordion functionality for mobile with GSAP animations
+   * Only active on mobile screens (max-width: 412px)
    */
   function initAccordion(footer) {
     const accordions = footer.querySelectorAll(".footer__accordion");
@@ -86,6 +87,57 @@
       document.body.classList.add("no-gsap");
     }
 
+    // Function to check if we're on mobile
+    const isMobile = () => window.innerWidth <= 412;
+
+    // Function to initialize or cleanup accordion based on screen size
+    function handleResize() {
+      accordions.forEach((accordion) => {
+        const content = accordion.querySelector(".footer__accordion-content");
+        if (!content) return;
+
+        if (isMobile()) {
+          // Mobile: Set up accordion
+          if (hasGSAP) {
+            // Only set initial state if not already set
+            if (!accordion._accordionInitialized) {
+              gsap.set(content, {
+                height: 0,
+                overflow: "hidden",
+                opacity: 0,
+              });
+              accordion._accordionInitialized = true;
+            }
+          }
+        } else {
+          // Desktop/Tablet: Reset to default visible state
+          if (hasGSAP) {
+            gsap.set(content, {
+              height: "auto",
+              overflow: "visible",
+              opacity: 1,
+            });
+          } else {
+            content.style.height = "";
+            content.style.overflow = "";
+            content.style.opacity = "";
+          }
+          accordion.classList.remove("is-open");
+          accordion._accordionInitialized = false;
+        }
+      });
+    }
+
+    // Initial setup
+    handleResize();
+
+    // Handle window resize with debounce
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 150);
+    });
+
     accordions.forEach((accordion) => {
       const trigger = accordion.querySelector(".footer__accordion-header");
       const content = accordion.querySelector(".footer__accordion-content");
@@ -96,16 +148,10 @@
       // Store animation state to prevent rapid clicking issues
       accordion._isAnimating = false;
 
-      // Set initial state for GSAP animations
-      if (hasGSAP) {
-        gsap.set(content, {
-          height: 0,
-          overflow: "hidden",
-          opacity: 0,
-        });
-      }
-
       trigger.addEventListener("click", () => {
+        // Only allow accordion interaction on mobile
+        if (!isMobile()) return;
+
         // Prevent interaction during animation
         if (accordion._isAnimating) return;
 

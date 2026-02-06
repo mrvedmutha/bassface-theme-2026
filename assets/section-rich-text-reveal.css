@@ -1,34 +1,41 @@
 /**
  * ==========================================
- * RICH TEXT REVEAL SECTION
+ * RICH TEXT REVEAL SECTION (v2.0 - Optimized)
  * ==========================================
  * 
- * A rich text section with staggered layout and scroll-triggered
- * text reveal animations (blur reveal for heading, typing for body).
+ * Performance-optimized text reveal animations.
+ * Designed to work smoothly on high-DPI Retina displays.
  * 
- * Responsive Breakpoints:
- * - Desktop Large (>1024px): Full indent, 48px/32px typography
- * - Desktop (>700px): Reduced indent, 48px/32px typography
- * - Mobile (≤700px): No indent, left-aligned, 32px/24px typography
+ * Responsive Breakpoints (Desktop-First):
+ * - Desktop (1440px): Base styles
+ * - Tablet (1024px): Reduced indent, smaller typography
+ * - Mobile (700px): No indent, left-aligned
+ * - Small Mobile (412px): Compact spacing
  */
 
 /* ==========================================
    BASE SECTION STYLES
    ========================================== */
 
-/* Outer wrapper - full width fluid background */
-
+/* Reset Shopify section defaults */
 .section-rich-text-reveal {
   display: block;
+  margin: 0;
+  padding: 0;
 }
+
+/* Outer wrapper - full width background */
 .rich-text-reveal__wrapper {
   width: 100%;
+  max-width: 100vw;
+  overflow: hidden; /* Prevent horizontal bleed */
+  background-color: var(--color-background-secondary);
 }
 
 /* Section container */
 .rich-text-reveal {
   width: 100%;
-  background-color: var(--color-background-secondary);
+  box-sizing: border-box;
 }
 
 /* Inner container - constrained width */
@@ -36,7 +43,8 @@
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
-  padding: 50px var(--page-margin);
+  padding: 80px var(--page-margin);
+  box-sizing: border-box;
 }
 
 .rich-text-reveal__content {
@@ -59,8 +67,57 @@
 }
 
 /* ==========================================
+   HEADING ANIMATION STYLES (Variable Blur)
+   ========================================== */
+
+/* Word wrapper keeps words together */
+.rich-text-reveal__heading .word-wrapper {
+  display: inline-block;
+  margin-right: 0.25em;
+  white-space: nowrap;
+}
+
+/* Character wrapper */
+.rich-text-reveal__heading .char-wrapper {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(6px);
+  will-change: opacity, transform, filter;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    filter 0.3s ease;
+}
+
+/* Variable blur levels - applied via data attribute */
+.rich-text-reveal__heading .char-wrapper[data-blur="light"] {
+  filter: blur(2px);
+}
+
+.rich-text-reveal__heading .char-wrapper[data-blur="medium"] {
+  filter: blur(4px);
+}
+
+.rich-text-reveal__heading .char-wrapper[data-blur="heavy"] {
+  filter: blur(6px);
+}
+
+/* Revealed state */
+.rich-text-reveal__heading .char-wrapper.revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+}
+
+/* ==========================================
    BODY/CONTENT STYLES
    ========================================== */
+.rich-text-reveal__body-wrapper {
+  position: relative;
+  margin-left: 150px;
+  margin-top: 50px;
+}
+
 .rich-text-reveal__body {
   font-family: var(--font-body);
   font-weight: var(--font-weight-normal);
@@ -72,139 +129,50 @@
 }
 
 /* ==========================================
-   CHARACTER ANIMATION STYLES (Blur Reveal)
+   BODY LINE ANIMATION STYLES (Blur Fade)
    ========================================== */
-.rich-text-reveal__heading .word-wrapper {
-  display: inline-block;
-  margin-right: 0.3em;
-}
-
-.rich-text-reveal__heading .char-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.rich-text-reveal__heading .char-inner {
-  position: relative;
-  display: inline-block;
-  filter: blur(10px);
+.rich-text-reveal__line {
+  display: inline;
   opacity: 0;
-  will-change: filter, opacity;
-}
-
-.rich-text-reveal__heading .char-inner.revealed {
-  filter: blur(0px);
-  opacity: 1;
+  filter: blur(3px);
+  will-change: opacity, filter;
   transition:
-    filter 0.6s ease,
-    opacity 0.6s ease;
+    opacity 0.35s ease,
+    filter 0.35s ease;
 }
 
-.rich-text-reveal__heading .space {
-  display: inline-block;
-  width: 0.3em;
-}
-
-/* ==========================================
-   TYPING ANIMATION STYLES (Body)
-   ========================================== */
-.rich-text-reveal__body-wrapper {
-  position: relative;
-  margin-left: 150px;
-  margin-top: 50px;
-}
-
-.rich-text-reveal__body {
-  margin-left: 0;
-  margin-top: 0;
-}
-
-/* Word wrapper keeps words together */
-.rich-text-reveal__body .word-wrapper {
-  display: inline-block;
-  white-space: nowrap;
-  margin-right: 0.25em;
-}
-
-.rich-text-reveal__body .char-inner {
-  display: inline;
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity 0.05s ease;
-}
-
-.rich-text-reveal__body .char-inner.revealed {
+.rich-text-reveal__line.revealed {
   opacity: 1;
-}
-
-.rich-text-reveal__body .space-char {
-  display: inline;
-  opacity: 0;
-}
-
-.rich-text-reveal__body .space-char.revealed {
-  opacity: 1;
-}
-
-/* Typing cursor */
-.rich-text-reveal__cursor {
-  display: none;
-  width: 2px;
-  height: 1.2em;
-  background-color: var(--color-text-primary);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  opacity: 0;
-}
-
-.rich-text-reveal__cursor.active {
-  display: inline-block;
-  opacity: 1;
-  animation: cursor-blink 0.7s infinite;
-}
-
-.rich-text-reveal__cursor.hidden {
-  display: none;
-  opacity: 0;
-  animation: none;
-}
-
-@keyframes cursor-blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
+  filter: blur(0px);
 }
 
 /* ==========================================
    NO ANIMATION STATE
    ========================================== */
-.rich-text-reveal--no-animation .char-inner {
-  filter: none !important;
+.rich-text-reveal--no-animation .char-wrapper,
+.rich-text-reveal--no-animation .rich-text-reveal__line {
   opacity: 1 !important;
-}
-
-.rich-text-reveal--no-animation .rich-text-reveal__cursor {
-  display: none;
+  filter: none !important;
+  transform: none !important;
 }
 
 /* ==========================================
-   RESPONSIVE STYLES - DESKTOP FIRST
+   RESPONSIVE STYLES - DESKTOP FIRST (1440px base)
    ========================================== */
 
-/* Tablet/Small Desktop (≤1024px) */
+/* Tablet (≤1024px) */
 @media (max-width: 1024px) {
+  .rich-text-reveal__container {
+    padding: 60px var(--page-margin);
+  }
+
   .rich-text-reveal__heading {
     font-size: 32px;
     max-width: 600px;
   }
 
   .rich-text-reveal__body-wrapper {
-    margin-left: 120px;
+    margin-left: 100px;
     margin-top: 40px;
   }
 
@@ -214,32 +182,14 @@
   }
 }
 
-/* Tablet (≤900px) */
-@media (max-width: 900px) {
-  .rich-text-reveal__heading {
-    font-size: 28px;
-    max-width: 500px;
-  }
-
-  .rich-text-reveal__body-wrapper {
-    margin-left: 80px;
-    margin-top: 35px;
-  }
-
-  .rich-text-reveal__body {
-    font-size: 18px;
-    max-width: 480px;
-  }
-}
-
 /* Mobile (≤700px) - No indent, left-aligned */
 @media (max-width: 700px) {
   .rich-text-reveal__container {
-    padding: 35px var(--page-margin);
+    padding: 50px var(--page-margin);
   }
 
   .rich-text-reveal__heading {
-    font-size: 24px;
+    font-size: 26px;
     max-width: 100%;
   }
 
@@ -249,7 +199,7 @@
   }
 
   .rich-text-reveal__body {
-    font-size: 16px;
+    font-size: 17px;
     max-width: 100%;
   }
 }
@@ -257,7 +207,7 @@
 /* Small Mobile (≤412px) */
 @media (max-width: 412px) {
   .rich-text-reveal__container {
-    padding: 25px var(--page-margin);
+    padding: 40px var(--page-margin);
   }
 
   .rich-text-reveal__heading {
@@ -277,17 +227,11 @@
    REDUCED MOTION PREFERENCE
    ========================================== */
 @media (prefers-reduced-motion: reduce) {
-  .rich-text-reveal__heading .char-inner {
+  .rich-text-reveal__heading .char-wrapper,
+  .rich-text-reveal__line {
+    opacity: 1;
     filter: none;
-    opacity: 1;
+    transform: none;
     transition: none;
-  }
-
-  .rich-text-reveal__body .char-inner {
-    opacity: 1;
-  }
-
-  .rich-text-reveal__cursor {
-    display: none;
   }
 }
