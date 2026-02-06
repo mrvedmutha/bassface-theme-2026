@@ -1,0 +1,137 @@
+{% comment %}
+  ==========================================
+  T-SHIRT 3D ROTATION SECTION (v2.0 - Optimized)
+  ==========================================
+  
+  Simplified, performance-optimized version:
+  - White background (no gradient mesh)
+  - Tight scroll scrub (1 frame per ~1vh)
+  - 0-100% = full rotation
+  - 98-100% = T-shirt settles to rest
+  - 100% = CTA reveals
+  - +5vh buffer for reading
+{% endcomment %}
+
+{{ 'section-tshirt-rotation.css' | asset_url | stylesheet_tag }}
+
+<section class="tshirt-rotation" data-section-id="{{ section.id }}">
+  {%- comment -%} Pinned Container (stays fixed during scroll) {%- endcomment -%}
+  <div class="tshirt-rotation__pinned" data-pinned-container>
+    
+    {%- comment -%} White Background {%- endcomment -%}
+    <div class="tshirt-rotation__background"></div>
+
+    {%- comment -%} Canvas for T-Shirt Sequence {%- endcomment -%}
+    <canvas
+      class="tshirt-rotation__canvas"
+      data-canvas
+      width="1200"
+      height="1200"
+      aria-label="Rotating 3D t-shirt animation"
+    ></canvas>
+
+    {%- comment -%} CTA Content (reveals at end) {%- endcomment -%}
+    <div class="tshirt-rotation__cta" data-cta>
+      {%- if section.settings.cta_heading != blank -%}
+        <h2 class="tshirt-rotation__cta-heading" data-cta-heading>
+          {{ section.settings.cta_heading }}
+        </h2>
+      {%- endif -%}
+      
+      {%- if section.settings.cta_paragraph != blank -%}
+        <p class="tshirt-rotation__cta-paragraph" data-cta-paragraph>
+          {{ section.settings.cta_paragraph }}
+        </p>
+      {%- endif -%}
+      
+      {%- if section.settings.cta_button_text != blank -%}
+        <a 
+          href="{{ section.settings.cta_button_link }}"
+          class="tshirt-rotation__button"
+          data-cta-button
+        >
+          <span class="tshirt-rotation__button-text">{{ section.settings.cta_button_text }}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} Scroll Spacer (frames + 5vh buffer) {%- endcomment -%}
+  <div class="tshirt-rotation__spacer" data-spacer></div>
+</section>
+
+{%- comment -%} Image URLs for JavaScript {%- endcomment -%}
+<script>
+  window.tshirtRotationData = window.tshirtRotationData || {};
+  window.tshirtRotationData['{{ section.id }}'] = {
+    totalFrames: {{ section.settings.total_frames }},
+    imageUrls: [
+      {%- assign max_frame = section.settings.total_frames | minus: 1 -%}
+      {%- for i in (0..max_frame) -%}
+        "{{ 't_shirt-animation-3d/images/img_' | append: i | append: '.webp' | asset_url }}"{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
+<script src="{{ 'section-tshirt-rotation.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "T-Shirt Rotation",
+  "tag": "section",
+  "class": "section-tshirt-rotation",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "3D T-shirt rotation on scroll with CTA reveal at end. White background, optimized for performance."
+    },
+    {
+      "type": "header",
+      "content": "Animation Settings"
+    },
+    {
+      "type": "number",
+      "id": "total_frames",
+      "label": "Total Animation Frames",
+      "info": "Number of frame images (img_0.webp to img_N.webp). 151 means frames 0-150.",
+      "default": 151
+    },
+    {
+      "type": "header",
+      "content": "CTA Content"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "WEAR TO RAVE"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_paragraph",
+      "label": "CTA Paragraph",
+      "default": "Born from the energy of the dancefloor, designed for those who live for the drop. Our collection merges streetwear aesthetics with rave culture, creating pieces that move with you from the studio to the stage."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "Button Text",
+      "default": "EXPLORE OUR COLLECTIONS"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    }
+  ],
+  "presets": [
+    {
+      "name": "T-Shirt Rotation"
+    }
+  ]
+}
+{% endschema %}

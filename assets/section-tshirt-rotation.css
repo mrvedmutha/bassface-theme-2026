@@ -1,0 +1,278 @@
+/**
+ * ==========================================
+ * T-SHIRT ROTATION SECTION (v2.0 - Optimized)
+ * ==========================================
+ * 
+ * Simplified, performance-focused styles:
+ * - White background (no gradient mesh)
+ * - Clean canvas positioning
+ * - CTA reveal at end
+ * 
+ * Scroll Timeline:
+ * - 0-100%: T-shirt rotates
+ * - 98-100%: T-shirt settles to bottom
+ * - 100%: CTA reveals
+ * - +5vh: Buffer for reading
+ */
+
+/* ==========================================
+   RESET & BASE
+   ========================================== */
+.section-tshirt-rotation {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.tshirt-rotation {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ==========================================
+   PINNED CONTAINER
+   ========================================== */
+.tshirt-rotation__pinned {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ==========================================
+   WHITE BACKGROUND
+   ========================================== */
+.tshirt-rotation__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+/* ==========================================
+   CANVAS (T-SHIRT)
+   ========================================== */
+.tshirt-rotation__canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: 90vh;
+  max-width: 90vw;
+  object-fit: contain;
+  z-index: 2;
+}
+
+/* ==========================================
+   CTA SECTION
+   ========================================== */
+.tshirt-rotation__cta {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tshirt-rotation__cta.is-visible {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.tshirt-rotation__cta-heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 48px;
+  color: #000000;
+  margin: 0 0 20px 0;
+  letter-spacing: 2px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.tshirt-rotation__cta-paragraph {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #000000;
+  margin: 0 0 30px 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.4s ease 0.1s,
+    transform 0.4s ease 0.1s;
+}
+
+.tshirt-rotation__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 36px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.4s ease 0.2s,
+    transform 0.4s ease 0.2s,
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.tshirt-rotation__button:hover {
+  background-color: #000000;
+}
+
+.tshirt-rotation__button:hover .tshirt-rotation__button-text {
+  color: #ffffff;
+}
+
+.tshirt-rotation__button-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+/* CTA Revealed State */
+.tshirt-rotation__cta.is-visible .tshirt-rotation__cta-heading,
+.tshirt-rotation__cta.is-visible .tshirt-rotation__cta-paragraph,
+.tshirt-rotation__cta.is-visible .tshirt-rotation__button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   SCROLL SPACER
+   ========================================== */
+.tshirt-rotation__spacer {
+  /* Height set by JS based on total frames + 5vh buffer */
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ==========================================
+   RESPONSIVE - DESKTOP FIRST (1440px base)
+   ========================================== */
+
+/* Tablet (≤1024px) */
+@media (max-width: 1024px) {
+  .tshirt-rotation__canvas {
+    height: 80vh;
+  }
+
+  .tshirt-rotation__cta {
+    top: 8%;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 36px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 15px;
+  }
+
+  .tshirt-rotation__button {
+    padding: 16px 32px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 13px;
+  }
+}
+
+/* Mobile (≤700px) */
+@media (max-width: 700px) {
+  .tshirt-rotation__canvas {
+    height: 70vh;
+    max-width: 100vw;
+  }
+
+  .tshirt-rotation__cta {
+    top: 5%;
+    max-width: 90%;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .tshirt-rotation__button {
+    padding: 14px 28px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 12px;
+  }
+}
+
+/* Small Mobile (≤412px) */
+@media (max-width: 412px) {
+  .tshirt-rotation__canvas {
+    height: 60vh;
+  }
+
+  .tshirt-rotation__cta-heading {
+    font-size: 24px;
+  }
+
+  .tshirt-rotation__cta-paragraph {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .tshirt-rotation__button {
+    padding: 12px 24px;
+  }
+
+  .tshirt-rotation__button-text {
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .tshirt-rotation__cta-heading,
+  .tshirt-rotation__cta-paragraph,
+  .tshirt-rotation__button {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

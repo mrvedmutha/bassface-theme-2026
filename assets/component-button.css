@@ -1,0 +1,317 @@
+/* ==========================================
+   BUTTON COMPONENT
+   ==========================================
+   
+   Unified button styles with variants, sizes, and ripple effect.
+   
+   Variants: --primary (black), --inverted (white)
+   Sizes: --xs, --sm, --md, --lg
+   Options: --rounded, --ripple, --disabled, --loading
+*/
+
+/* ==========================================
+   BASE BUTTON STYLES
+   ========================================== */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: 1px;
+  background-color: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+/* ==========================================
+   FILL ELEMENT (For Ripple Effect)
+   ========================================== */
+
+.btn__fill {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* ==========================================
+   TEXT ELEMENT
+   ========================================== */
+
+.btn__text {
+  position: relative;
+  font-family: var(--font-body, "Work Sans", sans-serif);
+  font-weight: 400;
+  transition: color 0.3s ease;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   VARIANT: PRIMARY (Black border/fill)
+   ========================================== */
+
+.btn--primary {
+  border-color: #000;
+}
+
+.btn--primary .btn__fill {
+  background-color: #000;
+}
+
+.btn--primary .btn__text {
+  color: #000;
+}
+
+/* Primary hover state (text goes white) */
+.btn--primary.btn--hover .btn__text {
+  color: #fff;
+}
+
+/* Non-ripple hover: CSS fill */
+.btn--primary:not(.btn--ripple):hover {
+  background-color: #000;
+}
+
+.btn--primary:not(.btn--ripple):hover .btn__text {
+  color: #fff;
+}
+
+/* ==========================================
+   VARIANT: INVERTED (White border/fill)
+   ========================================== */
+
+.btn--inverted {
+  border-color: #fff;
+}
+
+.btn--inverted .btn__fill {
+  background-color: #fff;
+}
+
+.btn--inverted .btn__text {
+  color: #fff;
+}
+
+/* Inverted hover state (text goes black) */
+.btn--inverted.btn--hover .btn__text {
+  color: #000;
+}
+
+/* Non-ripple hover: CSS fill */
+.btn--inverted:not(.btn--ripple):hover {
+  background-color: #fff;
+}
+
+.btn--inverted:not(.btn--ripple):hover .btn__text {
+  color: #000;
+}
+
+/* ==========================================
+   SIZE: XS (10px 24px, 12px font)
+   ========================================== */
+
+.btn--xs {
+  padding: 10px 24px;
+}
+
+.btn--xs .btn__text {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   SIZE: SM (14px 28px, 12px font)
+   ========================================== */
+
+.btn--sm {
+  padding: 14px 28px;
+}
+
+.btn--sm .btn__text {
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================
+   SIZE: MD (20px 40px, 16px font) - STANDARD
+   ========================================== */
+
+.btn--md {
+  padding: 20px 40px;
+}
+
+.btn--md .btn__text {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* ==========================================
+   SIZE: LG (40px 60px, 24px font)
+   ========================================== */
+
+.btn--lg {
+  padding: 40px 60px;
+}
+
+.btn--lg .btn__text {
+  font-size: 24px;
+}
+
+/* ==========================================
+   MODIFIER: ROUNDED (border-radius: 2px)
+   ========================================== */
+
+.btn--rounded {
+  border-radius: 2px;
+}
+
+/* ==========================================
+   MODIFIER: DISABLED
+   ========================================== */
+
+.btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ==========================================
+   MODIFIER: LOADING
+   ========================================== */
+
+.btn--loading {
+  background-color: #666;
+  border-color: #666;
+  pointer-events: none;
+}
+
+.btn--loading .btn__text {
+  color: #fff;
+}
+
+/* ==========================================
+   TOUCH DEVICES (No ripple, simple tap state)
+   ========================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  .btn--primary:active {
+    background-color: #000;
+  }
+
+  .btn--primary:active .btn__text {
+    color: #fff;
+  }
+
+  .btn--inverted:active {
+    background-color: #fff;
+  }
+
+  .btn--inverted:active .btn__text {
+    color: #000;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE: TABLET (≤1024px)
+   ========================================== */
+
+@media (max-width: 1024px) {
+  .btn--lg {
+    padding: 30px 50px;
+  }
+
+  .btn--lg .btn__text {
+    font-size: 20px;
+  }
+
+  .btn--md {
+    padding: 18px 36px;
+  }
+
+  .btn--md .btn__text {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE: MOBILE (≤700px)
+   ========================================== */
+
+@media (max-width: 700px) {
+  .btn--lg {
+    padding: 20px 30px;
+  }
+
+  .btn--lg .btn__text {
+    font-size: 18px;
+  }
+
+  .btn--md {
+    padding: 16px 30px;
+  }
+
+  .btn--md .btn__text {
+    font-size: 14px;
+  }
+
+  .btn--sm {
+    padding: 12px 24px;
+  }
+
+  .btn--sm .btn__text {
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE: SMALL MOBILE (≤412px)
+   ========================================== */
+
+@media (max-width: 412px) {
+  .btn--lg {
+    padding: 15px 25px;
+  }
+
+  .btn--lg .btn__text {
+    font-size: 14px;
+  }
+
+  .btn--md {
+    padding: 14px 24px;
+  }
+
+  .btn--md .btn__text {
+    font-size: 12px;
+  }
+
+  .btn--sm {
+    padding: 10px 20px;
+  }
+
+  .btn--sm .btn__text {
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn__text,
+  .btn__fill {
+    transition: none;
+  }
+}

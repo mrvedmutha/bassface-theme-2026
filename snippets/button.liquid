@@ -1,0 +1,94 @@
+{%- comment -%}
+  ==========================================
+  BUTTON COMPONENT
+  ==========================================
+  
+  Reusable button with optional ripple effect.
+  
+  Parameters:
+  - text: Button label (required)
+  - url: Link URL (required for type: 'link')
+  - variant: 'primary' (black) | 'inverted' (white) - default: 'primary'
+  - size: 'xs' | 'sm' | 'md' | 'lg' - default: 'md'
+  - ripple: true | false - enables GSAP ripple on hover - default: true
+  - rounded: true | false - applies border-radius - default: true
+  - type: 'link' | 'button' - default: 'link'
+  - x_ref: Alpine.js x-ref name (optional)
+  - disabled: true | false - default: false
+  - loading_text: Text to show when loading (optional)
+  - extra_classes: Additional CSS classes (optional)
+{%- endcomment -%}
+
+{%- comment -%} Load CSS and JS once per page {%- endcomment -%}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-button.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign btn_variant = variant | default: 'primary'
+  assign btn_size = size | default: 'md'
+  assign btn_ripple = ripple | default: true
+  assign btn_rounded = rounded | default: true
+  assign btn_type = type | default: 'link'
+  assign btn_disabled = disabled | default: false
+  assign btn_text = text | default: 'Button'
+  assign btn_url = url | default: '#'
+  assign btn_x_ref = x_ref | default: nil
+  assign btn_loading_text = loading_text | default: nil
+  assign btn_extra_classes = extra_classes | default: ''
+
+  # Build class list
+  assign btn_classes = 'btn btn--' | append: btn_variant | append: ' btn--' | append: btn_size
+
+  if btn_rounded
+    assign btn_classes = btn_classes | append: ' btn--rounded'
+  endif
+
+  if btn_ripple
+    assign btn_classes = btn_classes | append: ' btn--ripple'
+  endif
+
+  if btn_disabled
+    assign btn_classes = btn_classes | append: ' btn--disabled'
+  endif
+
+  if btn_extra_classes != ''
+    assign btn_classes = btn_classes | append: ' ' | append: btn_extra_classes
+  endif
+-%}
+
+{%- if btn_type == 'link' -%}
+  <a
+    href="{{ btn_url }}"
+    class="{{ btn_classes }}"
+    {%- if btn_x_ref %}x-ref="{{ btn_x_ref }}"{% endif %}
+    {%- if btn_ripple %}
+      @mouseenter="$buttonRipple.enter($event, $el)"
+      @mouseleave="$buttonRipple.leave($el)"
+    {%- endif %}
+    {%- if btn_disabled %}aria-disabled="true"{% endif %}
+  >
+    {%- if btn_ripple -%}
+      <span class="btn__fill" aria-hidden="true">&nbsp;</span>
+    {%- endif -%}
+    <span class="btn__text">{{ btn_text }}</span>
+  </a>
+{%- else -%}
+  <button
+    type="button"
+    class="{{ btn_classes }}"
+    {%- if btn_x_ref %}x-ref="{{ btn_x_ref }}"{% endif %}
+    {%- if btn_ripple %}
+      @mouseenter="$buttonRipple.enter($event, $el)"
+      @mouseleave="$buttonRipple.leave($el)"
+    {%- endif %}
+    {%- if btn_disabled %}disabled{% endif %}
+    {%- if btn_loading_text %}:class="{ 'btn--loading': isNavigating }"{% endif %}
+  >
+    {%- if btn_ripple -%}
+      <span class="btn__fill" aria-hidden="true">&nbsp;</span>
+    {%- endif -%}
+    <span class="btn__text"
+      {%- if btn_loading_text %} x-text="isNavigating ? '{{ btn_loading_text }}' : '{{ btn_text }}'"{% endif -%}
+    >{{ btn_text }}</span>
+  </button>
+{%- endif -%}
