@@ -3,6 +3,7 @@
  *
  * Global Alpine.js mixin for underline hover effect.
  * Uses GSAP for smooth left-enter / right-exit animation.
+ * Disabled on touch devices.
  *
  * Usage in Liquid/Alpine:
  * @mouseenter="$underlineLink.enter($event, $el)"
@@ -10,6 +11,10 @@
  */
 
 document.addEventListener("alpine:init", () => {
+  // Detect if device has touch capability
+  const isTouchDevice =
+    "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
   Alpine.magic("underlineLink", () => ({
     /**
      * Handle mouse enter - underline scales in from left
@@ -17,6 +22,8 @@ document.addEventListener("alpine:init", () => {
      * @param {HTMLElement} el - Link element
      */
     enter(event, el) {
+      // Disable animation on touch devices
+      if (isTouchDevice) return;
       if (typeof gsap === "undefined") return;
 
       const line = el.querySelector(".underline-link__line");
@@ -48,6 +55,8 @@ document.addEventListener("alpine:init", () => {
      * @param {HTMLElement} el - Link element
      */
     leave(el) {
+      // Disable animation on touch devices
+      if (isTouchDevice) return;
       if (typeof gsap === "undefined") return;
 
       const line = el.querySelector(".underline-link__line");
