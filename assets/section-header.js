@@ -143,35 +143,7 @@ document.addEventListener("alpine:init", () => {
       return;
     },
 
-    // Text underline animation (Search, Login/Signup)
-    animateTextEnter(element) {
-      if (typeof gsap === "undefined") return;
-
-      const underline = element.querySelector(".section-header__underline");
-      if (!underline) return;
-
-      // Underline enters from left
-      gsap.fromTo(
-        underline,
-        { scaleX: 0, transformOrigin: "left" },
-        { scaleX: 1, duration: 0.35, ease: "power2.out" },
-      );
-    },
-
-    animateTextExit(element) {
-      if (typeof gsap === "undefined") return;
-
-      const underline = element.querySelector(".section-header__underline");
-      if (!underline) return;
-
-      // Underline exits to right
-      gsap.to(underline, {
-        scaleX: 0,
-        transformOrigin: "right", // Exit from right
-        duration: 0.35,
-        ease: "power2.in",
-      });
-    },
+    // Text underline animation now handled by component-underline-link.js ($underlineLink magic)
 
     // ==========================================
     // ICON FADE ANIMATIONS - Outline ↔ Filled

@@ -16,6 +16,8 @@
 -%}
 
 {{ 'section-header.css' | asset_url | stylesheet_tag }}
+{{ 'component-underline-link.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-underline-link.js' | asset_url }}" defer></script>
 
 <header
   x-data="headerAnimation({{ is_transparent_page }})"
@@ -44,16 +46,16 @@
       {%- comment -%} Search Button - Desktop/Tablet (with text) {%- endcomment -%}
       <button
         @click="$store.searchOverlay.toggle()"
-        @mouseenter="animateTextEnter($el)"
-        @mouseleave="animateTextExit($el)"
+        @mouseenter="$underlineLink.enter($event, $el)"
+        @mouseleave="$underlineLink.leave($el)"
         aria-label="Search"
         :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
         class="section-header__button section-header__search-button"
       >
         {{ 'icon-header-search.svg' | inline_asset_content }}
-        <span class="section-header__search-text-wrapper">
+        <span class="underline-link__text-wrapper">
           <span class="section-header__search-text">Search</span>
-          <div class="section-header__underline"></div>
+          <span class="underline-link__line" aria-hidden="true"></span>
         </span>
       </button>
 
@@ -135,12 +137,12 @@
       {% if shop.customer_accounts_enabled %}
         <a
           href="{{ routes.account_url }}"
-          @mouseenter="animateTextEnter($el)"
-          @mouseleave="animateTextExit($el)"
+          @mouseenter="$underlineLink.enter($event, $el)"
+          @mouseleave="$underlineLink.leave($el)"
           :class="{ 'section-header__account-link--dark': sticky, 'section-header__account-link--light': !sticky }"
           class="section-header__account-link"
         >
-          <span class="section-header__account-text-wrapper">
+          <span class="underline-link__text-wrapper">
             <span class="section-header__account-text">
               {%- if customer -%}
                 Account
@@ -148,7 +150,7 @@
                 Login/Signup
               {%- endif -%}
             </span>
-            <div class="section-header__underline"></div>
+            <span class="underline-link__line" aria-hidden="true"></span>
           </span>
         </a>
 

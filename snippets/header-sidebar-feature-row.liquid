@@ -9,10 +9,13 @@
 -%}
 
 <div class="sidebar-drawer__feature-row sidebar-drawer__item" {{ block.shopify_attributes }}>
-  <a href="{{ url }}" class="sidebar-drawer__feature-link">
+  <a href="{{ url }}" class="sidebar-drawer__feature-link underline-link underline-link--hover"
+    @mouseenter="$underlineLink.enter($event, $el)"
+    @mouseleave="$underlineLink.leave($el)"
+  >
     <h3 class="sidebar-drawer__feature-title">
       {{ title }}
-      <span class="sidebar-drawer__link-underline"></span>
+      <span class="underline-link__line" aria-hidden="true"></span>
     </h3>
     {%- if image != blank -%}
       <div class="sidebar-drawer__feature-image-wrapper">

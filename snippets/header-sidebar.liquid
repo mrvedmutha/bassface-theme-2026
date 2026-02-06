@@ -24,7 +24,9 @@
 -%}
 
 {{ 'snippet-header-sidebar.css' | asset_url | stylesheet_tag }}
+{{ 'component-underline-link.css' | asset_url | stylesheet_tag }}
 {{ 'component-button.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-underline-link.js' | asset_url }}" defer></script>
 <script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
 {%- comment -%} Main Sidebar Drawer {%- endcomment -%}
@@ -75,14 +77,15 @@
             <ul class="sidebar-drawer__utility-list">
               {%- for link in linklists[utility_menu].links -%}
                 <li>
-                  <a
-                    href="{{ link.url }}"
-                    class="sidebar-drawer__utility-link"
-                    {% if link.current %}aria-current="page"{% endif %}
-                  >
-                    {{ link.title }}
-                    <span class="sidebar-drawer__link-underline"></span>
-                  </a>
+                  {%- render 'underline-link',
+                    text: link.title,
+                    url: link.url,
+                    tag: 'a',
+                    variant: 'hover',
+                    active: link.current,
+                    show_active_color: true,
+                    extra_classes: 'sidebar-drawer__utility-link'
+                  -%}
                 </li>
               {%- endfor -%}
             </ul>
@@ -119,14 +122,15 @@
                 <ul class="sidebar-drawer__categories-list">
                   {%- for link in linklists[product_categories_menu].links limit: 10 -%}
                     <li>
-                      <a
-                        href="{{ link.url }}"
-                        class="sidebar-drawer__category-link"
-                        {% if link.current %}aria-current="page"{% endif %}
-                      >
-                        {{ link.title }}
-                        <span class="sidebar-drawer__link-underline"></span>
-                      </a>
+                      {%- render 'underline-link',
+                        text: link.title,
+                        url: link.url,
+                        tag: 'a',
+                        variant: 'hover',
+                        active: link.current,
+                        show_active_color: true,
+                        extra_classes: 'sidebar-drawer__category-link'
+                      -%}
                     </li>
                   {%- endfor -%}
                 </ul>
@@ -155,14 +159,15 @@
                 <ul class="sidebar-drawer__collections-list">
                   {%- for link in linklists[collections_menu].links limit: 10 -%}
                     <li>
-                      <a
-                        href="{{ link.url }}"
-                        class="sidebar-drawer__collection-link"
-                        {% if link.current %}aria-current="page"{% endif %}
-                      >
-                        {{ link.title }}
-                        <span class="sidebar-drawer__link-underline"></span>
-                      </a>
+                      {%- render 'underline-link',
+                        text: link.title,
+                        url: link.url,
+                        tag: 'a',
+                        variant: 'hover',
+                        active: link.current,
+                        show_active_color: true,
+                        extra_classes: 'sidebar-drawer__collection-link'
+                      -%}
                     </li>
                   {%- endfor -%}
                 </ul>
@@ -192,10 +197,15 @@
                   {%- if block.type == 'featured_collection' -%}
                     <div class="sidebar-drawer__item">
                       {%- if block.settings.url != blank and block.settings.title != blank -%}
-                        <a href="{{ block.settings.url }}" class="sidebar-drawer__featured-link">
-                          {{ block.settings.title }}
-                          <span class="sidebar-drawer__link-underline"></span>
-                        </a>
+                        {%- render 'underline-link',
+                          text: block.settings.title,
+                          url: block.settings.url,
+                          tag: 'a',
+                          variant: 'hover',
+                          active: false,
+                          show_active_color: true,
+                          extra_classes: 'sidebar-drawer__featured-link'
+                        -%}
                       {%- endif -%}
                     </div>
                   {%- endif -%}
@@ -225,10 +235,15 @@
                 <ul class="sidebar-drawer__blog-list">
                   {%- for article in recent_posts -%}
                     <li>
-                      <a href="{{ article.url }}" class="sidebar-drawer__blog-link">
-                        {{ article.title }}
-                        <span class="sidebar-drawer__link-underline"></span>
-                      </a>
+                      {%- render 'underline-link',
+                        text: article.title,
+                        url: article.url,
+                        tag: 'a',
+                        variant: 'hover',
+                        active: false,
+                        show_active_color: false,
+                        extra_classes: 'sidebar-drawer__blog-link'
+                      -%}
                     </li>
                   {%- endfor -%}
                 </ul>
@@ -328,14 +343,15 @@
             <ul class="sidebar-drawer__categories-list">
               {%- for link in linklists[product_categories_menu].links -%}
                 <li class="sidebar-drawer__item">
-                  <a
-                    href="{{ link.url }}"
-                    class="sidebar-drawer__category-link"
-                    {% if link.current %}aria-current="page"{% endif %}
-                  >
-                    {{ link.title }}
-                    <span class="sidebar-drawer__link-underline"></span>
-                  </a>
+                  {%- render 'underline-link',
+                    text: link.title,
+                    url: link.url,
+                    tag: 'a',
+                    variant: 'hover',
+                    active: link.current,
+                    show_active_color: true,
+                    extra_classes: 'sidebar-drawer__category-link'
+                  -%}
                 </li>
               {%- endfor -%}
             </ul>
@@ -349,14 +365,15 @@
             <ul class="sidebar-drawer__collections-list sidebar-drawer__collections-list--level2">
               {%- for link in linklists[collections_menu].links -%}
                 <li class="sidebar-drawer__item">
-                  <a
-                    href="{{ link.url }}"
-                    class="sidebar-drawer__collection-link"
-                    {% if link.current %}aria-current="page"{% endif %}
-                  >
-                    {{ link.title }}
-                    <span class="sidebar-drawer__link-underline"></span>
-                  </a>
+                  {%- render 'underline-link',
+                    text: link.title,
+                    url: link.url,
+                    tag: 'a',
+                    variant: 'hover',
+                    active: link.current,
+                    show_active_color: true,
+                    extra_classes: 'sidebar-drawer__collection-link'
+                  -%}
                 </li>
               {%- endfor -%}
             </ul>
@@ -370,10 +387,15 @@
             <ul class="sidebar-drawer__blog-list sidebar-drawer__blog-list--level2">
               {%- for article in recent_posts -%}
                 <li class="sidebar-drawer__item">
-                  <a href="{{ article.url }}" class="sidebar-drawer__blog-link">
-                    {{ article.title }}
-                    <span class="sidebar-drawer__link-underline"></span>
-                  </a>
+                  {%- render 'underline-link',
+                    text: article.title,
+                    url: article.url,
+                    tag: 'a',
+                    variant: 'hover',
+                    active: false,
+                    show_active_color: false,
+                    extra_classes: 'sidebar-drawer__blog-link'
+                  -%}
                 </li>
               {%- endfor -%}
             </ul>

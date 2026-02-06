@@ -1,0 +1,116 @@
+/* ==========================================
+   UNDERLINE LINK COMPONENT
+   ==========================================
+
+   Reusable animated underline link styles.
+
+   Usage: {{ 'component-underline-link.css' | asset_url | stylesheet_tag }}
+
+   Structure:
+   .underline-link
+     [icon_before slot]
+     .underline-link__text-wrapper
+       .underline-link__text
+       .underline-link__line
+
+   Variants: --hover (hidden default), --persistent (visible default)
+   Colors: --dark, --light, inherit (default)
+   States: --active (orange text)
+*/
+
+/* ==========================================
+   BASE STYLES
+   ========================================== */
+
+.underline-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.underline-link__text-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-link__text {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-link__line {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 0.5px;
+  background-color: currentColor;
+  transform-origin: left;
+}
+
+/* ==========================================
+   VARIANT: HOVER (hidden by default)
+   ========================================== */
+
+.underline-link--hover .underline-link__line {
+  transform: scaleX(0);
+}
+
+/* ==========================================
+   VARIANT: PERSISTENT (visible by default)
+   ========================================== */
+
+.underline-link--persistent .underline-link__line {
+  transform: scaleX(1);
+}
+
+/* ==========================================
+   COLOR: DARK
+   ========================================== */
+
+.underline-link--dark {
+  color: #000000;
+}
+
+.underline-link--dark .underline-link__line {
+  background-color: #000000;
+}
+
+/* ==========================================
+   COLOR: LIGHT
+   ========================================== */
+
+.underline-link--light {
+  color: #ffffff;
+}
+
+.underline-link--light .underline-link__line {
+  background-color: #ffffff;
+}
+
+/* ==========================================
+   STATE: ACTIVE (orange text)
+   ========================================== */
+
+.underline-link--active {
+  color: #ff4400;
+}
+
+.underline-link--active .underline-link__line {
+  background-color: #ff4400;
+}
+
+/* ==========================================
+   ACCESSIBILITY: REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .underline-link__line {
+    transition: none;
+  }
+}

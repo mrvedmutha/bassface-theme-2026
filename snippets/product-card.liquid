@@ -1,0 +1,88 @@
+{%- comment -%}
+  ==========================================
+  PRODUCT CARD COMPONENT
+  ==========================================
+
+  Reusable product card with image, category, title, and price.
+
+  IMPORTANT: Sections using this snippet must load the card assets:
+  {{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+
+  Parameters:
+  - product: Shopify product object (required)
+  - image_loading: 'lazy' | 'eager' - default: 'lazy'
+  - image_sizes: Responsive sizes attribute - default: '(min-width: 1250px) 25vw, (min-width: 700px) 33vw, 50vw'
+  - image_widths: Widths for image_tag - default: '400, 600, 800'
+  - show_category: true | false - show product type - default: true
+  - show_price: true | false - show price - default: true
+  - price_prefix: Text before price - default: 'From '
+  - heading_tag: HTML tag for title ('h2', 'h3', 'h4', 'p') - default: 'h3'
+  - extra_classes: Additional CSS classes (optional)
+  - x_ref: Alpine.js x-ref name (optional)
+  - x_data_attrs: Custom Alpine/data attributes string (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign card_product = product
+  assign card_image_loading = image_loading | default: 'lazy'
+  assign card_image_sizes = image_sizes | default: '(min-width: 1250px) 25vw, (min-width: 700px) 33vw, 50vw'
+  assign card_image_widths = image_widths | default: '400, 600, 800'
+  assign card_show_category = show_category | default: true
+  assign card_show_price = show_price | default: true
+  assign card_price_prefix = price_prefix | default: 'From '
+  assign card_heading_tag = heading_tag | default: 'h3'
+  assign card_extra_classes = extra_classes | default: ''
+  assign card_x_ref = x_ref | default: nil
+  assign card_x_data_attrs = x_data_attrs | default: nil
+
+  # Build class list
+  assign card_classes = 'product-card'
+
+  if card_extra_classes != ''
+    assign card_classes = card_classes | append: ' ' | append: card_extra_classes
+  endif
+-%}
+
+{%- if card_product != blank -%}
+  <a
+    href="{{ card_product.url }}"
+    class="{{ card_classes }}"
+    aria-label="View {{ card_product.title }}"
+    {%- if card_x_ref %} x-ref="{{ card_x_ref }}"{% endif %}
+    {%- if card_x_data_attrs %} {{ card_x_data_attrs }}{% endif %}
+  >
+    <div class="product-card__image">
+      {%- if card_product.featured_image -%}
+        {{
+          card_product.featured_image
+          | image_url: width: 800
+          | image_tag:
+            loading: card_image_loading,
+            widths: card_image_widths,
+            sizes: card_image_sizes,
+            alt: card_product.featured_image.alt | default: card_product.title
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div class="product-card__info">
+      {%- if card_show_category -%}
+        {%- if card_product.type != blank -%}
+          <p class="product-card__category">{{ card_product.type }}</p>
+        {%- else -%}
+          <p class="product-card__category">PRODUCT</p>
+        {%- endif -%}
+      {%- endif -%}
+
+      <{{ card_heading_tag }} class="product-card__title">{{ card_product.title }}</{{ card_heading_tag }}>
+
+      {%- if card_show_price and card_product.price -%}
+        <p class="product-card__price">
+          {{ card_price_prefix }}{{ card_product.price | money }}
+        </p>
+      {%- endif -%}
+    </div>
+  </a>
+{%- endif -%}

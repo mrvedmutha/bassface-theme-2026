@@ -16,6 +16,7 @@
 {%- endcomment -%}
 
 {{ 'section-featured-hero-product-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-button.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
@@ -101,43 +102,13 @@
 
     {%- if products_to_show != blank and products_to_show.size > 0 -%}
       {%- for product in products_to_show limit: 4 -%}
-        <a
-          href="{{ product.url }}"
-          class="product-card"
-          aria-label="View {{ product.title }}"
-        >
-          <div class="product-card__image">
-            {%- if product.featured_image -%}
-              {{
-                product.featured_image
-                | image_url: width: 800
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '400, 600, 800',
-                  sizes: '(min-width: 1250px) 25vw, (min-width: 700px) 33vw, 50vw',
-                  alt: product.featured_image.alt | default: product.title
-              }}
-            {%- else -%}
-              {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
-            {%- endif -%}
-          </div>
-
-          <div class="product-card__info">
-            {%- if product.type != blank -%}
-              <p class="product-card__category">{{ product.type }}</p>
-            {%- else -%}
-              <p class="product-card__category">PRODUCT</p>
-            {%- endif -%}
-
-            <h3 class="product-card__title">{{ product.title }}</h3>
-
-            {%- if product.price -%}
-              <p class="product-card__price">
-                From {{ product.price | money }}
-              </p>
-            {%- endif -%}
-          </div>
-        </a>
+        {%- render 'product-card',
+          product: product,
+          image_loading: 'lazy',
+          show_category: true,
+          show_price: true,
+          price_prefix: 'From '
+        -%}
       {%- endfor -%}
     {%- else -%}
       {%- comment -%} Fallback: Show empty state if no products {%- endcomment -%}
@@ -148,9 +119,7 @@
   </div>
 </section>
 
-{%- comment -%} Load GSAP for animations {%- endcomment -%}
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
+{%- comment -%} GSAP loaded globally in theme.liquid {%- endcomment -%}
 <script src="{{ 'section-featured-hero-product-showcase.js' | asset_url }}" defer></script>
 
 {% schema %}

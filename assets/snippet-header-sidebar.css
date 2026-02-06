@@ -385,17 +385,7 @@
   color: #ff4400;
 }
 
-/* Underline element for GSAP animation (hidden by default) */
-.sidebar-drawer__link-underline {
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 0.5px;
-  background-color: #000000;
-  transform: scaleX(0);
-  transform-origin: left;
-}
+/* Underline styles now in component-underline-link.css */
 
 /* =====================================================
    UTILITY NAVIGATION
@@ -985,7 +975,7 @@
 }
 
 /* Underline element for featured titles */
-.sidebar-drawer__feature-title .sidebar-drawer__link-underline {
+.sidebar-drawer__feature-title .underline-link__line {
   bottom: 0;
   height: 1px;
 }

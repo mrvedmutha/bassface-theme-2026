@@ -85,8 +85,7 @@ document.addEventListener("alpine:init", () => {
     level2BackTitle: "Back",
 
     init() {
-      // Initialize hover events for underline animation
-      this.initLinkHoverAnimations();
+      // Underline hover animations now handled by component-underline-link.js
 
       // Prevent scroll events from bubbling to body
       this.$nextTick(() => {
@@ -114,58 +113,7 @@ document.addEventListener("alpine:init", () => {
       });
     },
 
-    // Initialize GSAP underline animations for all sidebar links
-    initLinkHoverAnimations() {
-      // Select all links that should have underline animation
-      const hoverableLinks = this.$root.querySelectorAll(
-        ".sidebar-drawer__utility-link, " +
-          ".sidebar-drawer__category-link, " +
-          ".sidebar-drawer__collection-link, " +
-          ".sidebar-drawer__blog-link, " +
-          ".sidebar-drawer__featured-link, " +
-          ".sidebar-drawer__feature-link", // For featured collection cards
-      );
-
-      hoverableLinks.forEach((link) => {
-        link.addEventListener("mouseenter", () => this.animateLinkEnter(link));
-        link.addEventListener("mouseleave", () => this.animateLinkExit(link));
-      });
-    },
-
-    // GSAP Underline Animation - Enter (left to right)
-    animateLinkEnter(element) {
-      if (typeof gsap === "undefined") return;
-
-      const underline = element.querySelector(
-        ".sidebar-drawer__link-underline",
-      );
-      if (!underline) return;
-
-      // Underline enters from left
-      gsap.fromTo(
-        underline,
-        { scaleX: 0, transformOrigin: "left" },
-        { scaleX: 1, duration: 0.35, ease: "power2.out" },
-      );
-    },
-
-    // GSAP Underline Animation - Exit (to right)
-    animateLinkExit(element) {
-      if (typeof gsap === "undefined") return;
-
-      const underline = element.querySelector(
-        ".sidebar-drawer__link-underline",
-      );
-      if (!underline) return;
-
-      // Underline exits to right
-      gsap.to(underline, {
-        scaleX: 0,
-        transformOrigin: "right",
-        duration: 0.35,
-        ease: "power2.in",
-      });
-    },
+    // Underline animations now handled by component-underline-link.js ($underlineLink magic)
 
     showLevel2(view) {
       if (window.innerWidth >= 700) return; // Only for mobile (<700px)

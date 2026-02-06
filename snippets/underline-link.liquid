@@ -1,0 +1,112 @@
+{%- comment -%}
+  ==========================================
+  UNDERLINE LINK COMPONENT
+  ==========================================
+
+  Reusable text link with animated underline effect.
+  Uses GSAP for smooth left-enter / right-exit underline animation.
+
+  IMPORTANT: Sections using this snippet must load the assets:
+  {{ 'component-underline-link.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'component-underline-link.js' | asset_url }}" defer></script>
+
+  Parameters:
+  - text: Link text (required)
+  - url: Link URL - default: '#'
+  - tag: 'a' | 'button' | 'span' - default: 'a'
+  - variant: 'hover' | 'persistent' - default: 'hover'
+    - hover: underline hidden by default, appears on hover
+    - persistent: underline always visible, re-animates on hover
+  - active: true | false - marks as current page - default: false
+  - show_active_color: true | false - show orange active color - default: true
+  - color: 'dark' | 'light' | 'inherit' - text/underline color - default: 'inherit'
+  - extra_classes: Additional CSS classes (optional)
+  - x_ref: Alpine.js x-ref name (optional)
+  - aria_label: Accessibility label (optional)
+  - onclick: Alpine @click handler (optional)
+  - icon_before: Raw HTML/SVG to render before text (optional)
+{%- endcomment -%}
+
+{%- liquid
+  assign link_text = text | default: 'Link'
+  assign link_url = url | default: '#'
+  assign link_tag = tag | default: 'a'
+  assign link_variant = variant | default: 'hover'
+  assign link_active = active | default: false
+  assign link_show_active_color = show_active_color | default: true
+  assign link_color = color | default: 'inherit'
+  assign link_extra_classes = extra_classes | default: ''
+  assign link_x_ref = x_ref | default: nil
+  assign link_aria_label = aria_label | default: nil
+  assign link_onclick = onclick | default: nil
+  assign link_icon_before = icon_before | default: nil
+
+  # Build class list
+  assign link_classes = 'underline-link underline-link--' | append: link_variant
+
+  if link_color != 'inherit'
+    assign link_classes = link_classes | append: ' underline-link--' | append: link_color
+  endif
+
+  if link_active and link_show_active_color
+    assign link_classes = link_classes | append: ' underline-link--active'
+  endif
+
+  if link_extra_classes != ''
+    assign link_classes = link_classes | append: ' ' | append: link_extra_classes
+  endif
+-%}
+
+{%- if link_tag == 'a' -%}
+  <a
+    href="{{ link_url }}"
+    class="{{ link_classes }}"
+    {%- if link_active %} aria-current="page"{% endif %}
+    {%- if link_x_ref %} x-ref="{{ link_x_ref }}"{% endif %}
+    {%- if link_aria_label %} aria-label="{{ link_aria_label }}"{% endif %}
+    {%- if link_onclick %} @click="{{ link_onclick }}"{% endif %}
+    @mouseenter="$underlineLink.enter($event, $el)"
+    @mouseleave="$underlineLink.leave($el)"
+  >
+    {%- if link_icon_before -%}
+      {{ link_icon_before }}
+    {%- endif -%}
+    <span class="underline-link__text-wrapper">
+      <span class="underline-link__text">{{ link_text }}</span>
+      <span class="underline-link__line" aria-hidden="true"></span>
+    </span>
+  </a>
+{%- elsif link_tag == 'button' -%}
+  <button
+    type="button"
+    class="{{ link_classes }}"
+    {%- if link_x_ref %} x-ref="{{ link_x_ref }}"{% endif %}
+    {%- if link_aria_label %} aria-label="{{ link_aria_label }}"{% endif %}
+    {%- if link_onclick %} @click="{{ link_onclick }}"{% endif %}
+    @mouseenter="$underlineLink.enter($event, $el)"
+    @mouseleave="$underlineLink.leave($el)"
+  >
+    {%- if link_icon_before -%}
+      {{ link_icon_before }}
+    {%- endif -%}
+    <span class="underline-link__text-wrapper">
+      <span class="underline-link__text">{{ link_text }}</span>
+      <span class="underline-link__line" aria-hidden="true"></span>
+    </span>
+  </button>
+{%- else -%}
+  <span
+    class="{{ link_classes }}"
+    {%- if link_x_ref %} x-ref="{{ link_x_ref }}"{% endif %}
+    @mouseenter="$underlineLink.enter($event, $el)"
+    @mouseleave="$underlineLink.leave($el)"
+  >
+    {%- if link_icon_before -%}
+      {{ link_icon_before }}
+    {%- endif -%}
+    <span class="underline-link__text-wrapper">
+      <span class="underline-link__text">{{ link_text }}</span>
+      <span class="underline-link__line" aria-hidden="true"></span>
+    </span>
+  </span>
+{%- endif -%}

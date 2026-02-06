@@ -68,10 +68,7 @@
   gap: 12px;
 }
 
-.section-header__search-text-wrapper {
-  position: relative;
-  display: inline-block;
-}
+/* Search/Account text wrapper styles now in component-underline-link.css */
 
 .section-header__search-text {
   font-family: var(--font-display);
@@ -80,17 +77,7 @@
   text-transform: uppercase;
 }
 
-/* Underline for text elements */
-.section-header__underline {
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 0.5px;
-  background-color: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-}
+/* Underline styles now in component-underline-link.css */
 
 /* Search icon only (mobile) */
 .section-header__search-icon {
@@ -153,10 +140,7 @@
   padding: 8px;
 }
 
-.section-header__account-text-wrapper {
-  position: relative;
-  display: inline-block;
-}
+/* Account text wrapper styles now in component-underline-link.css */
 
 .section-header__account-text {
   font-family: var(--font-display);

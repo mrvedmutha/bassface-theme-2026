@@ -59,10 +59,8 @@
   </div>
 </section>
 
-{%- comment -%} Load GSAP and ScrollTrigger for animations {%- endcomment -%}
+{%- comment -%} GSAP loaded globally in theme.liquid {%- endcomment -%}
 {%- if section.settings.enable_animation -%}
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js" defer></script>
   <script src="{{ 'section-rich-text-reveal.js' | asset_url }}" defer></script>
 {%- endif -%}
 
