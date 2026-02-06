@@ -155,8 +155,53 @@
       );
     }
 
+    /**
+     * Detect browser environment once
+     * Returns { isSafari, isChrome, isMobile }
+     */
+    detectEnvironment() {
+      const ua = navigator.userAgent;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+      const isChrome = /Chrome/.test(ua) && /Google Inc/.test(navigator.vendor);
+      const isMobile = window.innerWidth <= 700;
+      return { isSafari, isChrome, isMobile };
+    }
+
+    /**
+     * Get responsive animation config based on viewport width.
+     * Desktop keeps original values; mobile uses gentler settle.
+     */
+    getAnimConfig() {
+      const w = window.innerWidth;
+      if (w <= 700) {
+        return {
+          rotationEnd: 0.85,
+          settleEnd: 0.95,
+          settlePercent: 30, // less aggressive on mobile
+        };
+      }
+      // Desktop / tablet — original behaviour
+      return {
+        rotationEnd: 0.83,
+        settleEnd: 0.94,
+        settlePercent: 40,
+      };
+    }
+
+    /**
+     * Move the canvas vertically WITHOUT touching the CSS transform.
+     * We animate `top` from 50% (centred) to 50% + offset.
+     * The CSS `transform: translate(-50%,-50%)` stays untouched,
+     * so horizontal centering is never broken on any browser.
+     */
+    setCanvasOffset(percent) {
+      // percent 0 = centred (top:50%), percent 40 = top:70%
+      this.canvas.style.top = `${50 + percent}%`;
+    }
+
     setupScrollTrigger() {
       const self = this;
+      const env = this.detectEnvironment();
 
       // Main scroll animation
       ScrollTrigger.create({
@@ -165,49 +210,55 @@
         end: () => `+=${this.spacer.offsetHeight}`,
         pin: this.pinnedContainer,
         pinSpacing: false,
-        scrub: 0.5, // Smooth scrub
-        onUpdate: (scrollTrigger) => {
-          const progress = scrollTrigger.progress;
+        scrub: 0.5,
+        anticipatePin: 1,
+        onUpdate: (st) => {
+          const progress = st.progress;
+          const cfg = self.getAnimConfig();
 
-          // 0-83%: Rotate through all frames
-          if (progress < 0.83) {
-            // Map 0-0.83 progress to 0-100% of frames
-            const frameProgress = progress / 0.83;
+          // Phase 1 — Rotate through all frames
+          if (progress < cfg.rotationEnd) {
+            const frameProgress = progress / cfg.rotationEnd;
             const targetFrame = Math.floor(
               frameProgress * (self.totalFrames - 1),
             );
             self.drawFrame(targetFrame);
 
-            // Reset canvas position during rotation
-            gsap.set(self.canvas, { y: 0 });
+            // Keep canvas centred
+            self.setCanvasOffset(0);
 
             // Hide CTA
             self.cta.classList.remove("is-visible");
           }
-          // 83-94%: Settle T-shirt smoothly (11% of scroll = ~20vh)
-          else if (progress < 0.94) {
-            // Keep last frame
+          // Phase 2 — Settle T-shirt downward
+          else if (progress < cfg.settleEnd) {
             self.drawFrame(self.totalFrames - 1);
 
-            // Settle animation: 83-94% = 0% to 40% down
-            const settleProgress = (progress - 0.83) / 0.11; // 0 to 1
-            const yOffset = settleProgress * 40; // 0% to 40%
-            gsap.set(self.canvas, { y: `${yOffset}%` });
+            const settleProgress =
+              (progress - cfg.rotationEnd) / (cfg.settleEnd - cfg.rotationEnd);
+            const offset = settleProgress * cfg.settlePercent;
+            self.setCanvasOffset(offset);
 
-            // Hide CTA during settle
             self.cta.classList.remove("is-visible");
           }
-          // 94-100%: CTA reveal + buffer (T-shirt stays at rest)
+          // Phase 3 — CTA reveal, T-shirt at rest
           else {
-            // Keep last frame at rest position
             self.drawFrame(self.totalFrames - 1);
-            gsap.set(self.canvas, { y: "40%" });
+            self.setCanvasOffset(cfg.settlePercent);
 
-            // Reveal CTA
             self.cta.classList.add("is-visible");
           }
         },
       });
+
+      // Refresh on resize / orientation change
+      let resizeTimer;
+      const onResize = () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 300);
+      };
+      window.addEventListener("resize", onResize);
+      window.addEventListener("orientationchange", onResize);
     }
   }
 
