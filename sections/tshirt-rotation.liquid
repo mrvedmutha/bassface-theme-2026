@@ -13,8 +13,10 @@
 {% endcomment %}
 
 {{ 'section-tshirt-rotation.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
-<section class="tshirt-rotation" data-section-id="{{ section.id }}">
+<section class="tshirt-rotation" data-section-id="{{ section.id }}" x-data>
   {%- comment -%} Pinned Container (stays fixed during scroll) {%- endcomment -%}
   <div class="tshirt-rotation__pinned" data-pinned-container>
     
@@ -45,13 +47,16 @@
       {%- endif -%}
       
       {%- if section.settings.cta_button_text != blank -%}
-        <a 
-          href="{{ section.settings.cta_button_link }}"
-          class="tshirt-rotation__button"
-          data-cta-button
-        >
-          <span class="tshirt-rotation__button-text">{{ section.settings.cta_button_text }}</span>
-        </a>
+        {%- render 'button',
+          text: section.settings.cta_button_text,
+          url: section.settings.cta_button_link,
+          type: 'link',
+          variant: 'primary',
+          size: 'md',
+          rounded: true,
+          ripple: true,
+          data_attr: 'true'
+        -%}
       {%- endif -%}
     </div>
   </div>

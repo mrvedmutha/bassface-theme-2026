@@ -16,6 +16,8 @@
 {%- endcomment -%}
 
 {{ 'section-featured-hero-product-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
 <section
   class="featured-hero"
@@ -75,16 +77,16 @@
 
       <div class="featured-hero__cta-wrapper">
         {%- if section.settings.cta_text != blank -%}
-          <a
-            href="{{ section.settings.cta_link | default: '#' }}"
-            class="featured-hero__button"
-            x-ref="ctaBtn"
-            @mouseenter="handleButtonHover($event, $refs.ctaBtn)"
-            @mouseleave="handleButtonLeave($refs.ctaBtn)"
-          >
-            <span class="featured-hero__button-fill" aria-hidden="true">&nbsp;</span>
-            <span class="featured-hero__button-text">{{ section.settings.cta_text }}</span>
-          </a>
+          {%- render 'button',
+            text: section.settings.cta_text,
+            url: section.settings.cta_link,
+            type: 'link',
+            variant: 'inverted',
+            size: 'lg',
+            rounded: false,
+            ripple: true,
+            x_ref: 'ctaBtn'
+          -%}
         {%- endif -%}
       </div>
     </div>

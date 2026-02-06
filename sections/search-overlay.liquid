@@ -10,6 +10,8 @@
 -%}
 
 {{ 'section-search-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-button.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
 {%- comment -%} Search Overlay - Hidden by default, shown via Alpine.js {%- endcomment -%}
 <div
@@ -114,18 +116,18 @@
 
           {%- comment -%} MORE PRODUCTS Button {%- endcomment -%}
           <template x-if="searchResults.products.length > 3">
-            <button
-              x-ref="moreProductsBtn"
-              @click="navigateToSearch('products')"
-              @mouseenter="handleButtonHover($event, $refs.moreProductsBtn)"
-              @mouseleave="handleButtonLeave($refs.moreProductsBtn)"
-              class="search-overlay__button"
-              :class="{ 'search-overlay__button--loading': isNavigating }"
-              :disabled="isNavigating"
-            >
-              <span class="search-overlay__button-fill"></span>
-              <span class="search-overlay__button-text" x-text="isNavigating ? 'Navigating...' : 'MORE PRODUCTS'"></span>
-            </button>
+            {%- render 'button',
+              text: 'MORE PRODUCTS',
+              type: 'button',
+              variant: 'primary',
+              size: 'md',
+              rounded: true,
+              ripple: true,
+              x_ref: 'moreProductsBtn',
+              onclick: "navigateToSearch('products')",
+              loading_var: 'isNavigating',
+              loading_text: 'Navigating...'
+            -%}
           </template>
         </div>
       </template>
@@ -150,18 +152,18 @@
           </div>
 
           {%- comment -%} VIEW ALL RESULTS Button {%- endcomment -%}
-          <button
-            x-ref="viewAllBtn"
-            @click="navigateToSearch('all')"
-            @mouseenter="handleButtonHover($event, $refs.viewAllBtn)"
-            @mouseleave="handleButtonLeave($refs.viewAllBtn)"
-            class="search-overlay__button"
-            :class="{ 'search-overlay__button--loading': isNavigating }"
-            :disabled="isNavigating"
-          >
-            <span class="search-overlay__button-fill"></span>
-            <span class="search-overlay__button-text" x-text="isNavigating ? 'Navigating...' : 'VIEW ALL RESULTS'"></span>
-          </button>
+          {%- render 'button',
+            text: 'VIEW ALL RESULTS',
+            type: 'button',
+            variant: 'primary',
+            size: 'md',
+            rounded: true,
+            ripple: true,
+            x_ref: 'viewAllBtn',
+            onclick: "navigateToSearch('all')",
+            loading_var: 'isNavigating',
+            loading_text: 'Navigating...'
+          -%}
         </div>
       </template>
 

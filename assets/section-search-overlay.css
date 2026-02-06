@@ -3,7 +3,9 @@
    ========================================== */
 
 /* Hide Alpine.js templates until loaded */
-[x-cloak] { display: none !important; }
+[x-cloak] {
+  display: none !important;
+}
 
 /* ==========================================
    BACKDROP & CONTAINER
@@ -143,7 +145,9 @@
   scroll-behavior: smooth;
   /* Ensure content can scroll */
   min-height: 0;
-  max-height: calc(100vh - 20px - 49px); /* Viewport - container margin - search bar height */
+  max-height: calc(
+    100vh - 20px - 49px
+  ); /* Viewport - container margin - search bar height */
   /* Allow vertical scrolling only */
   touch-action: pan-y;
   overscroll-behavior: contain;
@@ -268,77 +272,10 @@
 
 /* ==========================================
    SEARCH RESULT BUTTONS
+   ==========================================
+   NOTE: Button styles now come from component-button.css
+   This section is kept as a comment for reference only.
    ========================================== */
-
-.search-overlay__button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 40px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  background-color: transparent;
-  cursor: pointer;
-  overflow: hidden;
-  transition: border-color 0.3s ease;
-  width: auto;
-  align-self: flex-start;
-}
-
-.search-overlay__button:disabled {
-  cursor: not-allowed;
-  border-color: #666;
-}
-
-.search-overlay__button-fill {
-  position: absolute;
-  background-color: #000;
-  border-radius: 50%;
-  pointer-events: none;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  z-index: 1;
-}
-
-.search-overlay__button-text {
-  position: relative;
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 300;
-  color: #000;
-  transition: color 0.3s ease;
-  z-index: 2;
-  white-space: nowrap;
-}
-
-/* Hover state - text becomes white */
-.search-overlay__button--hover .search-overlay__button-text {
-  color: #fff;
-}
-
-/* Loading state - dark grey background */
-.search-overlay__button--loading {
-  background-color: #666;
-  border-color: #666;
-}
-
-.search-overlay__button--loading .search-overlay__button-text {
-  color: #fff;
-}
-
-/* Touch devices - simple tap state */
-@media (hover: none) and (pointer: coarse) {
-  .search-overlay__button:active {
-    background-color: #000;
-    border-color: #000;
-  }
-
-  .search-overlay__button:active .search-overlay__button-text {
-    color: #fff;
-  }
-}
 
 /* ==========================================
    SKELETON LOADERS
@@ -362,12 +299,7 @@
 
 .search-overlay__skeleton-box,
 .search-overlay__skeleton-text {
-  background: linear-gradient(
-    90deg,
-    #e0e0e0 0px,
-    #f0f0f0 40px,
-    #e0e0e0 80px
-  );
+  background: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
   background-size: 468px 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: 4px;
@@ -375,12 +307,7 @@
 
 /* Product image skeleton */
 .search-overlay__skeleton-box {
-  background: linear-gradient(
-    90deg,
-    #e0e0e0 0px,
-    #f0f0f0 40px,
-    #e0e0e0 80px
-  );
+  background: linear-gradient(90deg, #e0e0e0 0px, #f0f0f0 40px, #e0e0e0 80px);
   background-size: 468px 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: 5px;

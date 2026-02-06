@@ -5,6 +5,10 @@
   
   Reusable button with optional ripple effect.
   
+  IMPORTANT: Sections using this snippet must load the button assets:
+  {{ 'component-button.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'component-button.js' | asset_url }}" defer></script>
+  
   Parameters:
   - text: Button label (required)
   - url: Link URL (required for type: 'link')
@@ -15,13 +19,14 @@
   - type: 'link' | 'button' - default: 'link'
   - x_ref: Alpine.js x-ref name (optional)
   - disabled: true | false - default: false
-  - loading_text: Text to show when loading (optional)
   - extra_classes: Additional CSS classes (optional)
+  
+  Alpine.js Dynamic Parameters (for complex use cases):
+  - onclick: @click handler expression (e.g., "navigateToSearch('products')")
+  - loading_var: Alpine variable for loading state (e.g., "isNavigating")
+  - loading_text: Text to show when loading (e.g., "Navigating...")
+  - data_attr: Custom data attribute value (optional)
 {%- endcomment -%}
-
-{%- comment -%} Load CSS and JS once per page {%- endcomment -%}
-{{ 'component-button.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'component-button.js' | asset_url }}" defer></script>
 
 {%- liquid
   assign btn_variant = variant | default: 'primary'
@@ -33,8 +38,11 @@
   assign btn_text = text | default: 'Button'
   assign btn_url = url | default: '#'
   assign btn_x_ref = x_ref | default: nil
+  assign btn_onclick = onclick | default: nil
+  assign btn_loading_var = loading_var | default: nil
   assign btn_loading_text = loading_text | default: nil
   assign btn_extra_classes = extra_classes | default: ''
+  assign btn_data_attr = data_attr | default: nil
 
   # Build class list
   assign btn_classes = 'btn btn--' | append: btn_variant | append: ' btn--' | append: btn_size
@@ -65,12 +73,17 @@
       @mouseenter="$buttonRipple.enter($event, $el)"
       @mouseleave="$buttonRipple.leave($el)"
     {%- endif %}
+    {%- if btn_onclick %}@click="{{ btn_onclick }}"{% endif %}
+    {%- if btn_loading_var %}:class="{ 'btn--loading': {{ btn_loading_var }} }"{% endif %}
     {%- if btn_disabled %}aria-disabled="true"{% endif %}
+    {%- if btn_data_attr %}data-cta-button="{{ btn_data_attr }}"{% endif %}
   >
     {%- if btn_ripple -%}
       <span class="btn__fill" aria-hidden="true">&nbsp;</span>
     {%- endif -%}
-    <span class="btn__text">{{ btn_text }}</span>
+    <span class="btn__text"
+      {%- if btn_loading_var and btn_loading_text %} x-text="{{ btn_loading_var }} ? '{{ btn_loading_text }}' : '{{ btn_text }}'"{% endif -%}
+    >{{ btn_text }}</span>
   </a>
 {%- else -%}
   <button
@@ -81,14 +94,17 @@
       @mouseenter="$buttonRipple.enter($event, $el)"
       @mouseleave="$buttonRipple.leave($el)"
     {%- endif %}
-    {%- if btn_disabled %}disabled{% endif %}
-    {%- if btn_loading_text %}:class="{ 'btn--loading': isNavigating }"{% endif %}
+    {%- if btn_onclick %}@click="{{ btn_onclick }}"{% endif %}
+    {%- if btn_loading_var %}:class="{ 'btn--loading': {{ btn_loading_var }} }"{% endif %}
+    {%- if btn_loading_var %}:disabled="{{ btn_loading_var }}"{% endif %}
+    {%- if btn_disabled and btn_loading_var == nil %}disabled{% endif %}
+    {%- if btn_data_attr %}data-cta-button="{{ btn_data_attr }}"{% endif %}
   >
     {%- if btn_ripple -%}
       <span class="btn__fill" aria-hidden="true">&nbsp;</span>
     {%- endif -%}
     <span class="btn__text"
-      {%- if btn_loading_text %} x-text="isNavigating ? '{{ btn_loading_text }}' : '{{ btn_text }}'"{% endif -%}
+      {%- if btn_loading_var and btn_loading_text %} x-text="{{ btn_loading_var }} ? '{{ btn_loading_text }}' : '{{ btn_text }}'"{% endif -%}
     >{{ btn_text }}</span>
   </button>
 {%- endif -%}
