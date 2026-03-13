@@ -13,8 +13,8 @@
        .underline-link__text
        .underline-link__line
 
-   Variants: --hover (hidden default), --persistent (visible default)
-   Colors: --dark, --light, inherit (default)
+   Variant: --hover (hidden default, animates on hover)
+   Colors: --dark, --light, --gray, inherit (default)
    States: --active (orange text)
 */
 
@@ -62,14 +62,6 @@
 }
 
 /* ==========================================
-   VARIANT: PERSISTENT (visible by default)
-   ========================================== */
-
-.underline-link--persistent .underline-link__line {
-  transform: scaleX(1);
-}
-
-/* ==========================================
    COLOR: DARK
    ========================================== */
 
@@ -91,6 +83,18 @@
 
 .underline-link--light .underline-link__line {
   background-color: #ffffff;
+}
+
+/* ==========================================
+   COLOR: GRAY
+   ========================================== */
+
+.underline-link--gray {
+  color: #949494;
+}
+
+.underline-link--gray .underline-link__line {
+  background-color: #949494;
 }
 
 /* ==========================================

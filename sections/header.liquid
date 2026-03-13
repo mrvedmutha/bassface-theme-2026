@@ -49,8 +49,8 @@
         @mouseenter="$underlineLink.enter($event, $el)"
         @mouseleave="$underlineLink.leave($el)"
         aria-label="Search"
-        :class="{ 'section-header__button--dark': sticky, 'section-header__button--light': !sticky }"
-        class="section-header__button section-header__search-button"
+        :class="{ 'underline-link--dark': sticky, 'underline-link--light': !sticky }"
+        class="section-header__button section-header__search-button underline-link underline-link--hover"
       >
         {{ 'icon-header-search.svg' | inline_asset_content }}
         <span class="underline-link__text-wrapper">
@@ -139,8 +139,8 @@
           href="{{ routes.account_url }}"
           @mouseenter="$underlineLink.enter($event, $el)"
           @mouseleave="$underlineLink.leave($el)"
-          :class="{ 'section-header__account-link--dark': sticky, 'section-header__account-link--light': !sticky }"
-          class="section-header__account-link"
+          :class="{ 'underline-link--dark': sticky, 'underline-link--light': !sticky }"
+          class="section-header__account-link underline-link underline-link--hover"
         >
           <span class="underline-link__text-wrapper">
             <span class="section-header__account-text">
