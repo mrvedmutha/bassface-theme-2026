@@ -1,0 +1,10 @@
+{
+  "theme_settings": [
+    {
+      "type": "richtext",
+      "id": "shipping_returns_content",
+      "label": "Shipping & Returns Content",
+      "info": "Content displayed in the Shipping & Returns tab (applies to all product pages)"
+    }
+  ]
+}

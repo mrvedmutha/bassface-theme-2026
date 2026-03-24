@@ -1,0 +1,33 @@
+{
+  "colors": {
+    "black": "#000000",
+    "gray": "#AEAEAE",
+    "white": "#FFFFFF",
+    "background_mobile": "#EFEFEF"
+  },
+  "typography": {
+    "font_family": "Work Sans",
+    "weights": {
+      "light": 300,
+      "regular": 400,
+      "semibold": 600
+    },
+    "sizes": ["16px", "24px"]
+  },
+  "spacing": {
+    "gaps": ["5px", "10px", "16px", "20px", "24px", "48px"],
+    "padding": ["10px", "20px", "24px", "40px"],
+    "border_radius": ["5px", "10px"]
+  },
+  "borders": {
+    "width": "1px",
+    "style": "solid"
+  },
+  "icons": {
+    "plus": "icon-plus.svg (20px)",
+    "minus": "icon-minus.svg (20px)",
+    "arrow_right": "icon-arrow-right.svg (10x6px)",
+    "save": "icon-save-product.svg (32px)",
+    "zoom": "icon-image-expand-icon.svg (40px/32px)"
+  }
+}

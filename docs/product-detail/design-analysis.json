@@ -1,0 +1,107 @@
+{
+  "section_name": "product-detail",
+  "file_structure": {
+    "liquid": "sections/product-detail.liquid",
+    "css": "assets/section-product-detail.css",
+    "js": "assets/section-product-detail.js",
+    "snippets": ["snippets/size-dropdown.liquid"]
+  },
+  "breakpoints": {
+    "desktop": "1440px",
+    "tablet": "1024px",
+    "mobile": "700px",
+    "compact_mobile": "412px"
+  },
+  "layout": {
+    "desktop": {
+      "type": "split-screen",
+      "left": "image_gallery",
+      "divider": "1px vertical line, 836px height",
+      "right": "product_info",
+      "image_size": "708px",
+      "content_width": "480px"
+    },
+    "tablet": {
+      "type": "split-screen",
+      "left": "image_gallery",
+      "divider": "1px vertical line, 836px height",
+      "right": "product_info",
+      "image_size": "708px",
+      "content_width": "440px"
+    },
+    "mobile": {
+      "type": "vertical_stack",
+      "image_size": "500px",
+      "content_width": "440px",
+      "padding": "40px horizontal",
+      "background": "#EFEFEF",
+      "border_radius": "10px top corners",
+      "divider": "none"
+    },
+    "compact_mobile": {
+      "type": "vertical_stack",
+      "image_size": "294px",
+      "content_width": "392px",
+      "padding": "40px horizontal",
+      "background": "#EFEFEF",
+      "border_radius": "10px top corners",
+      "divider": "none"
+    }
+  },
+  "components": {
+    "image_gallery": {
+      "images_count": 4,
+      "carousel_dots": {
+        "desktop_tablet": "vertical, left side of image",
+        "mobile": "horizontal, centered below image"
+      },
+      "zoom_button": {
+        "size_desktop": "40px",
+        "size_mobile": "32px",
+        "position": "bottom right"
+      }
+    },
+    "product_info": {
+      "category_label": {
+        "font_size": "16px",
+        "font_weight": "Light (300)"
+      },
+      "product_title": {
+        "font_size": "24px",
+        "font_weight": "Regular (400)"
+      },
+      "size_dropdown": {
+        "height": "64px",
+        "border_radius": "5px",
+        "reusable_snippet": true
+      },
+      "size_buttons": {
+        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+        "height": "64px",
+        "gap": "5px",
+        "border_radius": "5px"
+      },
+      "size_guide_link": {
+        "text": "SHOW SIZE GUIDE",
+        "style": "underlined, SemiBold"
+      },
+      "quantity_selector": {
+        "height": "64px",
+        "icons": ["minus", "plus"],
+        "icon_size": "20px"
+      },
+      "save_button": {
+        "size": "64px",
+        "icon_size": "32px"
+      },
+      "add_to_cart": {
+        "height": "64px",
+        "shows_price": true
+      },
+      "tabs": {
+        "items": ["DESCRIPTION", "SHIPPING & RETURNS"],
+        "style": "underlined"
+      }
+    }
+  }
+}

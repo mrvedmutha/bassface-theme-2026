@@ -1,0 +1,26 @@
+{
+  "breakpoints": {
+    "desktop": "1440px",
+    "tablet": "1024px", 
+    "mobile": "767px",
+    "compact_mobile": "412px"
+  },
+  "key_changes": {
+    "vertical_divider": {
+      "desktop_tablet": "Present (1px solid, 836px height)",
+      "mobile_compact": "Removed"
+    },
+    "carousel_dots": {
+      "desktop_tablet": "Vertical, left side of image",
+      "mobile_compact": "Horizontal, centered below image"
+    },
+    "background": {
+      "desktop_tablet": "None",
+      "mobile_compact": "Gray (#EFEFEF) with rounded top corners (10px)"
+    },
+    "layout": {
+      "desktop_tablet": "Horizontal split (image | divider | info)",
+      "mobile_compact": "Vertical stack (image above, info below with scroll)"
+    }
+  }
+}

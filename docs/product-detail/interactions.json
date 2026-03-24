@@ -1,0 +1,43 @@
+{
+  "image_carousel": {
+    "desktop_tablet": {
+      "scroll_hijacking": "Scroll changes images, prevents page scroll until all 4 images viewed",
+      "dots_clickable": true,
+      "dots_hover": "Scale up slightly",
+      "dots_active": "Larger black circle"
+    },
+    "mobile": {
+      "swipe_drag": true
+    }
+  },
+  "size_dropdown": {
+    "hover": "White outline → black outline with ripple fill (top to bottom)",
+    "click": "Expands to show size button grid",
+    "selection": "Updates dropdown value",
+    "close": "Click outside",
+    "reusable_snippet": true
+  },
+  "size_buttons": {
+    "selected": "Black background, white text",
+    "unavailable": "Gray border/text, strikethrough",
+    "available": "Black border, black text",
+    "hover": "Background white → gray (#EFEFEF)"
+  },
+  "quantity_selector": {
+    "hover": "Background white → gray (#EFEFEF)",
+    "icons_unchanged": true
+  },
+  "save_icon": {
+    "hover": "Border/icon gray → black"
+  },
+  "tabs": {
+    "click": "Hides product info section, shows content",
+    "close": "X button to return"
+  },
+  "size_guide": {
+    "action": "Opens full-screen modal (implement later)"
+  },
+  "zoom": {
+    "action": "Opens modal with all images (implement later)"
+  }
+}

@@ -282,3 +282,132 @@ For issues or questions:
 **Project**: Bassface Theme 2026
 **Last Updated**: 2026-01-13
 **Claude Code Version**: Latest
+
+---
+
+## Agent-Based Workflow
+
+You use specialized agents to handle complex phases of section development. Each agent runs in its own context window to keep the main conversation clean.
+
+### Trigger Detection & Agent Invocation
+
+**CRITICAL: You MUST use the Agent tool to spawn agents. Do not just describe what should happen.**
+
+**User provides Figma URL or design:**
+```
+1. Read `.claude/agents/analyzer.md`
+2. Invoke Agent tool:
+   - description: "Analyze Figma design"
+   - prompt: "Read and follow .claude/agents/analyzer.md. Figma URL: [user-provided-url]"
+   - subagent_type: "general-purpose"
+```
+
+**Analysis complete, user confirms:**
+```
+1. Read `.claude/agents/planner.md`
+2. Invoke Agent tool:
+   - description: "Create implementation plan"
+   - prompt: "Read and follow .claude/agents/planner.md. Use design-analysis.json from docs/[section-name]/"
+   - subagent_type: "Plan"
+```
+
+**Planning complete, user confirms:**
+```
+1. Read `.claude/agents/developer.md`
+2. Invoke Agent tool:
+   - description: "Implement section code"
+   - prompt: "Read and follow .claude/agents/developer.md. Use planning docs from docs/[section-name]/"
+   - subagent_type: "general-purpose"
+```
+
+**Development complete:**
+```
+1. Read `.claude/agents/validator.md`
+2. Invoke Agent tool:
+   - description: "Validate implementation"
+   - prompt: "Read and follow .claude/agents/validator.md. Validate files in sections/ and assets/"
+   - subagent_type: "general-purpose"
+```
+
+**Validation passed:**
+```
+1. Read `.claude/agents/tester.md`
+2. Invoke Agent tool:
+   - description: "Run tests"
+   - prompt: "Read and follow .claude/agents/tester.md. Test section at localhost:9292"
+   - subagent_type: "general-purpose"
+```
+
+**Tests failed:**
+```
+1. Read `.claude/agents/fixer.md`
+2. Invoke Agent tool:
+   - description: "Fix test failures"
+   - prompt: "Read and follow .claude/agents/fixer.md. Use test-results.json from docs/[section-name]/tests/"
+   - subagent_type: "general-purpose"
+   - (max 3 attempts)
+```
+
+### Agent Interaction
+
+Agents can directly ask users questions using AskUserQuestion tool. The flow:
+```
+You → Spawn agent → Agent works → Agent asks user → User answers → Agent continues → Returns results to you
+```
+
+### State Management
+
+Track progress in `docs/[section-name]/state.json`:
+
+```json
+{
+  "section_name": "hero-video",
+  "current_phase": "development",
+  "status": "in_progress",
+  "phases_completed": ["analysis", "planning"],
+  "next_agent": "validator"
+}
+```
+
+**On "continue" command:** Read state.json → Resume from current phase
+
+### Pipeline Flow
+
+```
+Figma URL → ANALYZER agent → user confirms
+→ PLANNER agent → user confirms
+→ DEVELOPER agent → VALIDATOR agent
+→ TESTER agent → [PASS: Done | FAIL: FIXER agent (3x)]
+```
+
+### File Structure
+
+```
+docs/[section-name]/
+├── state.json
+├── design-analysis.json
+├── figma/README.md
+├── 01-overview.md
+├── 02-design-tokens.md
+├── 03-implementation.md
+└── tests/
+    └── test-results.json
+```
+
+### Breakpoints
+
+```css
+/* Base: 1440px */
+@media (min-width: 1441px) { max-width: 1440px; margin: 0 auto; }
+@media (max-width: 1024px) { /* Tablet */ }
+@media (max-width: 767px)  { /* Mobile */ }
+@media (max-width: 375px)  { /* Small mobile */ }
+```
+
+### Core Rules
+
+1. Only create `custom-section-*` files (never modify core theme)
+2. Always read agent guide before spawning
+3. Update `state.json` after each phase
+4. Let agents handle user interaction directly
+5. Fixer escalates after 3 failed attempts

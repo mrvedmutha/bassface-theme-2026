@@ -1,0 +1,112 @@
+{{ 'section-product-detail.css' | asset_url | stylesheet_tag }}
+
+{%- assign product = all_products[section.settings.product] | default: product -%}
+
+<div class="product-detail">
+  <div class="product-detail__gallery">
+    <div class="gallery__main">
+      {%- for image in product.images limit: 4 -%}
+        <div class="gallery__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
+          <img src="{{ image | img_url: '1000x' }}" alt="{{ product.title }}" loading="lazy">
+          <button class="gallery__expand" aria-label="Expand image">
+            <img src="{{ 'icon-image-expand-icon.svg' | asset_url }}" alt="">
+          </button>
+        </div>
+      {%- endfor -%}
+    </div>
+    <div class="gallery__dots">
+      {%- for image in product.images limit: 4 -%}
+        <button class="gallery__dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="product-detail__divider"></div>
+
+  <div class="product-detail__content">
+    <div class="content__header">
+      <p class="content__category">{{ product.type }}</p>
+      <h1 class="content__title">{{ product.title }}</h1>
+    </div>
+
+    <div class="content__size">
+      <div class="size__buttons">
+        {%- for variant in product.variants limit: 4 -%}
+          <button class="size__button{% if forloop.first %} active{% endif %}" data-variant="{{ variant.id }}">{{ variant.title }}</button>
+        {%- endfor -%}
+      </div>
+      <select class="size__dropdown">
+        {%- for variant in product.variants -%}
+          <option value="{{ variant.id }}">{{ variant.title }}</option>
+        {%- endfor -%}
+      </select>
+      {%- if section.settings.size_guide_url != blank -%}
+        <a href="{{ section.settings.size_guide_url }}" class="size__guide">SHOW SIZE GUIDE</a>
+      {%- endif -%}
+    </div>
+
+    <div class="content__actions">
+      <div class="actions__quantity">
+        <button class="quantity__btn" data-action="minus" aria-label="Decrease">-</button>
+        <input type="number" class="quantity__input" value="1" min="1" aria-label="Quantity">
+        <button class="quantity__btn" data-action="plus" aria-label="Increase">+</button>
+      </div>
+      <button class="actions__save" aria-label="Save">
+        <img src="{{ 'icon-save-product.svg' | asset_url }}" alt="">
+      </button>
+    </div>
+
+    <button class="content__cart">ADD TO CART - {{ product.price | money }}</button>
+
+    <div class="content__tabs">
+      <button class="tabs__btn active" data-tab="description">DESCRIPTION</button>
+      <button class="tabs__btn" data-tab="shipping">SHIPPING & RETURNS</button>
+    </div>
+
+    <div class="content__panels">
+      <div class="panels__item active" data-panel="description">
+        {{ section.settings.description }}
+      </div>
+      <div class="panels__item" data-panel="shipping">
+        {{ section.settings.shipping_info }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'section-product-detail.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product Detail",
+  "settings": [
+    {
+      "type": "text",
+      "id": "product",
+      "label": "Product Handle"
+    },
+    {
+      "type": "url",
+      "id": "size_guide_url",
+      "label": "Size Guide URL"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Product description goes here.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_info",
+      "label": "Shipping & Returns",
+      "default": "<p>Shipping information goes here.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Detail"
+    }
+  ]
+}
+{% endschema %}
