@@ -1,10 +1,11 @@
 /* Base styles - 1440px desktop */
 .product-detail {
   display: flex;
-  gap: 44px;
+  gap: 10px;
   max-width: 1440px;
   margin: 0 auto;
   padding: calc(var(--header-height) + 32px) 16px 0 16px;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .product-detail__gallery {
@@ -16,15 +17,15 @@
 .gallery__dots {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-top: 4px;
+  gap: 24px;
+  align-self: center;
 }
 
 .gallery__dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background: #D9D9D9;
+  border-radius: 0;
+  background: #aeaeae;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -32,11 +33,14 @@
 }
 
 .gallery__dot:hover {
-  background: #666666;
+  background: #aeaeae;
+  opacity: 0.7;
 }
 
 .gallery__dot.active {
   background: #000000;
+  width: 10px;
+  height: 10px;
 }
 
 .gallery__main {
@@ -60,19 +64,17 @@
 }
 
 .gallery__expand {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
   width: 40px;
   height: 40px;
   border-radius: 5px;
-  background: #FFFFFF;
+  background: transparent;
   border: 1px solid #000000;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  margin-top: 20px;
 }
 
 .product-detail__divider {
@@ -86,7 +88,7 @@
 }
 
 .content__header {
-  margin-bottom: 24px;
+  margin-bottom: 48px;
 }
 
 .content__category {
@@ -106,13 +108,13 @@
 }
 
 .content__size {
-  margin-bottom: 24px;
+  margin-bottom: 48px;
 }
 
 .size__buttons {
   display: flex;
   gap: 5px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .size__button {
@@ -145,7 +147,7 @@
   font-size: 16px;
   padding: 0 16px;
   background: #FFFFFF;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .size__guide {
@@ -158,8 +160,8 @@
 
 .content__actions {
   display: flex;
-  gap: 5px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 48px;
 }
 
 .actions__quantity {
@@ -232,7 +234,7 @@
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
-  margin-bottom: 32px;
+  margin-bottom: 48px;
   transition: background 0.2s;
 }
 
@@ -242,9 +244,9 @@
 
 .content__tabs {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   border-bottom: 1px solid #000000;
-  margin-bottom: 24px;
+  margin-bottom: 48px;
 }
 
 .tabs__btn {
@@ -287,6 +289,7 @@
     max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    gap: 10px;
   }
 }
 

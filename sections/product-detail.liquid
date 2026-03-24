@@ -4,20 +4,20 @@
 
 <div class="product-detail">
   <div class="product-detail__gallery">
-    <div class="gallery__main">
-      {%- for image in product.images limit: 4 -%}
-        <div class="gallery__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
-          <img src="{{ image | img_url: '1000x' }}" alt="{{ product.title }}" loading="lazy">
-          <button class="gallery__expand" aria-label="Expand image">
-            <img src="{{ 'icon-image-expand-icon.svg' | asset_url }}" alt="">
-          </button>
-        </div>
-      {%- endfor -%}
-    </div>
     <div class="gallery__dots">
       {%- for image in product.images limit: 4 -%}
         <button class="gallery__dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
       {%- endfor -%}
+    </div>
+    <div class="gallery__main">
+      {%- for image in product.images limit: 4 -%}
+        <div class="gallery__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
+          <img src="{{ image | img_url: '1000x' }}" alt="{{ product.title }}" loading="lazy">
+        </div>
+      {%- endfor -%}
+      <button class="gallery__expand" aria-label="Expand image">
+        <img src="{{ 'icon-image-expand-icon.svg' | asset_url }}" alt="">
+      </button>
     </div>
   </div>
 
