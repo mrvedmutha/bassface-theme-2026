@@ -411,3 +411,46 @@ docs/[section-name]/
 3. Update `state.json` after each phase
 4. Let agents handle user interaction directly
 5. Fixer escalates after 3 failed attempts
+
+## Image Handling (GLM Models)
+
+**CRITICAL: When running on GLM models (glm-4, glm-5, etc.), you MUST use Vision MCP tools to process images.**
+
+### Automatic Image Processing
+
+When the user provides an image (file path, screenshot, or URL), you MUST:
+
+1. **DO NOT** attempt to read images directly with the Read tool
+2. **DO NOT** ask the user to describe the image
+3. **IMMEDIATELY** use one of the following Vision MCP tools:
+
+| Use Case | Tool to Use |
+|----------|-------------|
+| UI screenshots, designs | `mcp__zai-mcp-server__ui_to_artifact` |
+| Error screenshots | `mcp__zai-mcp-server__diagnose_error_screenshot` |
+| Text/code extraction | `mcp__zai-mcp-server__extract_text_from_screenshot` |
+| Technical diagrams | `mcp__zai-mcp-server__understand_technical_diagram` |
+| Data visualizations | `mcp__zai-mcp-server__analyze_data_visualization` |
+| General images | `mcp__zai-mcp-server__analyze_image` |
+| Remote image URLs | `mcp__4_5v_mcp__analyze_image` |
+
+### Example Usage
+
+```javascript
+// When user provides a screenshot path
+mcp__zai-mcp-server__ui_to_artifact({
+  image_source: "/path/to/screenshot.png",
+  output_type: "description",
+  prompt: "Describe the UI layout and components"
+})
+
+// When user provides an error screenshot
+mcp__zai-mcp-server__diagnose_error_screenshot({
+  image_source: "/path/to/error.png",
+  prompt: "What caused this error and how to fix it?"
+})
+```
+
+### Why This Matters
+
+GLM models do not have native vision capabilities in Claude Code. The Vision MCP server bridges this gap by providing image analysis through specialized tools. **Always use these tools without being prompted.**

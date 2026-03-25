@@ -1,75 +1,199 @@
 {{ 'section-product-detail.css' | asset_url | stylesheet_tag }}
 
-{%- assign product = all_products[section.settings.product] | default: product -%}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
 
-<div class="product-detail">
+<div class="product-detail" data-product-id="{{ product.id }}">
+  <!-- Left Column: Image Gallery -->
   <div class="product-detail__gallery">
-    <div class="gallery__dots">
-      {%- for image in product.images limit: 4 -%}
-        <button class="gallery__dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
-      {%- endfor -%}
-    </div>
     <div class="gallery__main">
-      {%- for image in product.images limit: 4 -%}
-        <div class="gallery__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
-          <img src="{{ image | img_url: '1000x' }}" alt="{{ product.title }}" loading="lazy">
-        </div>
-      {%- endfor -%}
-      <button class="gallery__expand" aria-label="Expand image">
-        <img src="{{ 'icon-image-expand-icon.svg' | asset_url }}" alt="">
-      </button>
+      <!-- Dots overlay on image only -->
+      <div class="gallery__dots">
+        {%- for image in product.images limit: 4 -%}
+          <button class="gallery__dot{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
+        {%- endfor -%}
+      </div>
+      <!-- Image slides -->
+      <div class="gallery__slides">
+        {%- for image in product.images limit: 4 -%}
+          <div class="gallery__slide{% if forloop.first %} active{% endif %}" data-index="{{ forloop.index0 }}">
+            <img src="{{ image | img_url: '1000x' }}" alt="{{ product.title }}" loading="lazy">
+          </div>
+        {%- endfor -%}
+      </div>
     </div>
+    <!-- Expand button on the right -->
+    <button class="gallery__expand" aria-label="Expand image">
+      <img src="{{ 'icon-image-expand-icon.svg' | asset_url }}" alt="">
+    </button>
   </div>
 
+  <!-- Center Divider -->
   <div class="product-detail__divider"></div>
 
+  <!-- Right Column: Product Details -->
   <div class="product-detail__content">
+    <!-- Header: Category & Title -->
     <div class="content__header">
-      <p class="content__category">{{ product.type }}</p>
+      <p class="content__category">{{ product.type | upcase }}</p>
       <h1 class="content__title">{{ product.title }}</h1>
     </div>
 
-    <div class="content__size">
-      <div class="size__buttons">
-        {%- for variant in product.variants limit: 4 -%}
-          <button class="size__button{% if forloop.first %} active{% endif %}" data-variant="{{ variant.id }}">{{ variant.title }}</button>
-        {%- endfor -%}
+    <!-- Panels Container (for overlay positioning) -->
+    <div class="content__panels-container">
+      <!-- Description Panel -->
+      <div class="content__panel" data-panel="description">
+        <div class="panel__header">
+          <h2 class="panel__title">DESCRIPTION</h2>
+          <button class="panel__close" data-panel-close aria-label="Close panel">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="panel__body">
+          {{ product.description }}
+        </div>
       </div>
-      <select class="size__dropdown">
-        {%- for variant in product.variants -%}
-          <option value="{{ variant.id }}">{{ variant.title }}</option>
-        {%- endfor -%}
-      </select>
-      {%- if section.settings.size_guide_url != blank -%}
-        <a href="{{ section.settings.size_guide_url }}" class="size__guide">SHOW SIZE GUIDE</a>
-      {%- endif -%}
+
+      <!-- Shipping Panel -->
+      <div class="content__panel" data-panel="shipping">
+        <div class="panel__header">
+          <h2 class="panel__title">SHIPPING & RETURNS</h2>
+          <button class="panel__close" data-panel-close aria-label="Close panel">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="panel__body">
+          {{ section.settings.shipping_info }}
+        </div>
+      </div>
     </div>
 
-    <div class="content__actions">
-      <div class="actions__quantity">
-        <button class="quantity__btn" data-action="minus" aria-label="Decrease">-</button>
-        <input type="number" class="quantity__input" value="1" min="1" aria-label="Quantity">
-        <button class="quantity__btn" data-action="plus" aria-label="Increase">+</button>
-      </div>
-      <button class="actions__save" aria-label="Save">
-        <img src="{{ 'icon-save-product.svg' | asset_url }}" alt="">
+    <!-- Size Selector Section -->
+    <div class="content__size" data-size-section>
+      <!-- Size Toggle Trigger -->
+      <button class="size__toggle-trigger" aria-expanded="false" data-size-toggle>
+        <span class="size__toggle-label">SIZE</span>
+        <span class="size__toggle-value" data-selected-size>{{ current_variant.title }}</span>
+        <span class="size__toggle-arrow">
+          <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L5 5L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </button>
+
+      <!-- Size Buttons (Collapsible) -->
+      <div class="size__buttons-wrapper collapsed" data-size-buttons-wrapper>
+        <div class="size__buttons">
+          {%- for variant in product.variants -%}
+            <button
+              class="size__button{% if variant.id == current_variant.id %} active{% endif %}{% unless variant.available %} sold-out{% endunless %}"
+              data-variant-id="{{ variant.id }}"
+              data-variant-price="{{ variant.price }}"
+              data-available="{{ variant.available }}"
+              {% unless variant.available %}disabled{% endunless %}
+            >
+              {{ variant.title }}
+            </button>
+          {%- endfor -%}
+        </div>
+
+        <!-- Size Guide Link -->
+        <button class="size__guide-trigger" data-modal="size-guide">
+          SHOW <span class="size__guide-underline">SIZE GUIDE</span>
+        </button>
+      </div>
     </div>
 
-    <button class="content__cart">ADD TO CART - {{ product.price | money }}</button>
+    <!-- Actions Section -->
+    <div class="content__actions">
+      <!-- Quantity Selector Row -->
+      <div class="actions__quantity">
+        <button class="quantity__btn" data-action="minus" aria-label="Decrease quantity">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 10H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <input type="number" class="quantity__input" value="1" min="1" aria-label="Quantity" data-quantity-input>
+        <button class="quantity__btn" data-action="plus" aria-label="Increase quantity">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 10H16M10 4V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
 
-    <div class="content__tabs">
-      <button class="tabs__btn active" data-tab="description">DESCRIPTION</button>
-      <button class="tabs__btn" data-tab="shipping">SHIPPING & RETURNS</button>
+      <!-- Save + Add to Cart Row -->
+      <div class="actions__buttons">
+        <button class="actions__save" aria-label="Save to wishlist">
+          <img src="{{ 'icon-save-product.svg' | asset_url }}" alt="" width="32" height="32">
+        </button>
+        <button class="actions__cart" data-add-to-cart>
+          <span class="cart__text">ADD TO CART</span>
+          <span class="cart__price" data-cart-price>{{ current_variant.price | money }}</span>
+        </button>
+      </div>
     </div>
 
-    <div class="content__panels">
-      <div class="panels__item active" data-panel="description">
-        {{ section.settings.description }}
-      </div>
-      <div class="panels__item" data-panel="shipping">
-        {{ section.settings.shipping_info }}
-      </div>
+    <!-- Footer Links -->
+    <div class="content__footer-links">
+      <button class="footer-link" data-panel-trigger="description">DESCRIPTION</button>
+      <button class="footer-link" data-panel-trigger="shipping">SHIPPING & RETURNS</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Size Guide -->
+<div class="modal" id="modal-size-guide" hidden>
+  <div class="modal__overlay" data-modal-close></div>
+  <div class="modal__content">
+    <button class="modal__close" data-modal-close aria-label="Close modal">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="modal__header">
+      <h2 class="modal__title">Size Guide</h2>
+    </div>
+    <div class="modal__body">
+      {%- render 'modal-size-guide' -%}
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Description -->
+<div class="modal" id="modal-description" hidden>
+  <div class="modal__overlay" data-modal-close></div>
+  <div class="modal__content">
+    <button class="modal__close" data-modal-close aria-label="Close modal">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="modal__header">
+      <h2 class="modal__title">Description</h2>
+    </div>
+    <div class="modal__body">
+      {{ section.settings.description }}
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Shipping & Returns -->
+<div class="modal" id="modal-shipping" hidden>
+  <div class="modal__overlay" data-modal-close></div>
+  <div class="modal__content">
+    <button class="modal__close" data-modal-close aria-label="Close modal">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="modal__header">
+      <h2 class="modal__title">Shipping & Returns</h2>
+    </div>
+    <div class="modal__body">
+      {{ section.settings.shipping_info }}
     </div>
   </div>
 </div>
