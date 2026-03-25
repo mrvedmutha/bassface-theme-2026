@@ -9,13 +9,9 @@
   display: flex;
   gap: 10px;
   width: 100%;
-  /* Position right below fixed header */
-  margin-top: var(--header-height, 80px);
-  /* Let content determine height instead of fixed viewport */
+  margin: var(--header-height, 80px) auto 40px auto;
   min-height: calc(100vh - var(--header-height, 80px));
   height: auto;
-  margin-left: auto;
-  margin-right: auto;
   padding: 0 0 40px 0;
   font-family: "Work Sans", sans-serif;
   box-sizing: border-box;
@@ -859,11 +855,6 @@
    COMPACT MOBILE: 412px and below
    ======================================== */
 @media (max-width: 412px) {
-  .gallery__main {
-    height: 294px;
-    width: 100%;
-  }
-
   .gallery__slides {
     height: 100%;
   }

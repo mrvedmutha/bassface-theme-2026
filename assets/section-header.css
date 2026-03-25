@@ -232,47 +232,52 @@
    RESPONSIVE BREAKPOINTS (Desktop-First)
    ===================================================== */
 
-/* Desktop (1440px) - Base styles show search text + icon */
-.section-header__search-button {
-  display: flex;
-}
-
-.section-header__search-icon {
-  display: none;
-}
-
-.section-header__account-link {
-  display: block;
-}
-
-.section-header__account-icon {
-  display: none;
-}
-
-/* Tablet (1024px) - Hide search text, show only icon */
-@media (max-width: 1024px) {
+/* Desktop (1025px+) - Show search text + account text, hide icons */
+@media (min-width: 1025px) {
   .section-header__search-button {
-    display: none;
+    display: flex;
   }
 
   .section-header__search-icon {
-    display: flex;
+    display: none;
+  }
+
+  .section-header__account-link {
+    display: block;
+  }
+
+  .section-header__account-icon {
+    display: none;
   }
 }
 
-/* Mobile (700px) */
+/* Tablet and below (1024px) - Hide search text and account text, show only icons */
+@media (max-width: 1024px) {
+  .section-header__search-button {
+    display: none !important;
+  }
+
+  .section-header__search-icon {
+    display: flex !important;
+  }
+
+  .section-header__account-link {
+    display: none !important;
+  }
+
+  .section-header__account-icon {
+    display: flex !important;
+  }
+}
+
+/* Mobile (700px) - Size adjustments */
 @media (max-width: 700px) {
   .section-header__container {
     padding-left: 36px;
     padding-right: 36px;
   }
 
-  .section-header__account-link {
-    display: none;
-  }
-
   .section-header__account-icon {
-    display: flex;
     width: 24px;
     height: 24px;
   }
