@@ -1,0 +1,179 @@
+[    1833ms] [WARNING] Allow attribute will take precedence over 'allowfullscreen'. @ http://localhost:9292/:2005
+[    1876ms] [WARNING] GSAP or ScrollTrigger not loaded. Retrying... @ http://localhost:9292/cdn/shop/t/4/assets/section-footer-features.js?v=180436652779018945661774374927:13
+[    1920ms] [WARNING] Alpine Expression Error: isPlayerPlaying is not defined
+
+Expression: "{ 'is-playing': isPlayerPlaying, 'is-open': isPlayerOpen }"
+
+ JSHandle@node @ https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:0
+[    2035ms] Uncaught ReferenceError: isPlayerPlaying is not defined
+    at [Alpine] { 'is-playing': isPlayerPlaying, 'is-open': isPlayerOpen } (:2:47)
+    at <anonymous> (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:1152)
+    at or (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:0:4955)
+    at <anonymous> (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:34669)
+    at r (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:19481)
+    at ln (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:19269)
+    at N (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:0:397)
+    at <anonymous> (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:0:510)
+    at Tn (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:34663)
+    at r (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:3069)
+    at n (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:3099)
+    at gr (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:3109)
+    at S (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:5943)
+    at <anonymous> (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:5307)
+    at vr (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:5295)
+    at <anonymous> (https://cdn.jsdelivr.net/npm/alpinejs@3.15.3/dist/cdn.min.js:4:40520)
+[    2335ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[    2335ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[    2742ms] [ERROR] Framing 'https://shop.app/' violates the following Content Security Policy directive: "frame-ancestors https://trgcj0-r0.myshopify.com https://trgcj0-r0.account.myshopify.com https://bassface.in https://www.bassface.in https://bassfacemusics.myshopify.com https://bassface-storefront-9e27aa684266004b66d3.o2.myshopify.dev https://shopify.com". The request has been blocked.
+ @ :0
+[    3613ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:9292/favicon.ico:0
+[    3686ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[    3686ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[    6038ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[    6038ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[    7695ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[    7695ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   10424ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   10424ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   13062ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   13062ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   18477ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   18478ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   23883ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   23883ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   29306ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   29307ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   34732ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   34732ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   40128ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   40128ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   45560ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   45560ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   50992ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   50992ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   56377ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   56377ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   61811ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   61811ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   67158ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   67158ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   73012ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   73012ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   78399ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   78400ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   83833ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   83833ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   89267ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   89267ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[   94657ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[   94657ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  100087ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  100087ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  105431ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  105431ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  110786ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  110786ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  116150ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  116150ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  121580ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  121580ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  127370ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  127370ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  132785ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  132785ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  138174ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  138174ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  143611ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  143611ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  149038ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  149039ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  154431ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  154431ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  159865ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  159865ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  165291ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  165291ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  170701ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  170702ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  176111ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  176111ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  181542ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  181543ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  186928ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  186928ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  192365ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  192365ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  197798ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  197798ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  203190ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  203190ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  208619ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  208619ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  214252ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  214252ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  219627ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  219628ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  224992ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  224992ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  230352ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  230352ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  235695ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  235695ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  241126ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  241126ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  246471ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  246471ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  251826ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  251826ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  257198ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  257198ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  262623ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  262623ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  267972ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  267972ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  273342ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  273342ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  278709ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  278709ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  284143ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  284143ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  289500ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  289500ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  294949ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  294949ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  300370ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  300370ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  305723ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  305724ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  311079ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  311080ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  316446ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  316446ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  321868ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  321868ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  327223ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  327223ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  332565ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  332565ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  337933ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  337933ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  343364ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  343364ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  348715ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  348715ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  351040ms] [ERROR] Unsafe attempt to load URL https://shop.app/pay/hop?analytics_trace_id=78286003-df97-4842-9d23-868d3cbf89d9&target_origin=http%3A%2F%2Flocalhost%3A9292&client_handle=trgcj0-r0.myshopify.com from frame with URL chrome-error://chromewebdata/. Domains, protocols and ports must match.
+ @ chrome-error://chromewebdata/:0
+[  354081ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  354081ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  359431ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  359431ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  364862ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  364862ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  370211ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  370211ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  375577ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  375577ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  380926ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  380926ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0
+[  386361ms] [ERROR] Access to fetch at 'https://trgcj0-r0.myshopify.com/api/collect' from origin 'http://localhost:9292' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:9292/:0
+[  386362ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://trgcj0-r0.myshopify.com/api/collect:0

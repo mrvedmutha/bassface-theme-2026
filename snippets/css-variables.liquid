@@ -13,24 +13,70 @@
     6. Breakpoints
     7. Semantic Tokens
 
-    Typography Philosophy:
-    - Desktop-first (1440px base): Gruppo for decorative/accent text
-    - Mobile (≤700px): Work Sans everywhere
-    - Work Sans: Primary workhorse font with multiple weights
-    - Gruppo: Display/accent font (single weight: 400)
+    Typography Philosophy (MINAS-INSPIRED):
+    - GT America LG Extended: Display/headings (Thin 100, Regular 400)
+    - Aeonik Pro: Body/UI text (Regular 400, Medium 500)
+    - Blacker Pro Text Book: Elegant accents (Light 300)
+    - Smaller fonts with generous letter-spacing
+    - Tighter line heights for refined look
 
     Color Philosophy:
     - Primary: Black - Main text and UI elements
     - Secondary: White - Backgrounds and inverse text
     - Accent: Orange - Highlights, active states, CTAs
+    - Background: #EFEFEF (warm off-white like Minas)
   {% endcomment %}
 
   {% comment %}
     ==========================================
-    FONT LOADING - Shopify Font Settings
+    FONT LOADING - Local Minas Fonts
     ==========================================
   {% endcomment %}
-  {% comment %} Load all font variations with display: swap for performance {% endcomment %}
+
+  {% comment %} GT America LG Extended - Display/Headings {% endcomment %}
+  @font-face {
+    font-family: 'GT America LG Extended';
+    font-style: normal;
+    font-weight: 100;
+    font-display: swap;
+    src: url('{{ "GT-America-LG-Extended-Thin.woff2" | asset_url }}') format('woff2');
+  }
+
+  @font-face {
+    font-family: 'GT America LG Extended';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('{{ "GT-America-LG-Extended-Regular.woff2" | asset_url }}') format('woff2');
+  }
+
+  {% comment %} Aeonik Pro - Body/UI Text {% endcomment %}
+  @font-face {
+    font-family: 'Aeonik Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('{{ "AeonikPro-Regular.woff" | asset_url }}') format('woff');
+  }
+
+  @font-face {
+    font-family: 'Aeonik Pro';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('{{ "AeonikPro-Medium.woff2" | asset_url }}') format('woff2');
+  }
+
+  {% comment %} Blacker Pro Text Book - Elegant Accents {% endcomment %}
+  @font-face {
+    font-family: 'Blacker Pro Text Book';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('{{ "Blacker-Pro-Text-Book.woff2" | asset_url }}') format('woff2');
+  }
+
+  {% comment %} Shopify Font Settings (kept for compatibility) {% endcomment %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
@@ -43,10 +89,11 @@
       ==========================================
     {% endcomment %}
 
-    {% comment %} Base Fonts {% endcomment %}
-    --font-display: 'Gruppo', sans-serif;         /* Decorative/accent - desktop only */
-    --font-body: 'Work Sans', sans-serif;         /* Primary functional font */
-    --font-heading: 'Work Sans', sans-serif;      /* Headings need weight variations */
+    {% comment %} Base Fonts - Minas Inspired {% endcomment %}
+    --font-display: 'GT America LG Extended', sans-serif;  /* Display/headings - Thin 100, Regular 400 */
+    --font-body: 'Aeonik Pro', sans-serif;                 /* Primary functional font - Regular 400, Medium 500 */
+    --font-accent: 'Blacker Pro Text Book', serif;         /* Elegant accents - Light 300 */
+    --font-heading: 'GT America LG Extended', sans-serif;  /* Headings */
 
     {% comment %} Shopify Font Settings Integration {% endcomment %}
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
@@ -57,13 +104,15 @@
       ==========================================
       2. FONT WEIGHTS
       ==========================================
-      Work Sans weights - Grupo only has 400
+      Minas font weights:
+      - GT America: 100 (Thin), 400 (Regular)
+      - Aeonik Pro: 400 (Regular), 500 (Medium)
+      - Blacker Pro: 300 (Book/Light)
     {% endcomment %}
-    --font-weight-light: 300;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
+    --font-weight-thin: 100;      /* GT America Thin */
+    --font-weight-light: 300;     /* Blacker Pro Book */
+    --font-weight-normal: 400;    /* Aeonik Pro Regular, GT America Regular */
+    --font-weight-medium: 500;    /* Aeonik Pro Medium */
 
     {% comment %}
       ==========================================
@@ -81,9 +130,9 @@
     --color-accent-rgb: 254, 127, 45;             /* RGB for opacity variants */
 
     {% comment %} Background Colors {% endcomment %}
-    --color-background: {{ settings.background_color | default: '#FFFFFF' }};
-    --color-background-primary: #FFFFFF;          /* White background */
-    --color-background-secondary: #EFEFEF;        /* Light gray background */
+    --color-background: {{ settings.background_color | default: '#EFEFEF' }};  /* Minas warm off-white */
+    --color-background-primary: #FFFFFF;          /* Pure white for cards/sections */
+    --color-background-secondary: #EFEFEF;        /* Warm off-white (Minas default) */
     --color-background-tertiary: #000000;         /* Black background (for inverse sections) */
 
     {% comment %} Text Colors {% endcomment %}
@@ -112,25 +161,27 @@
       Desktop-first sizing (1440px base) with mobile overrides
     {% endcomment %}
 
-    {% comment %} Font Sizes {% endcomment %}
-    --font-size-2xs: 0.625rem;    /* 10px - Small labels */
-    --font-size-xs: 0.75rem;      /* 12px - Micro text */
-    --font-size-sm: 0.875rem;     /* 14px - Category buttons */
-    --font-size-base: 1rem;       /* 16px - Body text, primary UI */
-    --font-size-lg: 1.125rem;     /* 18px - Section headings mobile */
-    --font-size-xl: 1.25rem;      /* 20px - Feature headings */
-    --font-size-2xl: 1.5rem;      /* 24px - Product names, nav tabs */
-    --font-size-3xl: 2rem;        /* 32px - Large section headings */
+    {% comment %} Font Sizes - Minas Inspired (smaller, tighter) {% endcomment %}
+    --font-size-2xs: 0.625rem;    /* 10px - Small labels, nav items */
+    --font-size-xs: 0.6875rem;    /* 11px - Cart count, buttons */
+    --font-size-sm: 0.8125rem;    /* 13px - Labels, captions */
+    --font-size-base: 0.875rem;   /* 14px - Body text (was 16px) */
+    --font-size-md: 0.9375rem;    /* 15px - Subheadings */
+    --font-size-lg: 1.125rem;     /* 18px - Section headings */
+    --font-size-xl: 1.5625rem;    /* 25px - Feature headings */
+    --font-size-2xl: 2.5rem;      /* 40px - Large headings */
+    --font-size-3xl: 3.75rem;     /* 60px - Display headings */
 
-    {% comment %} Line Heights {% endcomment %}
-    --line-height-tight: 1.2;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
+    {% comment %} Line Heights - Tighter like Minas {% endcomment %}
+    --line-height-tight: 1.1;      /* Headings */
+    --line-height-normal: 1.35;    /* Body text (was 1.5) */
+    --line-height-relaxed: 1.5;    /* Large text (was 1.75) */
 
-    {% comment %} Letter Spacing {% endcomment %}
-    --letter-spacing-tight: -0.02em;
+    {% comment %} Letter Spacing - More generous like Minas {% endcomment %}
+    --letter-spacing-tight: -0.01em;
     --letter-spacing-normal: 0;
-    --letter-spacing-wide: 0.05em;
+    --letter-spacing-wide: 0.08em;     /* Labels, nav */
+    --letter-spacing-wider: 0.15em;    /* Large headings */
 
     {% comment %}
       ==========================================
@@ -205,43 +256,47 @@
       Purpose-based token names for consistent usage
     {% endcomment %}
 
-    {% comment %} Headings - Always Work Sans for weight flexibility {% endcomment %}
-    --heading-h1-size: var(--font-size-3xl);
-    --heading-h1-weight: var(--font-weight-bold);
-    --heading-h1-line-height: var(--line-height-tight);
+    {% comment %} Headings - GT America (Thin 100 for large, Regular 400 for small) {% endcomment %}
+    --heading-h1-size: var(--font-size-3xl);  /* 60px */
+    --heading-h1-weight: var(--font-weight-thin);  /* 100 */
+    --heading-h1-line-height: 1;                   /* Tight for large display */
+    --heading-h1-letter-spacing: 0.03em;
 
-    --heading-h2-size: var(--font-size-2xl);
-    --heading-h2-weight: var(--font-weight-semibold);
+    --heading-h2-size: var(--font-size-2xl);  /* 40px */
+    --heading-h2-weight: var(--font-weight-normal);  /* 400 */
     --heading-h2-line-height: var(--line-height-tight);
+    --heading-h2-letter-spacing: 0.02em;
 
-    --heading-h3-size: var(--font-size-xl);
-    --heading-h3-weight: var(--font-weight-semibold);
-    --heading-h3-line-height: var(--line-height-normal);
+    --heading-h3-size: var(--font-size-xl);    /* 25px */
+    --heading-h3-weight: var(--font-weight-normal);  /* 400 */
+    --heading-h3-line-height: var(--line-height-tight);
 
-    --heading-h4-size: var(--font-size-lg);
-    --heading-h4-weight: var(--font-weight-medium);
+    --heading-h4-size: var(--font-size-lg);    /* 18px */
+    --heading-h4-weight: var(--font-weight-normal);  /* 400 */
     --heading-h4-line-height: var(--line-height-normal);
 
-    {% comment %} Body Text {% endcomment %}
-    --body-size: var(--font-size-base);
-    --body-weight: var(--font-weight-normal);
-    --body-line-height: var(--line-height-relaxed);
+    {% comment %} Body Text - Aeonik Pro {% endcomment %}
+    --body-size: var(--font-size-base);       /* 14px */
+    --body-weight: var(--font-weight-normal);  /* 400 */
+    --body-line-height: var(--line-height-normal);
 
-    --body-sm-size: var(--font-size-sm);
-    --body-sm-weight: var(--font-weight-normal);
+    --body-sm-size: var(--font-size-sm);       /* 13px */
+    --body-sm-weight: var(--font-weight-normal);  /* 400 */
     --body-sm-line-height: var(--line-height-normal);
 
-    {% comment %} Display Text - Mobile: Work Sans, Desktop: Grupo {% endcomment %}
-    --display-sm-size: var(--font-size-xl);
-    --display-md-size: var(--font-size-2xl);
-    --display-lg-size: var(--font-size-3xl);
+    {% comment %} Display Text - GT America Thin {% endcomment %}
+    --display-sm-size: var(--font-size-lg);    /* 18px */
+    --display-md-size: var(--font-size-xl);    /* 25px */
+    --display-lg-size: var(--font-size-3xl);   /* 60px */
 
     {% comment %} UI Elements {% endcomment %}
-    --label-size: var(--font-size-sm);
-    --label-weight: var(--font-weight-medium);
+    --label-size: var(--font-size-xs);         /* 11px */
+    --label-weight: var(--font-weight-normal); /* 400 */
+    --label-letter-spacing: normal;            /* Normal spacing like Minas header */
 
-    --button-size: var(--font-size-base);
-    --button-weight: var(--font-weight-normal);
+    --button-size: var(--font-size-base);      /* 14px */
+    --button-weight: var(--font-weight-normal);  /* 400 */
+    --button-letter-spacing: 0.05em;
 
     {% comment %}
       ==========================================
@@ -287,20 +342,21 @@
     ==========================================
     RESPONSIVE TYPOGRAPHY - DESKTOP-FIRST
     ==========================================
-    Desktop (base): Larger font sizes, Gruppo for decorative text
-    Mobile (≤700px): Smaller font sizes, Work Sans only
+    Desktop (base): Larger display sizes with GT America Thin
+    Mobile (≤700px): Slightly smaller, same fonts
   {% endcomment %}
   :root {
     {% comment %} Desktop base sizes (1440px) {% endcomment %}
-    --font-size-3xl: 2.5rem;  /* 40px on desktop */
-    --heading-h1-size: 3rem;  /* 48px on desktop */
+    --font-size-3xl: 3.75rem;  /* 60px on desktop */
+    --heading-h1-size: 3.75rem;  /* 60px on desktop */
   }
 
   @media (max-width: 700px) {
     :root {
       {% comment %} Scale down font sizes for mobile {% endcomment %}
-      --font-size-3xl: 2rem;    /* 32px on mobile */
-      --heading-h1-size: 2rem;  /* 32px on mobile */
+      --font-size-3xl: 2.5rem;    /* 40px on mobile */
+      --heading-h1-size: 2.5rem;  /* 40px on mobile */
+      --font-size-base: 0.8125rem;  /* 13px on mobile */
     }
   }
 
@@ -308,31 +364,61 @@
     ==========================================
     UTILITY CLASSES - Display Text (Desktop-First)
     ==========================================
-    Desktop: Gruppo font with wide letter-spacing
-    Mobile (≤700px): Work Sans with normal letter-spacing
+    Desktop & Mobile: GT America with generous letter-spacing
   {% endcomment %}
 
-  {% comment %} Desktop base - Gruppo font {% endcomment %}
+  {% comment %} Display text - GT America Thin for large, Regular for small {% endcomment %}
   .display-text {
     font-family: var(--font-display);
-    font-weight: 400;  /* Gruppo only has 400 weight */
-    letter-spacing: var(--letter-spacing-wide);
+    font-weight: var(--font-weight-thin);  /* 100 for elegant look */
+    letter-spacing: var(--letter-spacing-wider);
+    line-height: 1.1;
   }
 
-  @media (max-width: 700px) {
-    .display-text {
-      font-family: var(--font-body);
-      font-weight: var(--font-weight-semibold);
-      letter-spacing: var(--letter-spacing-normal);
-    }
+  .display-sm {
+    font-family: var(--font-display);
+    font-size: var(--display-sm-size);
+    font-weight: var(--font-weight-normal);  /* 400 for smaller display */
+    letter-spacing: 0.05em;
   }
 
-  {% comment %} Display sizes {% endcomment %}
-  .display-sm { font-size: var(--display-sm-size); }
-  .display-md { font-size: var(--display-md-size); }
-  .display-lg { font-size: var(--display-lg-size); }
+  .display-md {
+    font-family: var(--font-display);
+    font-size: var(--display-md-size);
+    font-weight: var(--font-weight-thin);
+    letter-spacing: 0.03em;
+  }
 
-  {% comment %} Always Work Sans - Never swap to Grupo {% endcomment %}
-  .text-body { font-family: var(--font-body); }
-  .text-heading { font-family: var(--font-heading); }
+  .display-lg {
+    font-family: var(--font-display);
+    font-size: var(--display-lg-size);
+    font-weight: var(--font-weight-thin);
+    letter-spacing: var(--letter-spacing-wider);
+  }
+
+  {% comment %} Body text - Aeonik Pro {% endcomment %}
+  .text-body {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-normal);
+  }
+
+  {% comment %} Heading text - GT America {% endcomment %}
+  .text-heading {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-thin);
+  }
+
+  {% comment %} Accent/elegant text - Blacker Pro {% endcomment %}
+  .text-accent {
+    font-family: var(--font-accent);
+    font-weight: var(--font-weight-light);  /* 300 */
+  }
+
+  {% comment %} Labels and nav - GT America Regular {% endcomment %}
+  .text-label {
+    font-family: var(--font-display);
+    font-size: var(--label-size);
+    font-weight: var(--font-weight-normal);
+    text-transform: uppercase;
+  }
 {% endstyle %}

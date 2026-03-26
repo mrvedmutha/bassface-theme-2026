@@ -265,29 +265,37 @@
 }
 
 /* =====================================================
-   TYPOGRAPHY
+   TYPOGRAPHY - Minas Inspired
    ===================================================== */
 
-/* Desktop (≥1250px): Gruppo for headings */
+{% comment %}
+   Minas Typography System:
+   - ALL menu items: Aeonik Pro 16px, normal spacing, no uppercase
+   - Section headers: Same as menu items (NOT larger)
+   - Featured labels: GT America 15px uppercase
+   - Featured descriptions: Blacker Pro 14px with 0.42px letter-spacing
+{% endcomment %}
+
+/* Desktop: Section titles - Aeonik Pro like Minas */
 @media screen and (min-width: 1250px) {
   .sidebar-drawer__section-title {
-    font-family: "Gruppo", sans-serif;
-    font-weight: 400;
-    text-transform: uppercase;
-    font-size: 18px;
-    letter-spacing: 0.05em;
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    font-size: 16px;
+    letter-spacing: normal;
   }
 
   .sidebar-drawer__feature-title {
-    font-family: "Gruppo", sans-serif;
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-normal);
     text-transform: uppercase;
-    font-size: 16px;
-    letter-spacing: 0.05em;
+    font-size: 15px;
+    letter-spacing: normal;
   }
 }
 
-/* Tablet (700px-1249px): Work Sans for everything */
+/* Tablet: All text - Aeonik Pro 16px */
 @media screen and (min-width: 700px) and (max-width: 1249px) {
   .sidebar-drawer__section-title,
   .sidebar-drawer__feature-title,
@@ -297,22 +305,25 @@
   .sidebar-drawer__blog-link,
   .sidebar-drawer__contact-link,
   .sidebar-drawer__featured-link {
-    font-family: "Work Sans", sans-serif;
+    font-family: var(--font-body);
   }
 
   .sidebar-drawer__section-title {
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .sidebar-drawer__feature-title {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 }
 
-/* Small Mobile (412px-699px): Work Sans for everything */
+/* Small Mobile: Aeonik Pro 16px */
 @media screen and (min-width: 412px) and (max-width: 699px) {
   .sidebar-drawer__section-title,
   .sidebar-drawer__feature-title,
@@ -322,24 +333,26 @@
   .sidebar-drawer__blog-link,
   .sidebar-drawer__contact-link,
   .sidebar-drawer__featured-link {
-    font-family: "Work Sans", sans-serif;
+    font-family: var(--font-body);
   }
 
   .sidebar-drawer__section-title {
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .sidebar-drawer__feature-title {
-    font-family: "Work Sans", sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 }
 
-/* Extra Small Mobile (<412px): Work Sans for everything */
+/* Extra Small Mobile: Aeonik Pro 16px */
 @media screen and (max-width: 411px) {
   .sidebar-drawer__section-title,
   .sidebar-drawer__feature-title,
@@ -349,30 +362,33 @@
   .sidebar-drawer__blog-link,
   .sidebar-drawer__contact-link,
   .sidebar-drawer__featured-link {
-    font-family: "Work Sans", sans-serif;
+    font-family: var(--font-body);
   }
 
   .sidebar-drawer__section-title {
     font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 }
 
-/* Body text (all screens) */
+/* Body text (all screens) - Aeonik Pro 16px like Minas */
 .sidebar-drawer__utility-link,
 .sidebar-drawer__collection-link,
 .sidebar-drawer__category-link,
 .sidebar-drawer__blog-link,
 .sidebar-drawer__contact-link,
 .sidebar-drawer__featured-link {
-  font-family: "Work Sans", sans-serif;
-  font-size: 14px;
-  font-weight: 300;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: var(--font-weight-normal);
   color: #000000;
   text-decoration: none;
   position: relative;
   display: inline-block;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 /* Active state - Orange color when URL matches */
@@ -404,10 +420,10 @@
 }
 
 .sidebar-drawer__utility-link {
-  font-size: 13px;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 16px;
+  font-weight: var(--font-weight-normal);
+  text-transform: none;
+  letter-spacing: normal;
 }
 
 /* Small Mobile (412px-699px): 4-column row like design */
@@ -419,7 +435,7 @@
   }
 
   .sidebar-drawer__utility-link {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -512,14 +528,14 @@
   color: #000000;
 }
 
-/* Desktop: Gruppo font, larger size */
+/* Desktop: Aeonik Pro 16px like Minas */
 @media screen and (min-width: 700px) {
   .sidebar-drawer__top-sections .sidebar-drawer__section-title {
-    font-family: "Gruppo", sans-serif;
-    font-size: 32px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
     margin-bottom: 16px;
   }
 }
@@ -566,11 +582,11 @@
   }
 
   .sidebar-drawer__top-sections .sidebar-drawer__section-title {
-    font-family: "Work Sans", sans-serif;
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
     margin-bottom: 12px;
   }
 }
@@ -625,7 +641,10 @@
   }
 
   .sidebar-drawer__category-link {
-    font-size: 13px;
+    font-size: 16px;
+    font-family: var(--font-body);
+    letter-spacing: normal;
+    text-transform: none;
   }
 }
 
@@ -671,7 +690,10 @@
   }
 
   .sidebar-drawer__collection-link {
-    font-size: 13px;
+    font-size: 16px;
+    font-family: var(--font-body);
+    letter-spacing: normal;
+    text-transform: none;
   }
 }
 
@@ -714,14 +736,16 @@
   border-bottom: 1px solid #e5e5e5;
   padding: 15px 0;
   margin-bottom: 30px;
-  font-family: "Work Sans", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: var(--font-weight-normal);
   color: #000000;
   cursor: pointer;
   transition: color 0.3s ease;
   width: 100%;
   text-align: left;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .sidebar-drawer__back-button:hover {
@@ -769,7 +793,8 @@
 .sidebar-drawer__featured-rows--with-images {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  column-gap: 16px;
+  row-gap: 0;
   margin-top: 16px;
 }
 
@@ -778,7 +803,8 @@
   .sidebar-drawer__featured-rows--with-images {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px; /* Mobile spacing */
+    column-gap: 16px; /* Column spacing */
+    row-gap: 0;
     margin-top: 16px;
   }
 
@@ -792,7 +818,8 @@
   .sidebar-drawer__featured-rows--with-images {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 26px;
+    column-gap: 26px;
+    row-gap: 0;
     margin-top: 20px;
   }
 
@@ -806,7 +833,8 @@
   .sidebar-drawer__featured-rows--with-images {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    column-gap: 16px;
+    row-gap: 0;
     margin-top: 16px;
   }
 
@@ -826,15 +854,16 @@
   }
 
   .sidebar-drawer__feature-title {
-    font-family: "Work Sans", sans-serif !important;
+    font-family: var(--font-body) !important;
     font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .sidebar-drawer__feature-image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 82px;
+    height: 82px;
   }
 }
 
@@ -862,15 +891,16 @@
   }
 
   .sidebar-drawer__feature-title {
-    font-family: "Work Sans", sans-serif !important;
+    font-family: var(--font-body) !important;
     font-size: 16px;
-    font-weight: 400;
-    text-transform: uppercase;
+    font-weight: var(--font-weight-normal);
+    text-transform: none;
+    letter-spacing: normal;
   }
 
   .sidebar-drawer__feature-image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 82px;
+    height: 82px;
   }
 }
 
@@ -899,10 +929,11 @@
   }
 
   .sidebar-drawer__feature-title {
-    font-family: "Work Sans", sans-serif !important;
-    font-size: 14px;
-    font-weight: 400;
+    font-family: var(--font-body) !important;
+    font-size: 16px;
+    font-weight: var(--font-weight-normal);
     text-transform: none;
+    letter-spacing: normal;
   }
 
   /* Show the featured images - smaller size for mobile */
@@ -917,32 +948,29 @@
    ===================================================== */
 
 .sidebar-drawer__feature-row {
-  padding: 2px 0 0 0;
+  padding: 0;
   border-bottom: 1px solid #000000;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
 }
 
 /* Desktop (≥1250px): Add top border to first items in each column */
 @media screen and (min-width: 1250px) {
   .sidebar-drawer__feature-row:first-child {
     border-top: 1px solid #000000;
-    padding-top: 12px; /* 10px gap + 2px existing padding */
   }
 
   .sidebar-drawer__feature-row:nth-child(2) {
     border-top: 1px solid #000000;
-    padding-top: 12px; /* 10px gap + 2px existing padding */
   }
 }
 
-/* Tablet (700px-1249px): Add top border with 16px gap */
+/* Tablet (700px-1249px): Add top border */
 @media screen and (min-width: 700px) and (max-width: 1249px) {
   .sidebar-drawer__feature-row:first-child,
   .sidebar-drawer__feature-row:nth-child(2) {
     border-top: 1px solid #000000;
-    padding-top: 18px; /* 16px gap + 2px existing padding */
   }
 }
 
@@ -951,19 +979,19 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: normal !important;
   text-decoration: none;
-  padding-bottom: 10px;
+  padding: 15px 0 !important;
 }
 
 .sidebar-drawer__feature-title {
-  margin: 0;
+  margin: 10px 0 0 0 !important;
   color: #000000;
-  font-family: "Gruppo", sans-serif;
-  font-size: 24px;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: var(--font-weight-normal);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: normal;
   position: relative;
   display: inline-block;
 }
@@ -981,8 +1009,8 @@
 }
 
 .sidebar-drawer__feature-image-wrapper {
-  width: 103px;
-  height: 103px;
+  width: 82px;
+  height: 82px;
   overflow: hidden;
   border-radius: 5px;
   flex-shrink: 0;
@@ -991,8 +1019,8 @@
 /* Tablet (700px-1249px): Smaller image size per Figma design */
 @media screen and (min-width: 700px) and (max-width: 1249px) {
   .sidebar-drawer__feature-image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 82px;
+    height: 82px;
   }
 }
 
@@ -1038,21 +1066,22 @@
 }
 
 .sidebar-drawer__exclusive-label {
-  font-family: "Gruppo", sans-serif;
-  font-size: 12px;
+  font-family: var(--font-display);
+  font-size: 15px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: normal;
   margin: 0 0 8px 0;
   color: #000000;
 }
 
 .sidebar-drawer__exclusive-title {
-  font-family: "Work Sans", sans-serif;
+  font-family: var(--font-accent);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: var(--font-weight-light);
   margin: 0 0 15px 0;
   color: #000000;
   line-height: 1.4;
+  letter-spacing: 0.42px;
 }
 
 /* =====================================================
@@ -1081,7 +1110,10 @@
 
 .sidebar-drawer__blog-link {
   display: inline-block;
-  font-size: 13px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 /* Small Mobile (412px-699px): 2-column grid */
@@ -1092,7 +1124,7 @@
   }
 
   .sidebar-drawer__blog-link {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -1133,7 +1165,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 16px;
+  font-family: var(--font-body);
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .sidebar-drawer__contact-link--email svg {
@@ -1152,7 +1187,7 @@
   }
 
   .sidebar-drawer__contact-link {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 

@@ -72,8 +72,9 @@
 
 .section-header__search-text {
   font-family: var(--font-display);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-letter-spacing);
   text-transform: uppercase;
 }
 
@@ -107,7 +108,8 @@
 /* Logo text fallback */
 .section-header__logo-text {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-normal);
   text-transform: uppercase;
   white-space: nowrap;
   display: block;
@@ -144,8 +146,9 @@
 
 .section-header__account-text {
   font-family: var(--font-display);
-  font-size: 12px;
-  letter-spacing: 0.1em;
+  font-size: var(--label-size);
+  font-weight: var(--label-weight);
+  letter-spacing: var(--label-letter-spacing);
   text-transform: uppercase;
 }
 
@@ -288,7 +291,7 @@
   }
 
   .section-header__logo-text {
-    font-size: 20px;
+    font-size: var(--font-size-xl);
   }
 }
 
@@ -300,7 +303,7 @@
   }
 
   .section-header__logo-text {
-    font-size: 18px;
+    font-size: var(--font-size-lg);
   }
 }
 

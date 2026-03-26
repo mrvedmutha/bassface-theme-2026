@@ -17,10 +17,8 @@
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
-    {% comment %} Google Fonts - Gruppo (display) and Work Sans (body) {% endcomment %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gruppo&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% comment %} Google Fonts - REMOVED: Now using local Minas fonts {% endcomment %}
+    {% comment %} Gruppo and Work Sans replaced with GT America, Aeonik Pro, and Blacker Pro {% endcomment %}
 
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
